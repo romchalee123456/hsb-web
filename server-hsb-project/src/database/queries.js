@@ -16,17 +16,38 @@ CREATE TABLE IF NOT EXISTS users (
 `;
 
 const createNewUser = `
-INSERT INTO users VALUES(null, ?, ?, ?, ?, NOW())
+INSERT INTO users VALUES(null, ?, ?, ?, ?, NOW(),?,?,?)
 `;
+
+const updateUser = `
+UPDATE users SET firstname = ?, lastname = ?, email = ?, role = ?, TameName = ?, PhoneNumber = ? WHERE users.id = ?;
+; `
 
 const findUserByEmail = `
 SELECT * FROM users WHERE email = ?
 `;
+
+const findAllUser = `
+SELECT * FROM users
+`;
+const findUserById = `
+SELECT * FROM users WHERE id = ?
+`;
+const deleteUserId = `
+DELETE FROM users WHERE users.id = ?
+`;
+ 
+const alterUser = `ALTER TABLE users ADD role INT(10) NULL AFTER created_on, ADD TameName INT NULL AFTER role, ADD PhoneNumber INT NULL AFTER TameName;`
 
 module.exports = {
     createDB,
     dropDB,
     createTableUSers,
     createNewUser,
-    findUserByEmail
+    findUserByEmail,
+    alterUser,
+    findAllUser,
+    findUserById,
+    deleteUserId,
+    updateUser
 };
