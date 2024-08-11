@@ -3,10 +3,10 @@ const { hash: hashPassword, compare: comparePassword } = require('../utils/passw
 const { generate: generateToken } = require('../utils/token');
 
 exports.signup = (req, res) => {
-    const { firstname, lastname, email, password } = req.body;
+    const { firstname, lastname, email, password,role,tameName,phoneNumber } = req.body;
     const hashedPassword = hashPassword(password.trim());
 
-    const user = new User(firstname.trim(), lastname.trim(), email.trim(), hashedPassword);
+    const user = new User(firstname.trim(), lastname.trim(), email.trim(), hashedPassword,role,tameName.trim(),phoneNumber.trim(), );
 
     User.create(user, (err, data) => {
         if (err) {
@@ -65,4 +65,92 @@ exports.signin = (req, res) => {
         }
     });
 
+ 
+
+}
+
+exports.update = (req, res) => {
+    const { firstname, lastname, email,role,tameName,phoneNumber } = req.body;
+    const { id } = req.params;
+
+    const user = new User(firstname.trim(), lastname.trim(), email.trim(),'',role,tameName.trim(),phoneNumber.trim());
+
+    User.update(user,id, (err, data) => {
+        if (err) {
+            res.status(500).send({
+                status: "error",
+                message: err.message
+            });
+        } else {
+            const token = generateToken(data.id);
+            res.status(201).send({
+                status: "success",
+                data: {
+                    token,
+                    data
+                }
+            });
+        }
+    });
+};
+
+exports.findAllUser = (req, res) => {
+    
+    User.findAllUser((err, data) => {
+        if (err) {
+            res.status(500).send({
+                status: "error",
+                message: err.message
+            });
+        } else {
+
+            res.status(201).send({
+                status: "success",
+                data: 
+                    data
+                
+            });
+        }
+    })
+}
+
+exports.findUserById = (req, res) => {
+    const { id } = req.params;
+
+    User.findUserById(id,(err, data) => {
+        if (err) {
+            res.status(500).send({
+                status: "error",
+                message: err.message
+            });
+        } else {
+
+            res.status(201).send({
+                status: "success",
+                data: 
+                    data
+                
+            });
+        }
+    })
+}
+
+exports.deleteUserId = (req, res) => {
+    const { id } = req.params;
+
+    User.deleteUserId(id,(err, data) => {
+        if (err) {
+            res.status(500).send({
+                status: "error",
+                message: err.message
+            });
+        } else {
+            res.status(201).send({
+                status: "success",
+                data: 
+                    data
+                
+            });
+        }
+    })
 }
