@@ -1,6 +1,6 @@
 const User = require('../models/user.model');
 const { hash: hashPassword, compare: comparePassword } = require('../utils/password');
-const { generate: generateToken } = require('../utils/token');
+const { generateAccessToken: generateAccessToken,refreshAccessToken:refreshAccessToken ,generateRefreshToken:generateRefreshToken} = require('../utils/token');
 
 exports.signup = (req, res) => {
     const { firstname, lastname, email, password,role,tameName,phoneNumber } = req.body;
@@ -15,7 +15,6 @@ exports.signup = (req, res) => {
                 message: err.message
             });
         } else {
-            const token = generateToken(data.id);
             res.status(201).send({
                 status: "success",
                 data: {
@@ -43,14 +42,16 @@ exports.signin = (req, res) => {
                 message: err.message
             });
             return;
-        }
+        } 
         if (data) {
             if (comparePassword(password.trim(), data.password)) {
-                const token = generateToken(data.id);
+                const token = generateAccessToken(data.id);
+                const refreshToken = generateRefreshToken(data.id);
                 res.status(200).send({
                     status: 'success',
-                    data: {
+                    data: { 
                         token,
+                        refreshToken,
                         firstname: data.firstname,
                         lastname: data.lastname,
                         email: data.email
@@ -82,11 +83,9 @@ exports.update = (req, res) => {
                 message: err.message
             });
         } else {
-            const token = generateToken(data.id);
             res.status(201).send({
                 status: "success",
                 data: {
-                    token,
                     data
                 }
             });
@@ -153,4 +152,17 @@ exports.deleteUserId = (req, res) => {
             });
         }
     })
+}
+
+exports.refreshAccessToken = (req, res) => {
+    const { refreshToken } = req.body;
+
+    // Refresh the access token using the provided refresh token
+    const newAccessToken = refreshAccessToken(refreshToken);
+
+    if (newAccessToken) {
+        res.json({ accessToken: newAccessToken });
+    } else {
+        res.status(403).json({ message: 'Invalid refresh token' });
+    }
 }

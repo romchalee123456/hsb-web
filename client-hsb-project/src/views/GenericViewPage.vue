@@ -50,7 +50,7 @@ onMounted(async () => {
                 </IconField>
             </template>
 
-            <template #end> <Button label="เพิ่มข้อมูล" raised @Click="handleClickAdd" />
+            <template #end> <Button  severity="info" label="เพิ่มข้อมูล"   @Click="handleClickAdd" />
                 <Button label="ค้นหา" raised @Click="searchData" v-if="false"/>
             </template>
         </Toolbar>
@@ -70,3 +70,6 @@ onMounted(async () => {
     </div>
 
 </template>
+<style >
+
+</style>

@@ -1,7 +1,7 @@
 <script setup>
 import { useLayout } from '@/layout/composables/layout';
 
-import logo from '@/assets/image/logo2.png'
+import logo from '@/assets/image/huglogo1-ai.png'
 const { onMenuToggle, toggleDarkMode, isDarkTheme } = useLayout();
 </script>
 
@@ -15,8 +15,9 @@ const { onMenuToggle, toggleDarkMode, isDarkTheme } = useLayout();
         
 
                 <Image :src="logo" alt="Image" width="100" />
-                <span>ระบบรายงาน</span>
+              
             </router-link>
+            <h2>ระบบบริหารโครงการ</h2>
         </div>
 
         <div class="layout-topbar-actions">
