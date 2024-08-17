@@ -23,3 +23,11 @@
         top: 100px;
     }
 }
+
+.p-button {
+    background-color: #192a51;
+}
+.p-button:not(:disabled):hover{
+    background-color: #192a51;
+}
+

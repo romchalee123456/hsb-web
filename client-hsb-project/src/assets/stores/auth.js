@@ -10,13 +10,13 @@ export const useAuthStore = defineStore('auth', {
       this.isAuthenticated = true;
       this.user = user;
       localStorage.setItem('isAuthenticated', JSON.stringify(this.isAuthenticated));
-      localStorage.setItem('user', JSON.stringify(this.user));
+      // localStorage.setItem('user', JSON.stringify(this.user));
     },
     logout() {
       this.isAuthenticated = false;
       this.user = null;
       localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('user');
+      // localStorage.removeItem('user');
     },
   },
 });

@@ -1,8 +1,8 @@
 <script setup>
 import loginService from '@/service/loginService';
-import Image from 'primevue/image';
+import logo from '@/assets/image/huglogo1-ai.png';
 import { useAuthStore } from '@/assets/stores/auth';
-import logo from '@/assets/image/logo2.png'
+// import logo from '@/assets/image/'
 import router from '@/router';
 import { ref } from 'vue';
 const authStore = useAuthStore();
@@ -11,7 +11,7 @@ const password = ref('');
 const checked = ref(false);
 
 const onLogin = () => {
-    // loginService.login(email.value, password.value).then(() => {
+     loginService.login(email.value, password.value).then(() => {
         
             const user = {
         username: email.value,
@@ -23,7 +23,7 @@ const onLogin = () => {
         // this.$router.push({ name: 'Home' });
         router.push('/')
      
-        // });
+        });
 };
 </script>
 
