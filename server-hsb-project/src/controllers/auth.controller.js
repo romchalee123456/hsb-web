@@ -1,15 +1,29 @@
-const User = require('../models/user.model');
 const { hash: hashPassword, compare: comparePassword } = require('../utils/password');
 const { generateAccessToken: generateAccessToken,refreshAccessToken:refreshAccessToken ,generateRefreshToken:generateRefreshToken} = require('../utils/token');
+const { PrismaClient } = require('@prisma/client')
 
-exports.signup = (req, res) => {
+const prisma = new PrismaClient()
+
+exports.signup = async(req, res) => {
     const { firstname, lastname, email, password,role,tameName,phoneNumber } = req.body;
     const hashedPassword = hashPassword(password.trim());
 
     const user = new User(firstname.trim(), lastname.trim(), email.trim(), hashedPassword,role,tameName.trim(),phoneNumber.trim(), );
 
-    User.create(user, (err, data) => {
-        if (err) {
+    const result = await prisma.user.create({
+        data: {
+          firstname:firstname.trim(),
+          lastname:lastname.trim(),
+           email: email.trim(),
+           password: hashedPassword.trim(),
+           role: role,
+           TameName: tameName.trim(),
+           PhoneNumber: phoneNumber.trim(),
+        
+        },
+      })
+
+        if (!result) {
             res.status(500).send({
                 status: "error",
                 message: err.message
@@ -18,43 +32,35 @@ exports.signup = (req, res) => {
             res.status(201).send({
                 status: "success",
                 data: {
-                    token,
-                    data
+                
+                    result
                 }
             });
         }
-    });
+    
 };
 
-exports.signin = (req, res) => {
+exports.signin = async(req, res) => {
     const { email, password } = req.body;
-    User.findByEmail(email.trim(), (err, data) => {
-        if (err) {
-            if (err.kind === "not_found") {
-                res.status(404).send({
-                    status: 'error',
-                    message: `User with email ${email} was not found`
-                });
-                return;
-            }
-            res.status(500).send({
-                status: 'error',
-                message: err.message
-            });
-            return;
-        } 
-        if (data) {
-            if (comparePassword(password.trim(), data.password)) {
-                const token = generateAccessToken(data.id);
-                const refreshToken = generateRefreshToken(data.id);
+    const user = await prisma.user.findUnique({
+        where: {
+          email: email
+        },
+      })
+
+      if(user){
+        if (comparePassword(password.trim(), user.password)) {
+            if (comparePassword(password.trim(), user.password)) {
+                const token = generateAccessToken(user.id);
+                const refreshToken = generateRefreshToken(user.id);
                 res.status(200).send({
                     status: 'success',
                     data: { 
                         token,
                         refreshToken,
-                        firstname: data.firstname,
-                        lastname: data.lastname,
-                        email: data.email
+                        firstname: user.firstname,
+                        lastname: user.lastname,
+                        email: user.email
                     }
                 });
                 return;
@@ -64,93 +70,98 @@ exports.signin = (req, res) => {
                 message: 'Incorrect password'
             });
         }
-    });
-
- 
-
+      }else{
+                        res.status(404).send({
+                    status: 'error',
+                    message: `User with email ${email} was not found`
+                });
+                return;
+      }
 }
 
-exports.update = (req, res) => {
+exports.update = async(req, res) => {
     const { firstname, lastname, email,role,tameName,phoneNumber } = req.body;
     const { id } = req.params;
 
-    const user = new User(firstname.trim(), lastname.trim(), email.trim(),'',role,tameName.trim(),phoneNumber.trim());
+    // const user = new User(firstname.trim(), lastname.trim(), email.trim(),'',role,tameName.trim(),phoneNumber.trim());
+    const result = await prisma.user.update({
+        where: { id: Number(id) },
+        data: {
+          firstname : firstname.trim(),
+          lastname : lastname.trim(),
+          email : email.trim(),
+          role:role,
+          TameName:tameName.trim(),
+          password:phoneNumber.trim(),
 
-    User.update(user,id, (err, data) => {
-        if (err) {
-            res.status(500).send({
-                status: "error",
-                message: err.message
-            });
-        } else {
-            res.status(201).send({
-                status: "success",
-                data: {
-                    data
-                }
-            });
-        }
-    });
+        },
+      })
+
+      if (!result) {
+                res.status(500).send({
+                    status: "error",
+                    message: err.message
+                });
+            } else {
+                res.status(201).send({
+                    status: "success",
+                    data: {
+                        result
+                    }
+                });
+            }
+
 };
 
-exports.findAllUser = (req, res) => {
+exports.findAllUser = async(req, res) => {
+
+    const data = await prisma.user.findMany();
+        if (!data) {
+            res.status(500).send({
+                status: "error",
+                // message: err.message
+            });
+        } else {
+
+            res.status(201).send({
+                status: "success",
+                data: 
+                    data
+                
+            });
+        }
     
-    User.findAllUser((err, data) => {
-        if (err) {
-            res.status(500).send({
-                status: "error",
-                message: err.message
-            });
-        } else {
-
-            res.status(201).send({
-                status: "success",
-                data: 
-                    data
-                
-            });
-        }
-    })
 }
 
-exports.findUserById = (req, res) => {
+exports.findUserById = async(req, res) => {
     const { id } = req.params;
 
-    User.findUserById(id,(err, data) => {
-        if (err) {
-            res.status(500).send({
-                status: "error",
-                message: err.message
-            });
-        } else {
-
-            res.status(201).send({
-                status: "success",
-                data: 
-                    data
-                
-            });
-        }
+    const data = await prisma.user.findUnique({
+        where: { id: Number(id) },
     })
+    
+    if (!data) {
+        res.status(500).send({
+            status: "error",
+            message: err.message
+        });
+    } else {
+
+        res.status(201).send({
+            status: "success",
+            data: 
+                data
+            
+        });
+    }
+
 }
 
-exports.deleteUserId = (req, res) => {
+exports.deleteUserId = async(req, res) => {
     const { id } = req.params;
 
-    User.deleteUserId(id,(err, data) => {
-        if (err) {
-            res.status(500).send({
-                status: "error",
-                message: err.message
-            });
-        } else {
-            res.status(201).send({
-                status: "success",
-                data: 
-                    data
-                
-            });
-        }
+    const data = await prisma.user.delete({
+        where: { id: Number(id) },
     })
 }
 

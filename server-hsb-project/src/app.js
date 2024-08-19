@@ -4,7 +4,9 @@ const cors = require('cors');
 const authRoute = require('./routes/auth.route');
 
 const { httpLogStream } = require('./utils/logger');
+const { PrismaClient } = require('@prisma/client')
 
+const prisma = new PrismaClient()
 const app = express();
 
 app.use(express.json());
@@ -23,6 +25,14 @@ app.get('/',(req, res) => {
         }
     });
 });
+
+app.get('/feed', async (req, res) => {
+
+    const posts = await prisma.user.findMany({
+    })
+  
+    res.json(posts)
+  })
 
 app.use((err, req, res, next) => {
     res.status(err.statusCode || 500).send({

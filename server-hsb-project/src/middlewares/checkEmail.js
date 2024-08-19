@@ -1,4 +1,3 @@
-const User = require('../models/user.model');
 
 const checkEmail =  (req, res, next) => {
     const { email } = req.body;

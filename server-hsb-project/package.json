@@ -5,16 +5,19 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "start:dev": "nodemon",
+    "dev": "nodemon",
     "db:up": "node src/database/scripts/dbUp.js",
     "db:down": "node src/database/scripts/dbDown.js",
     "tables:up": "node src/database/scripts/tablesUp.js",
-    "db:init": "npm run db:up && npm run tables:up"
+    "db:init": "npm run db:up && npm run tables:up",
+    "postinstall": "prisma generate",
+    "vercel-build": "prisma generate && prisma migrate deploy && next build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^5.18.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
@@ -26,6 +29,8 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.16",
+    "prisma": "^5.18.0",
     "winston": "^3.7.2"
   }
+  
 }
