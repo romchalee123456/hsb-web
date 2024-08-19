@@ -4,13 +4,13 @@ const { logger } = require('./logger');
 
 // Generate Access Token
 const generateAccessToken = (id) => {
-    return jwt.sign({ id }, JWT_SECRET_KEY, { expiresIn: '1m' }); // 1 day expiry
+    return jwt.sign({ id }, JWT_SECRET_KEY, { expiresIn: '60m' }); // 1 day expiry
 };
 
 // Generate Refresh Token
 const generateRefreshToken = (id) => {
 
-    return jwt.sign({ id }, JWT_REFRESH_SECRET_KEY, { expiresIn: '7m' }); // 7 days expiry
+    return jwt.sign({ id }, JWT_REFRESH_SECRET_KEY, { expiresIn: '5h' }); // 7 days expiry
 };
 
 // Decode Access or Refresh Token

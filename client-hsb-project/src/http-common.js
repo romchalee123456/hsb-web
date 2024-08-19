@@ -7,7 +7,7 @@ let isRefreshing = false;
 let refreshSubscribers = [];
 
 const instance = axios.create({
-    baseURL: 'http://localhost:3000/api', // Replace with your API's base URL
+    baseURL: 'http://localhost:3001/api', // Replace with your API's base URL
     headers: {
         'Content-Type': 'application/json'
         // You can add more default headers here if needed
