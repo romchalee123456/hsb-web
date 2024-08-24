@@ -1,5 +1,6 @@
 const { hash: hashPassword, compare: comparePassword } = require('../utils/password');
 const { generateAccessToken: generateAccessToken,refreshAccessToken:refreshAccessToken ,generateRefreshToken:generateRefreshToken} = require('../utils/token');
+const {decodeTokenForId:decodeTokenForId} = require('../utils/token')
 const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
@@ -7,8 +8,6 @@ const prisma = new PrismaClient()
 exports.signup = async(req, res) => {
     const { firstname, lastname, email, password,role,tameName,phoneNumber } = req.body;
     const hashedPassword = hashPassword(password.trim());
-
-    const user = new User(firstname.trim(), lastname.trim(), email.trim(), hashedPassword,role,tameName.trim(),phoneNumber.trim(), );
 
     const result = await prisma.user.create({
         data: {
@@ -18,7 +17,7 @@ exports.signup = async(req, res) => {
            password: hashedPassword.trim(),
            role: role,
            TameName: tameName.trim(),
-           PhoneNumber: phoneNumber.trim(),
+           PhoneNumber: phoneNumber,
         
         },
       })
@@ -131,6 +130,61 @@ exports.findAllUser = async(req, res) => {
             });
         }
     
+}
+
+exports.findUserById = async(req, res) => {
+    const { id } = req.params;
+
+    const data = await prisma.user.findUnique({
+        where: { id: Number(id) },
+    })
+    
+    if (!data) {
+        res.status(500).send({
+            status: "error",
+            message: err.message
+        });
+    } else {
+
+        res.status(201).send({
+            status: "success",
+            data: 
+                data
+            
+        });
+    }
+
+}
+
+exports.findUserDefult= async(req, res) => {
+   
+    const authHeader = req.headers['authorization'];
+  
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) {
+        return res.status(401).send('UnAuthorization')
+    } 
+   var decode =  decodeTokenForId(token)
+  
+    const data = await prisma.user.findUnique({
+        where: { id: Number(decode.id) },
+    })
+    
+    if (!data) {
+        res.status(500).send({
+            status: "error",
+            message: err.message
+        });
+    } else {
+
+        res.status(201).send({
+            status: "success",
+            data: 
+                data
+            
+        });
+    }
+
 }
 
 exports.findUserById = async(req, res) => {
