@@ -24,6 +24,17 @@ const decodeToken = (token, isRefreshToken = false) => {
         return false;
     }
 };
+
+const decodeTokenForId = (token, isRefreshToken = false) => {
+ 
+    try {
+        const secret = isRefreshToken ? JWT_REFRESH_SECRET_KEY : JWT_SECRET_KEY;
+        return jwt.decode(token, secret);
+    } catch (error) {
+        logger.error('Token verification failed', error);
+        return false;
+    }
+};
  
 // Refresh Token Function
 const refreshAccessToken = (refreshToken) => {
@@ -47,5 +58,6 @@ module.exports = {
     generateAccessToken,
     generateRefreshToken,
     decodeToken,
-    refreshAccessToken
+    refreshAccessToken,
+    decodeTokenForId
 };
