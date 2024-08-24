@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE `File` (
+CREATE TABLE `file` (
     `fileid` INTEGER NOT NULL AUTO_INCREMENT,
     `fileName` VARCHAR(500) NOT NULL,
     `filePath` VARCHAR(500) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE `File` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Housedetail` (
+CREATE TABLE `housedetail` (
     `houseDetailid` INTEGER NOT NULL AUTO_INCREMENT,
     `createOn` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `houseDetailNameId` INTEGER NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE `Housedetail` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Housedetailname` (
+CREATE TABLE `housedetailname` (
     `houseDetailNameid` INTEGER NOT NULL AUTO_INCREMENT,
     `createOn` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `houseDetailName` VARCHAR(500) NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE `Housedetailname` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Period` (
+CREATE TABLE `period` (
     `periodid` INTEGER NOT NULL AUTO_INCREMENT,
     `projectid` INTEGER NOT NULL,
     `description` VARCHAR(500) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE `Period` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Periodname` (
+CREATE TABLE `periodname` (
     `periodNameid` INTEGER NOT NULL AUTO_INCREMENT,
     `createOn` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `periodName` VARCHAR(500) NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE `Periodname` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Project` (
+CREATE TABLE `project` (
     `projectid` INTEGER NOT NULL AUTO_INCREMENT,
     `projectName` VARCHAR(500) NULL,
     `projectCode` VARCHAR(500) NULL,
@@ -61,12 +61,13 @@ CREATE TABLE `Project` (
     `amount` DECIMAL(10, 0) NULL,
     `userid` INTEGER NULL,
     `projectStatusid` INTEGER NULL,
+    `responseid` INTEGER NULL,
 
     PRIMARY KEY (`projectid`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `User` (
+CREATE TABLE `user` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `firstname` VARCHAR(50) NULL,
     `lastname` VARCHAR(50) NULL,
@@ -77,18 +78,30 @@ CREATE TABLE `User` (
     `TameName` VARCHAR(100) NULL,
     `PhoneNumber` INTEGER NULL,
 
-    UNIQUE INDEX `User_email_key`(`email`),
+    UNIQUE INDEX `user_email_key`(`email`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- AddForeignKey
-ALTER TABLE `File` ADD CONSTRAINT `File_houseDetailId_fkey` FOREIGN KEY (`houseDetailId`) REFERENCES `Housedetail`(`houseDetailid`) ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateTable
+CREATE TABLE `customer` (
+    `customerid` INTEGER NOT NULL AUTO_INCREMENT,
+    `customerFirstname` VARCHAR(255) NULL,
+    `customerLasttname` VARCHAR(255) NULL,
+    `customerLine` VARCHAR(255) NULL,
+    `customerPhone` INTEGER NULL,
+    `customerAddress` VARCHAR(500) NULL,
+
+    PRIMARY KEY (`customerid`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `Housedetail` ADD CONSTRAINT `Housedetail_houseDetailNameId_fkey` FOREIGN KEY (`houseDetailNameId`) REFERENCES `Housedetailname`(`houseDetailNameid`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `file` ADD CONSTRAINT `file_houseDetailId_fkey` FOREIGN KEY (`houseDetailId`) REFERENCES `housedetail`(`houseDetailid`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Period` ADD CONSTRAINT `Period_periodnameid_fkey` FOREIGN KEY (`periodnameid`) REFERENCES `Periodname`(`periodNameid`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `housedetail` ADD CONSTRAINT `housedetail_houseDetailNameId_fkey` FOREIGN KEY (`houseDetailNameId`) REFERENCES `housedetailname`(`houseDetailNameid`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Period` ADD CONSTRAINT `Period_projectid_fkey` FOREIGN KEY (`projectid`) REFERENCES `Project`(`projectid`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `period` ADD CONSTRAINT `period_periodnameid_fkey` FOREIGN KEY (`periodnameid`) REFERENCES `periodname`(`periodNameid`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `period` ADD CONSTRAINT `period_projectid_fkey` FOREIGN KEY (`projectid`) REFERENCES `project`(`projectid`) ON DELETE RESTRICT ON UPDATE CASCADE;
