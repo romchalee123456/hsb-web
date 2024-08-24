@@ -314,7 +314,7 @@ onMounted(async () => {
       <template #footer>
        <Button  severity="info"  label="บันทึกข้อมูล" raised @Click="handleClickSave" v-if="!modeView" />
        <Button  severity="info"  label="แก้ไขข้อมูล" raised @Click="handleClickEdit" v-if="modeView" />
-       <Button  severity="info"  label="ลบช้อมูลข้อมูล" raised @Click="handleClickDelete" v-if="userId != 0 && !modeView" />
+       <Button  severity="info"  label="ลบข้อมูล" raised @Click="handleClickDelete" v-if="userId != 0 && !modeView" />
 
        <Button  severity="secondary"  label="ปิด" raised @Click="handleClickClose" />
       </template>

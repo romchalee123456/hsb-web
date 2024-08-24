@@ -8,45 +8,45 @@ datasource db {
 }
 
 model file {
-  fileid         Int    @id @default(autoincrement())
-  fileName       String @db.VarChar(500)
-  filePath       String @db.VarChar(500)
+  fileid         Int      @id @default(autoincrement())
+  fileName       String   @db.VarChar(500)
+  filePath       String   @db.VarChar(500)
   statusId       Int
   createOn       DateTime @default(now())
   houseDetailId  Int
   backUpStatus   Int
-  fileBackupPath String @db.VarChar(500)
+  fileBackupPath String   @db.VarChar(500)
 
   housedetail housedetail @relation(fields: [houseDetailId], references: [houseDetailid])
 }
 
 model housedetail {
-  houseDetailid      Int       @id @default(autoincrement())
-  createOn           DateTime  @default(now())
-  houseDetailNameId  Int
+  houseDetailid     Int      @id @default(autoincrement())
+  createOn          DateTime @default(now())
+  houseDetailNameId Int
 
   houseDetailname housedetailname @relation(fields: [houseDetailNameId], references: [houseDetailNameid])
-  files          file[]
+  files           file[]
 }
 
 model housedetailname {
-  houseDetailNameid Int       @id @default(autoincrement())
-  createOn          DateTime  @default(now())
-  houseDetailName   String    @db.VarChar(500)
+  houseDetailNameid Int      @id @default(autoincrement())
+  createOn          DateTime @default(now())
+  houseDetailName   String   @db.VarChar(500)
 
   housedetails housedetail[]
 }
 
 model period {
-  periodid       Int       @id @default(autoincrement())
+  periodid       Int      @id @default(autoincrement())
   projectid      Int
-  description    String    @db.VarChar(500)
+  description    String   @db.VarChar(500)
   createOn       DateTime
   periodStatusId Int
   periodnameid   Int
 
   periodname periodname @relation(fields: [periodnameid], references: [periodNameid])
-  project    project     @relation(fields: [projectid], references: [projectid])
+  project    project    @relation(fields: [projectid], references: [projectid])
 }
 
 model periodname {
@@ -58,26 +58,36 @@ model periodname {
 }
 
 model project {
-  projectid      Int       @id @default(autoincrement())
-  projectName    String?   @db.VarChar(500)
-  projectCode    String?   @db.VarChar(500)
-  description    String?   @db.VarChar(500)
-  createOn       DateTime?
-  amount         Decimal?  @db.Decimal(10, 0)
-  userid         Int?
+  projectid       Int       @id @default(autoincrement())
+  projectName     String?   @db.VarChar(500)
+  projectCode     String?   @db.VarChar(500)
+  description     String?   @db.VarChar(500)
+  createOn        DateTime?
+  amount          Decimal?  @db.Decimal(10, 0)
+  userid          Int?
   projectStatusid Int?
+  responseid       Int?
 
   periods period[]
 }
 
 model user {
-  id          Int       @id @default(autoincrement())
-  firstname   String?   @db.VarChar(50)
-  lastname    String?   @db.VarChar(50)
-  email       String    @unique @db.VarChar(255)
-  password    String    @db.VarChar(255)
-  created_on  DateTime  @default(now()) @db.Timestamp(6)
+  id          Int      @id @default(autoincrement())
+  firstname   String?  @db.VarChar(50)
+  lastname    String?  @db.VarChar(50)
+  email       String   @unique @db.VarChar(255)
+  password    String   @db.VarChar(255)
+  created_on  DateTime @default(now()) @db.Timestamp(6)
   role        Int?
-  TameName    String?   @db.VarChar(100)
+  TameName    String?  @db.VarChar(100)
   PhoneNumber Int?
+}
+
+model customer {
+  customerid Int @id @default(autoincrement())
+  customerFirstname String? @db.VarChar(255)
+  customerLasttname String? @db.VarChar(255) 
+  customerLine String? @db.VarChar(255)
+  customerPhone Int?
+  customerAddress String? @db.VarChar(500)
 }
