@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const authRoute = require('./routes/auth.route');
+const projectRoute = require('./routes/project.route')
 
 const { httpLogStream } = require('./utils/logger');
 const { PrismaClient } = require('@prisma/client')
@@ -16,6 +17,7 @@ app.use(morgan('combined', { stream: httpLogStream }));
 app.use(cors());
 
 app.use('/api/auth', authRoute);
+app.use('/api/project', projectRoute);
 
 app.get('/',(req, res) => {
     res.status(200).send({

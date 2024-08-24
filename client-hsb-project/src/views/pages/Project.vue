@@ -1,10 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import GenericViewPage from '../GenericViewPage.vue';
-import userService from '@/service/userService';
-import fromAddUser from '@/components/fromDialog/fromAddUser.vue';
+import projectService from '@/service/projectService';
+import projectfrom from '@/components/fromDialog/projectfrom.vue';
 
-const users = ref([]);
+const project = ref([]);
 const fromVisible = ref(false);
 const id = ref(0);
 const handleClickAdd = () =>{
@@ -18,13 +18,13 @@ const handleClickClose = () =>{
 const onRowDbClick = (event) =>{
    console.log(event.data);
     fromVisible.value = true;
-    id.value = event.data.id;
+    id.value = event.data.projectid;
 }
 
 const loadData = async() =>{
-    const res = await userService.getAllUser();
+    const res = await projectService.getAllProject();
 
-users.value = res.data;
+project.value = res.data;
 }
 const searchData = (value) => {
     
@@ -37,26 +37,27 @@ onMounted(async () => {
 </script>
 <template>
     <GenericViewPage
-    :list="users"
+    :list="project"
 @button-add="handleClickAdd"
 @onRowDbClick="onRowDbClick"
 @search="searchData"
-:title="'ผู้ใช้งาน'"
+:title="'โครงการ'"
     >
     <template #Column>
-        <Column header="ชื่อ" filterField="firstname" field="firstname"> </Column>
-                <Column header="นามสกุล"  field="lastname"></Column>
-                <Column header="ชื่อทีม" field="TameName"></Column>
-                <Column header="เบอร์โทร" field="PhoneNumber"></Column>
+        <Column header="รหัสโครงการ"  field="projectCode"> </Column>
+                <Column header="ชื่อโครงการ"  field="projectName"></Column>
+                <Column header="รายละเอียด" field="description"></Column>
+                <Column header="มูลค่า" field="amount"></Column>
+                
     </template>
     </GenericViewPage>
-<fromAddUser
+<projectfrom
 v-if="fromVisible"
 :from-visible="fromVisible"
 :id="id"
 :onload="loadData"
 @button-close="handleClickClose"
-></fromAddUser>
+></projectfrom>
 </template>
 <style>
 
