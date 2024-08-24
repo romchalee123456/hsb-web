@@ -3,12 +3,12 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 exports.createCustomer = async(req, res) => {
-    const {customerFirstname, customerLasttname, customerLine, customerPhone, customerAddress} = req.body;
+    const {customerFirstname, customerLastname, customerLine, customerPhone, customerAddress} = req.body;
 
     const result = await prisma.customer.create({
         data: {
           customerFirstname:customerFirstname,
-          customerLasttname:customerLasttname,
+          customerLastname:customerLastname,
            customerLine: customerLine,
            customerPhone: customerPhone,
            customerAddress: customerAddress,
@@ -53,14 +53,14 @@ exports.findAllCustomer = async(req, res) => {
 };
 
 exports.updateCustomerId = async(req, res) => {
-    const {customerFirstname, customerLasttname, customerLine, customerPhone, customerAddress} = req.body;
+    const {customerFirstname, customerLastname, customerLine, customerPhone, customerAddress} = req.body;
     const { id } = req.params;
 
     const result = await prisma.customer.update({
         where: { customerid: Number(id) },
         data: {
             customerFirstname:customerFirstname,
-            customerLasttname:customerLasttname,
+            customerLastname:customerLastname,
              customerLine: customerLine,
              customerPhone: customerPhone,
              customerAddress: customerAddress,

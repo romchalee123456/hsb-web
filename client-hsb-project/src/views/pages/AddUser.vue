@@ -46,8 +46,8 @@ onMounted(async () => {
     <template #Column>
         <Column header="ชื่อ" filterField="firstname" field="firstname"> </Column>
                 <Column header="นามสกุล"  field="lastname"></Column>
-                <Column header="ชื่อทีม" field="TameName"></Column>
-                <Column header="เบอร์โทร" field="PhoneNumber"></Column>
+                <Column header="ชื่อทีม" field="teamName"></Column>
+                <Column header="เบอร์โทร" field="phoneNumber"></Column>
     </template>
     </GenericViewPage>
 <fromAddUser

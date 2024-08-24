@@ -45,7 +45,7 @@ onMounted(async () => {
     >
     <template #Column>
         <Column header="ชื่อ" field="customerFirstname"> </Column>
-                <Column header="นามสกุล"  field="customerLasttname"></Column>
+                <Column header="นามสกุล"  field="customerLastname"></Column>
                 <Column header="เบอร์โทรศัพท์" field="customerPhone"></Column>
                 <Column header="ไอดี-ไลน์" field="customerLine"></Column>
     </template>

@@ -21,7 +21,7 @@ const modeView = ref(true);
 
 
 const customerFirstname = ref('');
-const customerLasttname = ref('');
+const customerLastname = ref('');
 const customerLine = ref('');
 const customerPhone = ref('');
 const customerAddress = ref('');
@@ -55,7 +55,7 @@ const validatedata = async () => {
         toast.add({ severity: 'warn', summary: 'warn Error', detail: 'กรุณากรอกชื่อ', life: 5000 });
         return false;
     }
-    if (customerLasttname.value === '') {
+    if (customerLastname.value === '') {
         toast.add({ severity: 'warn', summary: 'warn Error', detail: 'กรุณากรอกนามสกุล', life: 5000 });
         return false;
     }
@@ -84,7 +84,7 @@ const handleClickSave = async () => {
         if (customerid.value === 0) {
             const payload = {
                 customerFirstname: customerFirstname.value,
-                customerLasttname: customerLasttname.value,
+                customerLastname: customerLastname.value,
                 customerPhone: customerPhone.value,
                 customerLine: customerLine.value,
                 customerAddress: customerAddress.value,
@@ -116,7 +116,7 @@ const handleClickSave = async () => {
         } else {
             const payload = {
                 customerFirstname: customerFirstname.value,
-                customerLasttname: customerLasttname.value,
+                customerLastname: customerLastname.value,
                 customerPhone: customerPhone.value,
                 customerLine: customerLine.value,
                 customerAddress: customerAddress.value,
@@ -163,7 +163,7 @@ const handleClickSave = async () => {
 const fetchData = async (value) => {
     const res = await customerService.findCustomerById(value);
     customerFirstname.value = res.data.customerFirstname;
-    customerLasttname.value = res.data.customerLasttname;
+    customerLastname.value = res.data.customerLastname;
     customerPhone.value = res.data.customerPhone;
     customerLine.value = res.data.customerLine;
     customerAddress.value = res.data.customerAddress;
@@ -214,7 +214,7 @@ onMounted(async () => {
                             <label class="mr-5">นามสกุล</label>
                         </div>
                         <div class="col-span-4">
-                            <InputText class="w-full" id="customerCode1" type="text" v-model="customerLasttname" :disabled="modeView" />
+                            <InputText class="w-full" id="customerCode1" type="text" v-model="customerLastname" :disabled="modeView" />
                         </div>
                     </div>
                     <div class="field grid grid-cols-5 gap-4">
@@ -222,7 +222,7 @@ onMounted(async () => {
                             <label class="mr-5">เบอร์โทร</label>
                         </div>
                         <div class="col-span-4">
-                            <InputNumber class="w-full" id="customerCode1" type="text" v-model="customerPhone" :disabled="modeView" />
+                            <InputText class="w-full" id="customerCode1" type="text" v-model="customerPhone" :disabled="modeView" />
                         </div>
                     </div>
                     <div class="field grid grid-cols-5 gap-4">

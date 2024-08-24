@@ -17,7 +17,7 @@ export default {
         return res.data;
     },
     async updateCustomerId(data,id) {
-        const res = await http.post(`/customer/customerUpdate/${id}`, data);
+        const res = await http.put(`/customer/customerUpdate/${id}`, data);
         return res.data;
     },
 };
