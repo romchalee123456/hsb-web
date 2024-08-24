@@ -80,7 +80,7 @@ async function main() {
       password: '$2a$10$FVtM8B8dLQUilVnwMiQykuCYoIdCcPxpvj8xZ0AwKbfcnLVkmLB6.', // Ideally, you should hash the password
       role: 2,
       teamName: 'ทีมช่างแนวใหม่',
-      phoneNumber: 1234567890,
+      phoneNumber: "1234567890",
     },
   });
 
@@ -88,7 +88,7 @@ async function main() {
   const customer1 = await prisma.customer.create({
     data: {
       customerFirstname: 'คุณกลาง',
-      customerLasttname: 'มีดี',
+      customerLastname: 'มีดี',
       customerLine: 'Customer Line 1',
       customerPhone: "09876543210",
       customerAddress: '123 Main St',

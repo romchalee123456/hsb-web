@@ -15,7 +15,10 @@ const model = ref([
         label: 'จัดการโครงการ',
         items: [{ label: 'โครงการ', icon: 'pi pi-fw pi pi-home', to: '/project' }]
     },
-  
+    {
+        label: 'ลูกค้า',
+        items: [{ label: 'เพิ่มลูกค้า', icon: 'pi pi-fw pi pi-user-plus', to: '/customer' }]
+    },
 ]);
 </script>
 
