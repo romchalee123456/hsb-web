@@ -6,7 +6,7 @@ const { signup: signupValidator, signin: signinValidator } = require('../validat
 const authController = require('../controllers/auth.controller');
 
 router.route('/signup')
-    .post( asyncHandler(checkEmail), asyncHandler(authController.signup));
+    .post(  asyncHandler(authController.signup));
 
 router.route('/update/:id')
     .post( asyncHandler(authController.update));
@@ -25,4 +25,8 @@ router.route('/getUser')
 
     router.route('/refresh')
     .post(asyncHandler(authController.refreshAccessToken));
+
+    router.route('/getUserDufult')
+    .get(asyncHandler(authorization),asyncHandler(authController.findUserDefult));
+
 module.exports = router;
