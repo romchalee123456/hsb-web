@@ -3,6 +3,7 @@ import { onMounted, defineProps, toRefs, defineEmits,ref } from 'vue';
 import InputText from "primevue/inputtext";
 const props = defineProps({
     list: Array,
+    title: String,
 });
 
 const { list } = toRefs(props);
@@ -35,7 +36,7 @@ onMounted(async () => {
 
 <template>
     <div class="card ">
-        <div class="font-semibold text-xl mb-4">เพิ่มผู้ใช้งาน</div>
+        <div class="font-semibold text-xl mb-4">{{ props.title }}</div>
         <Toolbar>
             <template #start>
       
