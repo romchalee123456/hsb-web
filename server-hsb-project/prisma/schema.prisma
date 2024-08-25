@@ -41,12 +41,19 @@ model period {
   periodid       Int      @id @default(autoincrement())
   projectid      Int
   description    String   @db.VarChar(500)
-  createOn       DateTime
+  createOn       DateTime @default(now()) @db.Timestamp(6)
   periodStatusId Int
   periodnameid   Int
 
   periodname periodname @relation(fields: [periodnameid], references: [periodNameid])
   project    project    @relation(fields: [projectid], references: [projectid])
+  periodStatus periodStatus @relation(fields: [periodStatusId], references: [periodStatusId])
+}
+
+model periodStatus {
+  periodStatusId Int @id @default(autoincrement())
+  periodStatusName String @db.VarChar(500)
+  period period[]
 }
 
 model periodname {
@@ -62,7 +69,7 @@ model project {
   projectName     String?   @db.VarChar(500)
   projectCode     String?   @db.VarChar(500)
   description     String?   @db.VarChar(500)
-  createOn        DateTime?
+  createOn        DateTime? @default(now()) @db.Timestamp(6)
   amount          Decimal?  @db.Decimal(10, 0)
   userid          Int?
   projectStatusid Int?

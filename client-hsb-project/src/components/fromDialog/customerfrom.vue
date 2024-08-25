@@ -197,6 +197,7 @@ onMounted(async () => {
                     class: 'bg-hsb-primary text-white text-base modal-font-Prompt'
                 }
             }"
+            @update:visible="handleClickClose"
         >
             <div class="container mx-auto px-4 pt-4">
                 <div class="grid grid-cols-2 gap-4">
