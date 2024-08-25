@@ -2,37 +2,59 @@ const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
 
-exports.createProject = async(req, res) => {
-    const { projectCode, projectName, description, amount,projectStatusid,responseid} = req.body;
+exports.createProject = async (req, res) => {
+    const { projectCode, projectName, description, amount, projectStatusid, responseid, periodData } = req.body;
 
-    const result = await prisma.project.create({
-        data: {
-          projectCode:projectCode,
-          projectName:projectName,
-           description: description,
-           amount: amount,
-           projectStatusid: projectStatusid,
-           responseid: responseid,
+    try {
+        // Create the project
+        const result = await prisma.project.create({
+            data: {
+                projectCode: projectCode,
+                projectName: projectName,
+                description: description,
+                amount: amount,
+                projectStatusid: projectStatusid,
+                responseid: responseid,
+            },
+        });
 
-        },
-      })
 
-        if (!result) {
-            res.status(500).send({
-                status: "error",
-                message: err.message
-            });
-        } else {
-            res.status(201).send({
-                status: "success",
-                data: {
-                
-                    result
-                }
-            });
+        // Handle periodData if it exists
+        if (periodData && periodData.length > 0) {
+            for (const element of periodData) {
+                // Ensure createOn is in ISO-8601 format or set it to null if not provided
+                const createOn = element.createOn ? new Date(element.createOn).toISOString() : null;
+
+                // Create each period associated with the new project
+                const resultPeriod = await prisma.period.create({
+                    data: {
+                        projectid: result.projectid,
+                        description: element.description,
+                        createOn: createOn,
+                        periodStatusId: element.periodStatusId,
+                        periodnameid: 1,
+                    },
+                });
+            }
         }
-    
+
+        // Respond with success
+        res.status(201).send({
+            status: "success",
+            data: {
+                result: result,
+            },
+        });
+
+    } catch (err) {
+        console.error('Error creating project or periods:', err.message);
+        res.status(500).send({
+            status: "error",
+            message: err.message,
+        });
+    }
 };
+
 
 exports.findAllProject = async(req, res) => {
 
@@ -55,7 +77,7 @@ exports.findAllProject = async(req, res) => {
 };
 
 exports.updateProjectId = async(req, res) => {
-    const { projectCode, projectName, description, amount,projectStatusid,responseid} = req.body;
+    const { projectCode, projectName, description, amount,projectStatusid,responseid,periodData,deletePeriod} = req.body;
     const { id } = req.params;
 
     const result = await prisma.project.update({
@@ -68,9 +90,49 @@ exports.updateProjectId = async(req, res) => {
              projectStatusid: projectStatusid,
              responseid: responseid,
 
+
         },
       })
+      
+      if (periodData && periodData.length > 0) {
+        for (const element of periodData) {
+            if (!element.periodid){
+                      // Ensure createOn is in ISO-8601 format or set it to null if not provided
+            const createOn = element.createOn ? new Date(element.createOn).toISOString() : null;
 
+            // Create each period associated with the new project
+            const resultPeriod = await prisma.period.create({
+                data: {
+                    projectid: result.projectid,
+                    description: element.description,
+                    createOn: createOn,
+                    periodStatusId: element.periodStatusId,
+                    periodnameid: 1,
+                },
+            });
+            }
+            else{
+                await prisma.period.update({
+                    where: { periodid: Number(element.periodid) },
+                    data:{
+                        description: element.description,
+                        periodStatusId: element.periodStatusId
+                    },
+                })
+            }
+        }
+        
+    
+    }
+    if (deletePeriod && deletePeriod.length > 0) {
+        for (const element of deletePeriod) {
+            if (element.periodid) {
+                await prisma.period.delete({
+                   where:{periodid: Number(element.periodid)} ,
+                })
+            }
+        }
+    }
       if (!result) {
                 res.status(500).send({
                     status: "error",
@@ -93,6 +155,17 @@ exports.findProjectById = async(req, res) => {
     const data = await prisma.project.findUnique({
         where: { projectid: Number(id) },
     })
+
+    const periodData = await prisma.period.findMany({
+        include: {
+            periodStatus: {
+              select: {
+                periodStatusName: true,
+              },
+            },
+          },
+        where: {projectid: Number(id) },
+    })
     
     if (!data) {
         res.status(500).send({
@@ -103,8 +176,8 @@ exports.findProjectById = async(req, res) => {
 
         res.status(201).send({
             status: "success",
-            data: 
-                data
+            data: data, 
+            periodData: periodData,
             
         });
     }
@@ -132,4 +205,5 @@ exports.deleteProjectId = async(req, res) => {
         });
     }
 };
+
 

@@ -24,6 +24,8 @@ const selectedRole = ref({ id: 1, name: 'ดำเนินการ' });
 const selectedRoleSponse = ref();
 const responses = ref([]);
 const projectCode = ref('');
+const periodData = ref([]);
+const deletePeriod = ref([]);
 const description = ref('');
 const projectName = ref('');
 const amount = ref('');
@@ -34,6 +36,40 @@ const projectStatus = ref([
 ]);
 
 const emit = defineEmits(['buttonClose']);
+
+const addPeriod = () => {
+    const isoDateString = new Date().toISOString(); // ISO-8601 format
+
+    const period = {
+
+        projectid: projectid.value,
+        description: "",
+        createOn: "",
+        periodStatusId: 1,
+        periodnameid: 0,
+        createOn:isoDateString,
+        periodStatus: {
+            periodStatusName: 'ปิด'
+        }
+    };
+
+    periodData.value.push(period);
+};
+
+const periodDelete = (index,data) => {
+    periodData.value.splice(index,1);
+    deletePeriod.value.push(data);
+};
+
+const openPeriod = (index) => {
+    periodData.value[index].periodStatusId=2;
+    periodData.value[index].periodStatus.periodStatusName="ดำเนินการ";
+};
+
+const closePeriod = (index) => {
+    periodData.value[index].periodStatusId=1;
+    periodData.value[index].periodStatus.periodStatusName="ปิด";
+};
 
 const handleClickClose = () => {
     modeView.value = true;
@@ -91,7 +127,8 @@ const handleClickSave = async () => {
                 amount: amount.value,
                 responseid: selectedRoleSponse.value.id,
                 projectStatusid: selectedRole.value.id,
-                description: description.value
+                description: description.value,
+                periodData: periodData.value
             };
             const res = await projectService.createProject(payload);
 
@@ -124,7 +161,9 @@ const handleClickSave = async () => {
                 amount: amount.value,
                 responseid: selectedRoleSponse.value.id,
                 projectStatusid: selectedRole.value.id,
-                description: description.value
+                description: description.value,
+                periodData: periodData.value,
+                deletePeriod: deletePeriod.value
             };
             const res = await projectService.updateProjectId(payload, projectid.value);
 
@@ -173,6 +212,7 @@ const fetchData = async (value) => {
     description.value = res.data.description;
     selectedRole.value = projectStatus.value[res.data.projectStatusid - 1];
     selectedRoleSponse.value = responses.value[res.data.responseid - 1];
+    periodData.value = res.periodData;
 };
 onMounted(async () => {
     const res = await userService.getAllUser();
@@ -205,6 +245,7 @@ onMounted(async () => {
                     class: 'bg-hsb-primary text-white text-base modal-font-Prompt'
                 }
             }"
+            @update:visible="handleClickClose"
         >
             <div class="container mx-auto px-4 pt-4">
                 <div class="grid grid-cols-2 gap-4">
@@ -262,8 +303,40 @@ onMounted(async () => {
                     </div>
                 </div>
             </div>
+            <div class="datatable-wrapper flex items-center justify-center">
+                <DataTable :value="periodData" stripedRows class="w-[1150px]">
+                    <Column field="description" header="งวด">
+                        <template #body="{index}">
+                            <InputText v-model="periodData[index].description" :disabled="modeView">
+                            </InputText>
+                        </template>
+                    </Column>
+                    <Column  header="สถานะ">
+                        <template #body="{ data }">
+                            <Badge v-if="data.periodStatusId == 1" :value="data.periodStatus.periodStatusName" severity="secondary"></Badge>
+                            <Badge v-if="data.periodStatusId == 2" :value="data.periodStatus.periodStatusName" severity="warn"></Badge>
+                            <Badge v-if="data.periodStatusId == 3" :value="data.periodStatus.periodStatusName" severity="success"></Badge>
+                        </template>
+                    </Column>
+                    <Column  header="เปิด/ปิด" style="width: 15%" headerStyle="text-center">
+                        <template #body="{ data, index }">
+                            <div class="flex justify-center align-center">
+                                <Button v-if="data.periodStatusId == 1" severity="success" label="เปิด" raised @Click="openPeriod(index)" :disabled="modeView"/>
+                                <Button v-if="data.periodStatusId !== 1" severity="danger" label="ปิด" raised @Click="closePeriod(index)" :disabled="modeView"/>
+                            </div>
+                        </template>
+                    </Column>
+                    <Column >
+                        <template #body="{index,data}">
+                            <Button icon="pi pi-trash"  style="background-color: yellow; color: black; border-color: yellow;" @Click="periodDelete(index,data)" :disabled="modeView"></Button>
+                            
+                        </template>
+                    </Column>
+                </DataTable>
+            </div>
 
             <template #footer>
+                <Button severity="info" label="เพิ่มงวด" raised @Click="addPeriod" v-if="!modeView" />
                 <Button severity="info" label="บันทึกข้อมูล" raised @Click="handleClickSave" v-if="!modeView" />
                 <Button severity="info" label="แก้ไขข้อมูล" raised @Click="handleClickEdit" v-if="modeView" />
                 <Button severity="info" label="ลบข้อมูล" raised @Click="handleClickDelete" v-if="projectid != 0 && !modeView" />
@@ -277,4 +350,5 @@ onMounted(async () => {
 .bg-hsb-primary {
     background-color: #192a51;
 }
+
 </style>
