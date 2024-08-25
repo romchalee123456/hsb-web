@@ -8,18 +8,18 @@ const routes = [
     {
         path: '/',
         component: ()=> import('@/views/pages/home.vue'),
-        // children: [
-        //     {
-        //         path: '/',
-        //         name: 'dashboard',
-        //         component: () => import('@/views/Dashboard.vue')
-        //     },
-        //     {
-        //         path: '/addUser',
-        //         name: 'addUser',
-        //         component: () => import('@/views/pages/AddUser.vue')
-        //     }
-        // ]
+        children: [
+            {
+                path: '/',
+                name: 'project',
+                component: () => import('@/views/pages/project.vue')
+            },
+            // {
+            //     path: '/addUser',
+            //     name: 'addUser',
+            //     component: () => import('@/views/pages/AddUser.vue')
+            // }
+        ]
   },
   { path: '/login', name: 'Login', component: Login },
 ];
