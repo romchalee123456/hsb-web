@@ -12,7 +12,8 @@
     "db:init": "npm run db:up && npm run tables:up",
     "postinstall": "prisma generate",
     "vercel-build": "prisma generate && prisma migrate deploy && next build",
-    "seed": "node prisma/seed.js"
+    "seed": "node prisma/seed.js",
+    "reset": "node reset.js &&  prisma generate && prisma migrate deploy && next build && npm run seed"
   },
   "keywords": [],
   "author": "",

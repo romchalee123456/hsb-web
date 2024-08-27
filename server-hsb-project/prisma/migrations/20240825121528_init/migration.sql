@@ -35,11 +35,19 @@ CREATE TABLE `period` (
     `periodid` INTEGER NOT NULL AUTO_INCREMENT,
     `projectid` INTEGER NOT NULL,
     `description` VARCHAR(500) NOT NULL,
-    `createOn` DATETIME(3) NOT NULL,
+    `createOn` TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     `periodStatusId` INTEGER NOT NULL,
     `periodnameid` INTEGER NOT NULL,
 
     PRIMARY KEY (`periodid`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `periodStatus` (
+    `periodStatusId` INTEGER NOT NULL AUTO_INCREMENT,
+    `periodStatusName` VARCHAR(500) NOT NULL,
+
+    PRIMARY KEY (`periodStatusId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -57,7 +65,7 @@ CREATE TABLE `project` (
     `projectName` VARCHAR(500) NULL,
     `projectCode` VARCHAR(500) NULL,
     `description` VARCHAR(500) NULL,
-    `createOn` DATETIME(3) NULL,
+    `createOn` TIMESTAMP(6) NULL DEFAULT CURRENT_TIMESTAMP(6),
     `amount` DECIMAL(10, 0) NULL,
     `userid` INTEGER NULL,
     `projectStatusid` INTEGER NULL,
@@ -75,8 +83,8 @@ CREATE TABLE `user` (
     `password` VARCHAR(255) NOT NULL,
     `created_on` TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     `role` INTEGER NULL,
-    `TameName` VARCHAR(100) NULL,
-    `PhoneNumber` INTEGER NULL,
+    `teamName` VARCHAR(100) NULL,
+    `phoneNumber` VARCHAR(50) NULL,
 
     UNIQUE INDEX `user_email_key`(`email`),
     PRIMARY KEY (`id`)
@@ -86,9 +94,9 @@ CREATE TABLE `user` (
 CREATE TABLE `customer` (
     `customerid` INTEGER NOT NULL AUTO_INCREMENT,
     `customerFirstname` VARCHAR(255) NULL,
-    `customerLasttname` VARCHAR(255) NULL,
+    `customerLastname` VARCHAR(255) NULL,
     `customerLine` VARCHAR(255) NULL,
-    `customerPhone` INTEGER NULL,
+    `customerPhone` VARCHAR(50) NULL,
     `customerAddress` VARCHAR(500) NULL,
 
     PRIMARY KEY (`customerid`)
@@ -105,3 +113,6 @@ ALTER TABLE `period` ADD CONSTRAINT `period_periodnameid_fkey` FOREIGN KEY (`per
 
 -- AddForeignKey
 ALTER TABLE `period` ADD CONSTRAINT `period_projectid_fkey` FOREIGN KEY (`projectid`) REFERENCES `project`(`projectid`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `period` ADD CONSTRAINT `period_periodStatusId_fkey` FOREIGN KEY (`periodStatusId`) REFERENCES `periodStatus`(`periodStatusId`) ON DELETE RESTRICT ON UPDATE CASCADE;

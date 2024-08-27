@@ -31,7 +31,7 @@ const phoneNumber = ref('');
 const role = ref([
   { id: 1, name: 'admin' },
   { id: 2, name: 'ผู้ดูแลโครงการ' },
-  { id: 3, name: 'ช่าง' },
+  { id: 3, name: 'หัวหน้าช่าง' },
 
 ]);
 

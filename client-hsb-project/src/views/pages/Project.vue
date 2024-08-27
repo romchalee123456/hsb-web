@@ -44,7 +44,7 @@ onMounted(async () => {
 :title="'โครงการ'"
     >
     <template #Column>
-        <Column header="รหัสโครงการ"  field="projectCode"> </Column>
+        <Column header="รหัสโครงการ"  field="projectCode" > </Column>
                 <Column header="ชื่อโครงการ"  field="projectName"></Column>
                 <Column header="รายละเอียด" field="description"></Column>
                 <Column header="มูลค่า" field="amount"></Column>

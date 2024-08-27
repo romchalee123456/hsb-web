@@ -37,6 +37,22 @@ async function main() {
     },
   });
 
+  const periodStatus1 = await prisma.periodStatus.create({
+    data:{
+      periodStatusName:'ปิด'
+    }
+  });
+  const periodStatus2 = await prisma.periodStatus.create({
+    data:{
+      periodStatusName:'ดำเนินการ'
+    }
+  });
+  const periodStatus3 = await prisma.periodStatus.create({
+    data:{
+      periodStatusName:'อนุมัติ'
+    }
+  });
+
   // Seed project
   const project1 = await prisma.project.create({
     data: {
@@ -95,7 +111,7 @@ async function main() {
     },
   });
 
-  console.log({ houseDetailName1, houseDetail1, file1, periodName1, period1, project1, user1, customer1 });
+  console.log({ houseDetailName1, houseDetail1, file1, periodName1, periodStatus1,periodStatus2,periodStatus3,period1, project1, user1, user2,customer1 });
 }
 
 main()

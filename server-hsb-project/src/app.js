@@ -5,6 +5,7 @@ const authRoute = require('./routes/auth.route');
 const projectRoute = require('./routes/project.route');
 const customerRoute = require('./routes/customer.route');
 
+const projectTrackingRoute  = require('./routes/projectTracking.route')
 
 const { httpLogStream } = require('./utils/logger');
 const { PrismaClient } = require('@prisma/client')
@@ -20,6 +21,7 @@ app.use(cors());
 
 app.use('/api/auth', authRoute);
 app.use('/api/project', projectRoute);
+app.use('/api/projectTracking', projectTrackingRoute);
 app.use('/api/customer', customerRoute)
 
 app.get('/',(req, res) => {

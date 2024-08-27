@@ -2,24 +2,29 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/assets/stores/auth';
 import Login from '@/views/pages/auth/Login.vue';
-import AppLayout from '@/layout/AppLayout.vue';
+
 
 const routes = [
     {
         path: '/',
-        component: ()=> import('@/views/pages/home.vue'),
-        // children: [
-        //     {
-        //         path: '/',
-        //         name: 'dashboard',
-        //         component: () => import('@/views/Dashboard.vue')
-        //     },
-        //     {
-        //         path: '/addUser',
-        //         name: 'addUser',
-        //         component: () => import('@/views/pages/AddUser.vue')
-        //     }
-        // ]
+        component: ()=> import('@/views/Layout.vue'),
+        children: [
+          {
+            path: '/',
+            name: 'home',
+            component: () => import('@/views/pages/home.vue')
+        },  
+          {
+                path: '/',
+                name: 'project',
+                component: () => import('@/views/pages/project.vue')
+            },
+            // {
+            //     path: '/addUser',
+            //     name: 'addUser',
+            //     component: () => import('@/views/pages/AddUser.vue')
+            // }
+        ]
   },
   { path: '/login', name: 'Login', component: Login },
 ];

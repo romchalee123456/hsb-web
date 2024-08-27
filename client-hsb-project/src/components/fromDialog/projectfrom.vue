@@ -44,7 +44,6 @@ const addPeriod = () => {
 
         projectid: projectid.value,
         description: "",
-        createOn: "",
         periodStatusId: 1,
         periodnameid: 0,
         createOn:isoDateString,
