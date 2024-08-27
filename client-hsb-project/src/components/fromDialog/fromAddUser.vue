@@ -26,12 +26,12 @@ const rePassword = ref('');
 const firstname = ref('');
 const lastname = ref('');
 const email = ref('');
-const tameName = ref('');
+const teamName = ref('');
 const phoneNumber = ref('');
 const role = ref([
   { id: 1, name: 'admin' },
   { id: 2, name: 'ผู้ดูแลโครงการ' },
-  { id: 3, name: 'ช่าง' },
+  { id: 3, name: 'หัวหน้าช่าง' },
 
 ]);
 
@@ -72,7 +72,7 @@ const validatedata = async () => {
     return false;
   }
   if (email.value === '' ) {
-    toast.add({ severity: 'warn', summary: 'warn Error', detail: 'กรุณากรอกemail', life: 5000 });
+    toast.add({ severity: 'warn', summary: 'warn Error', detail: 'กรุณากรอกอีเมล์', life: 5000 });
     return false;
   }
   if (password.value === '' && userId.value === 0 ) {
@@ -90,8 +90,8 @@ const validatedata = async () => {
     return false;
   }
 
-  if (tameName.value === '' ) {
-    toast.add({ severity: 'warn', summary: 'warn Error', detail: 'กรุณากรอกเบอร์', life: 5000 });
+  if (teamName.value === '' ) {
+    toast.add({ severity: 'warn', summary: 'warn Error', detail: 'กรุณากรอกชื่อทีม', life: 5000 });
     return false;
   }
   return true;
@@ -114,15 +114,15 @@ const handleClickSave = async () => {
     email: email.value,
     password: password.value,
     role: selectedRole.value.id,
-    tameName: tameName.value,
+    teamName: teamName.value,
     phoneNumber: phoneNumber.value
   }
   const res = await userService.insertUser(payload);
 
   if (res.status === "success") {
 
-    await fetchData(res.data.data.id);
-    userId.value = res.data.data.id;
+    await fetchData(res.data.result.id);
+    userId.value = res.data.result.id;
 
     toast.add({
       severity: 'success',
@@ -149,7 +149,7 @@ const handleClickSave = async () => {
     lastname: lastname.value,
     email: email.value,
     role: selectedRole.value.id,
-    tameName: tameName.value,
+    teamName: teamName.value,
     phoneNumber: phoneNumber.value.toString()
   }
   const res = await userService.UpdateUser(payload,userId.value);
@@ -205,8 +205,8 @@ const fetchData = async (value) => {
   lastname.value = res.data.lastname;
   email.value = res.data.email;
   selectedRole.value = role.value[res.data.role - 1];
-  tameName.value = res.data.TameName;
-  phoneNumber.value = res.data.PhoneNumber;
+  teamName.value = res.data.teamName;
+  phoneNumber.value = res.data.phoneNumber;
   password.value = '';
   rePassword.value = '';
 
@@ -233,8 +233,10 @@ onMounted(async () => {
         header: {
           class: 'bg-hsb-primary text-white text-base modal-font-Prompt',
         },
-      }">
-
+      }"
+      @update:visible="handleClickClose"
+      >
+      
       <div class="container mx-auto px-4 pt-4">
         <div class="grid grid-cols-2 gap-4">
           <div class="field grid grid-cols-5 gap-4">
@@ -294,7 +296,7 @@ onMounted(async () => {
               <label class="mr-5">ชื่อทีม</label>
             </div>
             <div class="col-span-4">
-              <InputText class="w-full" id="firstname1" type="text" v-model="tameName" :disabled="modeView" />
+              <InputText class="w-full" id="firstname1" type="text" v-model="teamName" :disabled="modeView" />
             </div>
           </div>
           <div class="field grid grid-cols-5 gap-4">

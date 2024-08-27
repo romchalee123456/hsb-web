@@ -37,6 +37,22 @@ async function main() {
     },
   });
 
+  const periodStatus1 = await prisma.periodStatus.create({
+    data:{
+      periodStatusName:'ปิด'
+    }
+  });
+  const periodStatus2 = await prisma.periodStatus.create({
+    data:{
+      periodStatusName:'ดำเนินการ'
+    }
+  });
+  const periodStatus3 = await prisma.periodStatus.create({
+    data:{
+      periodStatusName:'อนุมัติ'
+    }
+  });
+
   // Seed project
   const project1 = await prisma.project.create({
     data: {
@@ -80,7 +96,7 @@ async function main() {
       password: '$2a$10$FVtM8B8dLQUilVnwMiQykuCYoIdCcPxpvj8xZ0AwKbfcnLVkmLB6.', // Ideally, you should hash the password
       role: 2,
       teamName: 'ทีมช่างแนวใหม่',
-      phoneNumber: 1234567890,
+      phoneNumber: "1234567890",
     },
   });
 
@@ -88,14 +104,14 @@ async function main() {
   const customer1 = await prisma.customer.create({
     data: {
       customerFirstname: 'คุณกลาง',
-      customerLasttname: 'มีดี',
+      customerLastname: 'มีดี',
       customerLine: 'Customer Line 1',
       customerPhone: "09876543210",
       customerAddress: '123 Main St',
     },
   });
 
-  console.log({ houseDetailName1, houseDetail1, file1, periodName1, period1, project1, user1, customer1 });
+  console.log({ houseDetailName1, houseDetail1, file1, periodName1, periodStatus1,periodStatus2,periodStatus3,period1, project1, user1, user2,customer1 });
 }
 
 main()

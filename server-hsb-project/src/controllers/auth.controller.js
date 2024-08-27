@@ -6,7 +6,7 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 exports.signup = async(req, res) => {
-    const { firstname, lastname, email, password,role,tameName,phoneNumber } = req.body;
+    const { firstname, lastname, email, password,role,teamName,phoneNumber } = req.body;
     const hashedPassword = hashPassword(password.trim());
 
     const result = await prisma.user.create({
@@ -16,8 +16,8 @@ exports.signup = async(req, res) => {
            email: email.trim(),
            password: hashedPassword.trim(),
            role: role,
-           TameName: tameName.trim(),
-           PhoneNumber: phoneNumber,
+           teamName: teamName.trim(),
+           phoneNumber: phoneNumber,
         
         },
       })
@@ -79,7 +79,7 @@ exports.signin = async(req, res) => {
 }
 
 exports.update = async(req, res) => {
-    const { firstname, lastname, email,role,tameName,phoneNumber } = req.body;
+    const { firstname, lastname, email,role,teamName,phoneNumber } = req.body;
     const { id } = req.params;
 
     // const user = new User(firstname.trim(), lastname.trim(), email.trim(),'',role,tameName.trim(),phoneNumber.trim());
@@ -90,7 +90,7 @@ exports.update = async(req, res) => {
           lastname : lastname.trim(),
           email : email.trim(),
           role:role,
-          TameName:tameName.trim(),
+          teamName:teamName.trim(),
           password:phoneNumber.trim(),
 
         },
@@ -118,7 +118,7 @@ exports.findAllUser = async(req, res) => {
         if (!data) {
             res.status(500).send({
                 status: "error",
-                // message: err.message
+                message: err.message
             });
         } else {
 

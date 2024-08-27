@@ -20,27 +20,32 @@ const routes = [
                 component: () => import('@/views/pages/AddUser.vue')
             },
             {
-              path: '/project',
-              name: 'project',
-              component: () => import('@/views/pages/Project.vue')
+                path: '/project',
+                name: 'project',
+                component: () => import('@/views/pages/Project.vue')
+            },
+            {
+              path: '/customer',
+              name: 'customer',
+              component: () => import('@/views/pages/Customer.vue')
           }
         ]
-  },
-  { path: '/login', name: 'Login', component: Login },
+    },
+    { path: '/login', name: 'Login', component: Login }
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+    history: createWebHistory(),
+    routes
 });
 
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
-  if (to.name !== 'Login' && !authStore.isAuthenticated) {
-    next({ name: 'Login' });
-  } else {
-    next();
-  }
+    const authStore = useAuthStore();
+    if (to.name !== 'Login' && !authStore.isAuthenticated) {
+        next({ name: 'Login' });
+    } else {
+        next();
+    }
 });
 
 export default router;

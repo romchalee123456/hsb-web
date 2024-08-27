@@ -14,10 +14,19 @@ exports.findAllProject = async(req, res) => {
     } 
    var decode =  decodeTokenForId(token)
 
-    const projectNumber = await prisma.project.count({
+    const projectTotal = await prisma.project.count({
         where: { responseid: Number(decode.id) },
     });
-        if (!projectNumber) {
+    const projects = await prisma.project.findMany({
+        where: { responseid: Number(decode.id) },
+        include:{
+            _count:{
+                select:{periods:true}
+            }
+        }
+        
+    });
+        if (!projectTotal) {
             res.status(500).send({
                 status: "error",
                  message: err.message
@@ -28,8 +37,9 @@ exports.findAllProject = async(req, res) => {
                 status: "success",
                 data: 
                     {
-                        projectNumber : projectNumber,
-                        
+                        projectTotal : projectTotal,
+                        projects:projects,
+
 
                     }
                 

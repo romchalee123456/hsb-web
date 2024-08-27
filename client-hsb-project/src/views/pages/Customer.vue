@@ -1,10 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import GenericViewPage from '../GenericViewPage.vue';
-import userService from '@/service/userService';
-import fromAddUser from '@/components/fromDialog/fromAddUser.vue';
+import customerService from '@/service/customerService';
+import customerfrom from '@/components/fromDialog/customerfrom.vue';
 
-const users = ref([]);
+const customer = ref([]);
 const fromVisible = ref(false);
 const id = ref(0);
 const handleClickAdd = () =>{
@@ -18,13 +18,13 @@ const handleClickClose = () =>{
 const onRowDbClick = (event) =>{
    console.log(event.data);
     fromVisible.value = true;
-    id.value = event.data.id;
+    id.value = event.data.customerid;
 }
 
 const loadData = async() =>{
-    const res = await userService.getAllUser();
+    const res = await customerService.getAllCustomer();
 
-users.value = res.data;
+customer.value = res.data;
 }
 const searchData = (value) => {
     
@@ -37,26 +37,26 @@ onMounted(async () => {
 </script>
 <template>
     <GenericViewPage
-    :list="users"
+    :list="customer"
 @button-add="handleClickAdd"
 @onRowDbClick="onRowDbClick"
 @search="searchData"
-:title="'ผู้ใช้งาน'"
+:title="'ลูกค้า'"
     >
     <template #Column>
-        <Column header="ชื่อ" filterField="firstname" field="firstname"> </Column>
-                <Column header="นามสกุล"  field="lastname"></Column>
-                <Column header="ชื่อทีม" field="teamName"></Column>
-                <Column header="เบอร์โทร" field="phoneNumber"></Column>
+        <Column header="ชื่อ" field="customerFirstname"> </Column>
+                <Column header="นามสกุล"  field="customerLastname"></Column>
+                <Column header="เบอร์โทรศัพท์" field="customerPhone"></Column>
+                <Column header="ไอดี-ไลน์" field="customerLine"></Column>
     </template>
     </GenericViewPage>
-<fromAddUser
+<customerfrom
 v-if="fromVisible"
 :from-visible="fromVisible"
 :id="id"
 :onload="loadData"
 @button-close="handleClickClose"
-></fromAddUser>
+></customerfrom>
 </template>
 <style>
 

@@ -1,8 +1,34 @@
 <script setup>
 import { useLayout } from '@/layout/composables/layout';
-
+import { ref } from 'vue';
+import loginService from '@/service/loginService';
 import logo from '@/assets/image/huglogo1-ai.png'
 const { onMenuToggle, toggleDarkMode, isDarkTheme } = useLayout();
+
+const menu = ref();
+const items = ref([
+    {
+        // label: 'Options',
+        items: [
+            // {
+            //     label: 'รีโหลด',
+            //     icon: 'pi pi-refresh'
+            // },
+            {
+                label: 'ออกจากระบบ',
+                icon: 'pi pi-upload',
+                command: () => {
+                  loginService.logout();
+        }
+               
+            }
+        ]
+    }
+]);
+
+const toggle = (event) => {
+    menu.value.toggle(event);
+};
 </script>
 
 <template>
@@ -45,10 +71,13 @@ const { onMenuToggle, toggleDarkMode, isDarkTheme } = useLayout();
                         <i class="pi pi-inbox"></i>
                         <span>Messages</span>
                     </button>
-                    <button type="button" class="layout-topbar-action">
+                    <button type="button" class="layout-topbar-action"
+                     @click="toggle"
+                    >
                         <i class="pi pi-user"></i>
                         <span>Profile</span>
                     </button>
+                    <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
                 </div>
             </div>
         </div>
