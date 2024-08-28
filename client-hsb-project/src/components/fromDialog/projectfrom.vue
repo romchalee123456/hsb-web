@@ -8,6 +8,7 @@ import projectService from '@/service/projectService';
 import userService from '@/service/userService';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
+import customerInputFields from '../customInputfields/customerInputFields.vue';
 const toast = useToast();
 useToast;
 const props = defineProps({
@@ -29,6 +30,7 @@ const deletePeriod = ref([]);
 const description = ref('');
 const projectName = ref('');
 const amount = ref('');
+const customerSelected = ref();
 const projectStatus = ref([
     { id: 1, name: 'ดำเนินการ' },
     { id: 2, name: 'เสร็จสิ้น' },
@@ -113,6 +115,7 @@ const validatedata = async () => {
 };
 
 const handleClickSave = async () => {
+    console.log(customerSelected.value)
     const validate = await validatedata();
     if (!validate) {
         return false;
@@ -289,6 +292,20 @@ onMounted(async () => {
                             <Dropdown v-model="selectedRoleSponse" :options="responses" optionLabel="firstname" placeholder="" checkmark :highlightOnSelect="false" class="w-full md:w-14rem" :disabled="modeView" />
                         </div>
                     </div>
+                    <div class="field grid grid-cols-5 gap-4">
+                        <div>
+                            <label class="">ลูกค้า</label>
+                        </div>
+                        <div class="col-span-4">
+                          <customerInputFields
+                          :selected-value="customerSelected"
+                          @valueChanged="(value)=>{
+                            customerSelected = value;
+                          }"
+                          :disabled="modeView"
+                          ></customerInputFields>
+                        </div>
+                    </div>
                     <br />
                     <div class="grid col-span-2 gap-4">
                         <div>
@@ -296,7 +313,7 @@ onMounted(async () => {
                         </div>
                         <div>
                             <div class="col-span-10">
-                                <Textarea class="w-full" v-model="description" variant="filled" rows="5" cols="30" />
+                                <Textarea class="w-full" v-model="description" variant="filled" rows="5" cols="30" :disabled="modeView"  />
                             </div>
                         </div>
                     </div>
