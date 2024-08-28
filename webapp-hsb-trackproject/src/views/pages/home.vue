@@ -6,6 +6,7 @@ import loginService from '@/service/loginService';
 import { onMounted, ref } from 'vue';
 import InputText from 'primevue/inputtext';
 import logo from '@/assets/image/huglogo1-ai.png';
+import router from '@/router';
 const firstname = ref('');
 const lastname = ref('');
 const role = ref([
@@ -44,6 +45,9 @@ const toggle = (event) => {
 };
 import projectTrackingService from '@/service/projectTrackingService';
 
+const toPeriod = async (projectid) => {
+  router.push('/period/'+ projectid)
+}
 
 
 const fetchData = async () => {
@@ -133,7 +137,7 @@ onMounted(async () => {
         :key="project.projectCode"
           >
           <div class="pt-5">
-          <Card>
+          <Card @Click="toPeriod(project.projectid)">
         <template #title> <span class="font-bold kanit-thin">{{ project.projectName }}</span></template>
         <template #content>
             <p class="m-0">
