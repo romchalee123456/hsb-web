@@ -166,6 +166,13 @@ exports.findProjectById = async(req, res) => {
           },
         where: {projectid: Number(id) },
     })
+
+    const countApprovePeriod = await prisma.period.count({
+        where: {
+            projectid: Number(id),
+            periodStatusId: 3,
+        },
+    });
     
     if (!data) {
         res.status(500).send({
@@ -178,6 +185,7 @@ exports.findProjectById = async(req, res) => {
             status: "success",
             data: data, 
             periodData: periodData,
+            countApprovePeriod: countApprovePeriod
             
         });
     }
