@@ -15,9 +15,9 @@ const routes = [
             component: () => import('@/views/pages/home.vue')
         },  
           {
-                path: '/',
-                name: 'project',
-                component: () => import('@/views/pages/project.vue')
+                path: '/period/:id',
+                name: 'period',
+                component: () => import('@/views/pages/period.vue')
             },
             // {
             //     path: '/addUser',
