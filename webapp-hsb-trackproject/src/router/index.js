@@ -19,11 +19,11 @@ const routes = [
                 name: 'period',
                 component: () => import('@/views/pages/period.vue')
             },
-            // {
-            //     path: '/addUser',
-            //     name: 'addUser',
-            //     component: () => import('@/views/pages/AddUser.vue')
-            // }
+            {
+              path: '/period/periodDetail/:id/:periodId:',
+              name: 'periodDetail',
+              component: () => import('@/views/pages/periodDetail.vue')
+          },
         ]
   },
   { path: '/login', name: 'Login', component: Login },

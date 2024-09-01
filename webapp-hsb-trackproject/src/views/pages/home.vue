@@ -73,7 +73,7 @@ onMounted(async () => {
     
       <!-- Header Section -->
       <div class="header-top">
-        <div class=" flex flex-wrap justify-end  navbarApp pb-0 pl-0 pr-0 pt-4" >
+        <div class=" flex flex-wrap justify-end  navbarApp pb-2 pl-0 pr-0 pt-4" >
         <OverlayBadge value="2" severity="danger">
             <i class="pi pi-bell" style="font-size: 2rem" />
         </OverlayBadge>

@@ -48,5 +48,29 @@ exports.findAllProject = async(req, res) => {
     
 };
 
+exports.findPeriodName = async(req, res) => {
+
+    const periodname = await prisma.periodname.findMany({
+    });
+
+    if (!periodname) {
+        res.status(500).send({
+            status: "error",
+             message: err.message
+        });
+    } else {
+
+        res.status(201).send({
+            status: "success",
+            data: 
+                {
+                 periodname,
+
+                }
+            
+        });
+    }
+}
+
 
 

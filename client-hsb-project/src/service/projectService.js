@@ -22,6 +22,12 @@ export default {
         const res = await http.put(`/project/projectUpdate/${id}`, data);
         return res.data;
     },
+    
+    async getPeriodDetail(id) {
+        const res = await http.get(`/project/getPeriodDetail/${id}`);
+        return res.data;
+    },
+
 
 
 };
