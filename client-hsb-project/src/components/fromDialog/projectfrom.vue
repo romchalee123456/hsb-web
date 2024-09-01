@@ -9,6 +9,7 @@ import userService from '@/service/userService';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import customerInputFields from '../customInputfields/customerInputFields.vue';
+import PeriodDetailFrom from './PeriodDetailFrom.vue';
 const toast = useToast();
 useToast;
 const props = defineProps({
@@ -19,7 +20,9 @@ const props = defineProps({
 const { fromVisible, id } = toRefs(props);
 
 const projectid = ref(0);
+const periodid = ref(0);
 const modeView = ref(true);
+const periodfromVisible = ref(false);
 
 const selectedRole = ref({ id: 1, name: 'ดำเนินการ' });
 const selectedRoleSponse = ref();
@@ -38,6 +41,14 @@ const projectStatus = ref([
 ]);
 
 const emit = defineEmits(['buttonClose']);
+
+const openPeriodDetail = (event) => {
+    console.log(event);
+periodfromVisible.value = true;
+console.log(event.data.periodid);
+periodid.value = event.data.periodid;
+
+};
 
 const addPeriod = () => {
     const isoDateString = new Date().toISOString(); // ISO-8601 format
@@ -230,6 +241,12 @@ onMounted(async () => {
 });
 </script>
 <template>
+<PeriodDetailFrom
+v-if="periodfromVisible"
+:fromVisible="periodfromVisible"
+:id="periodid"
+@close="()=>{periodfromVisible = false}"
+></PeriodDetailFrom>
     <Toast />
     <div class="card flex justify-center">
         <Dialog
@@ -320,10 +337,14 @@ onMounted(async () => {
                 </div>
             </div>
             <div class="datatable-wrapper flex items-center justify-center">
-                <DataTable :value="periodData" stripedRows class="w-[1150px]">
+                <DataTable :value="periodData" stripedRows class="w-[1150px]"
+                @row-dblclick="openPeriodDetail"
+                >
                     <Column field="description" header="งวด">
                         <template #body="{index}">
-                            <InputText v-model="periodData[index].description" :disabled="modeView">
+                            <InputText v-model="periodData[index].description" :disabled="modeView"
+                             class="w-full"
+                            >
                             </InputText>
                         </template>
                     </Column>

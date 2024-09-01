@@ -19,4 +19,7 @@ router.route('/projectUpdate/:id')
 router.route('/projectDelete/:id')
     .delete(asyncHandler(projectController.deleteProjectId));
 
+router.route('/getPeriodDetail/:id')
+    .get(asyncHandler(projectController.findAllPeriodDetail));
+
 module.exports = router;

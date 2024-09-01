@@ -4,6 +4,8 @@ const cors = require('cors');
 const authRoute = require('./routes/auth.route');
 const projectRoute = require('./routes/project.route');
 const customerRoute = require('./routes/customer.route');
+const houseDetailRoute = require('./routes/houseDetail.route');
+const uploadFileRoute = require('./routes/uploadFile.route');
 
 const projectTrackingRoute  = require('./routes/projectTracking.route')
 
@@ -22,7 +24,9 @@ app.use(cors());
 app.use('/api/auth', authRoute);
 app.use('/api/project', projectRoute);
 app.use('/api/projectTracking', projectTrackingRoute);
-app.use('/api/customer', customerRoute)
+app.use('/api/customer', customerRoute);
+app.use('/api/houseDetail', houseDetailRoute);
+app.use('/api/uploadFile', uploadFileRoute);
 
 app.get('/',(req, res) => {
     res.status(200).send({

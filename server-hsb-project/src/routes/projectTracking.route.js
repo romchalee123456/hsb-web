@@ -8,5 +8,6 @@ const projectTrackingController = require('../controllers/projectTracking.contro
 router.route('/getProject')
     .get(asyncHandler(projectTrackingController.findAllProject));
 
-
+    router.route('/getPeriodName')
+    .get(asyncHandler(projectTrackingController.findPeriodName));
 module.exports = router;

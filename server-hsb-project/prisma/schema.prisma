@@ -24,8 +24,9 @@ model housedetail {
   houseDetailid     Int      @id @default(autoincrement())
   createOn          DateTime @default(now())
   houseDetailNameId Int
-
+  periodDetailid    Int
   houseDetailname housedetailname @relation(fields: [houseDetailNameId], references: [houseDetailNameid])
+  periodDetail periodDetail @relation(fields: [periodDetailid], references: [periodDetailid])
   files           file[]
 }
 
@@ -43,11 +44,27 @@ model period {
   description    String   @db.VarChar(500)
   createOn       DateTime @default(now()) @db.Timestamp(6)
   periodStatusId Int
+
+  project    project    @relation(fields: [projectid], references: [projectid])
+  periodStatus periodStatus @relation(fields: [periodStatusId], references: [periodStatusId])
+
+  periodDetail periodDetail[]
+}
+
+model periodDetail {
+  periodDetailid       Int      @id @default(autoincrement())
+  periodid              Int     
+  projectid            Int
+  description    String   @db.VarChar(500)
+  createOn       DateTime @default(now()) @db.Timestamp(6)
+  periodDetailStatusId Int
   periodnameid   Int
 
   periodname periodname @relation(fields: [periodnameid], references: [periodNameid])
-  project    project    @relation(fields: [projectid], references: [projectid])
-  periodStatus periodStatus @relation(fields: [periodStatusId], references: [periodStatusId])
+  period period @relation(fields: [periodid], references: [periodid])
+  periodDetailStatus periodDetailStatus @relation(fields: [periodDetailStatusId], references: [periodDetailStatusId])
+
+  housedetail housedetail[]
 }
 
 model periodStatus {
@@ -56,12 +73,19 @@ model periodStatus {
   period period[]
 }
 
+model periodDetailStatus {
+  periodDetailStatusId Int @id @default(autoincrement())
+  periodDetailStatusName String @db.VarChar(500)
+  periodDetail periodDetail[]
+}
+
+
 model periodname {
   periodNameid Int      @id @default(autoincrement())
   createOn     DateTime @default(now())
   periodName   String   @db.VarChar(500)
 
-  periods period[]
+  periodDetail periodDetail[]
 }
 
 model project {

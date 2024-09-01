@@ -28,7 +28,7 @@ visible.value =false;
 }
 
 onMounted(async()=>{
-    alert(props.disable)
+ 
     const res = await customerService.getAllCustomer();
 
      customer.value = res.data;

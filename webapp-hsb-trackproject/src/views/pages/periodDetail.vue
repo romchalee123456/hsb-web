@@ -3,11 +3,11 @@ import Card from 'primevue/card';
 import userService from '@/service/userService';
 import loginService from '@/service/loginService';
 import { onMounted, ref } from 'vue';
-import InputText from 'primevue/inputtext';
 import logo from '@/assets/image/huglogo1-ai.png';
 import projectService from '@/service/projectService';
 import { useRoute } from 'vue-router';
-import router from '@/router';
+import houesDetailFrom from '@/components/fromDialog/houesDetailFrom.vue';
+
 const route = useRoute();
 const firstname = ref('');
 const lastname = ref('');
@@ -19,20 +19,21 @@ const role = ref([
 const projectName = ref(0);
 const projectCode = ref(0);
 const description = ref(0);
-const periodList = ref([]);
+const periodDetailid = ref();
 const selectedRole = ref();
 const periodTotal = ref(0);
 const periodApproveTotal = ref(0);
+const fromVisible = ref(false);
+
+const periodList = ref([]);
+const periodDetalList = ref([]);
 
 const menu = ref();
 const items = ref([
     {
         // label: 'Options',
         items: [
-            // {
-            //     label: 'รีโหลด',
-            //     icon: 'pi pi-refresh'
-            // },
+   
             {
                 label: 'ออกจากระบบ',
                 icon: 'pi pi-upload',
@@ -48,15 +49,28 @@ const toggle = (event) => {
     menu.value.toggle(event);
 };
 
+import router from '@/router';
 
+//
+const houseDetailFrom = (value) => {
+    fromVisible.value = true;
+console.log(value);
+    periodDetailid.value = value;
 
-const toPeriodDetail = (periodDetailId) => {
-    router.push('periodDetail/'+route.params.id+'/'+periodDetailId)
+};
+
+const toPeriod = () => {
+    router.push('/period/'+route.params.id)
 };
 
 const fetchData = async () => {
     const projectId = route.params.id;
+    const periodId = route.params.periodId;
+    
     const res = await projectService.findProjectById(projectId);
+    const resPeriodDetail = await projectService.getPeriodDetail(periodId);
+
+    periodDetalList.value = resPeriodDetail.data;
 
     projectName.value = res.data.projectName;
     projectCode.value = res.data.projectCode;
@@ -76,11 +90,17 @@ onMounted(async () => {
 });
 </script>
 <template>
+    <houesDetailFrom
+    v-if="fromVisible"
+    :fromVisible="fromVisible"
+    :id="periodDetailid"
+    @onClosed="(value)=>{fromVisible = value}"
+    ></houesDetailFrom>
     <!-- Header Section -->
     <div class="header-top">
         <div class="flex justify-between items-center navbarApp pb-2 pl-0 pr-0 pt-4">
   <!-- Left Side -->
-  <a href="/"><i class="pi pi-chevron-left" style="font-size: 1.5rem; color: #192a51;"></i></a>
+  <i class="pi pi-chevron-left" style="font-size: 1.5rem; color: #192a51;" @click="toPeriod"></i>
   
   <!-- Right Side -->
   <div class="flex items-center space-x-4">
@@ -109,55 +129,30 @@ onMounted(async () => {
                         </div>
                     </div>
                 </div>
-                <div class="col-12 p-0 navbarApp text-white">
-                    <div class="font-bold" style="padding-left: 4rem; padding-right: 4rem; padding-top: 1.5rem">
-                        <span class="p-2" style="font-size: 1rem; letter-spacing: 0.1rem">รหัสโครงการ : {{ projectCode }}</span>
-                        <span class="p-2" style="font-size: 1rem; letter-spacing: 0.1rem">งวด : {{ periodTotal }}</span>
-                    </div>
-                </div>
-                <div class="col-12 p-0 navbarApp text-white">
-                    <div class="font-bold" style="padding-left: 4rem; padding-right: 4rem; padding-top: 0.5rem">
-                        <span class="p-2" style="font-size: 1rem; letter-spacing: 0.1rem">โครงการ : {{ projectName }}</span>
-                    </div>
-                </div>
-                <div class="col-12 p-0 navbarApp text-white">
-                    <div class="font-bold" style="padding-left: 4rem; padding-right: 4rem; padding-top: 0.5rem">
-                        <span class="p-2" style="font-size: 0.8rem; letter-spacing: 0.1rem">รายละเอียด : {{ description }}</span>
-                    </div>
-                </div>
-                <div class="col-12 text-center pt-0 pl-6 pr-6 pb-0 diagonal-gradient">
-                    <div class="col">
-                        <InputGroup>
-                            <InputGroupAddon class="bg-primary text-white">
-                                <i class="pi pi-search"></i>
-                            </InputGroupAddon>
-                            <InputText class="w-full bg-primary text-white" placeholder="ค้นหา" />
-                        </InputGroup>
-                    </div>
-                </div>
-                <!-- Content Section -->
+            
             </div>
         </div>
     </div>
 
-    <div class="content bg-white content-gradient">
-        <div class="col-12 p-0 text-white">
-            <div class="font-bold flex justify-end items-center" style="padding-left: 4rem; padding-right: 4rem; padding-top: 0.5rem">
-                
-                <span class="p-2" style="font-size: 1rem; letter-spacing: 0.1rem; border: 2px; background-color: #192a51">อนุมัติ : {{ periodApproveTotal }}</span>
-            </div>
-        </div>
+    <div class="content content-gradient">
 
-        <div class="px-5" v-for="period of periodList" :key="period.periodid">
+        <div class="px-5">
             <div class="pt-[2px] pb-3">
-                <Card  style="background-color: #192a51;" @click="toPeriodDetail(period.periodid)">
-                    <template #title>
-                        <div class="flex justify-between items-center  w-full bg-primary">
-                            <span class="font-bold kanit-thin text-white">{{ period.description }}</span>             
-                            <Badge style="font-size: 1.1rem; letter-spacing: 0.1rem; border-radius: 5px " v-if="period.periodStatusId == 1" :value="period.periodStatus.periodStatusName" severity="secondary"></Badge>
-                            <Badge style="font-size: 1.1rem; letter-spacing: 0.1rem; border-radius: 5px" v-if="period.periodStatusId == 2" :value="period.periodStatus.periodStatusName" severity="warn"></Badge>
-                            <Badge style="font-size: 1.1rem; letter-spacing: 0.1rem; border-radius: 5px" v-if="period.periodStatusId == 3" :value="period.periodStatus.periodStatusName" severity="success"></Badge>
-                        </div>
+                <Card  style="background-color: #192a51;height: 80vh;">
+             
+                    <template #content>
+                        <div class="pt-[2px] pb-3" v-for="periodDetail of periodDetalList" :key="periodDetail.periodDetailid">
+                        <Card @Click="houseDetailFrom(periodDetail.periodDetailid)">
+        <template #title>{{ periodDetail.periodname.periodname }}</template>
+        <template #content>
+            <p class="m-0">
+              
+                {{   periodDetail.description }}
+            </p>
+        </template>
+    </Card>
+            </div>
+                        
                     </template>
 
                         

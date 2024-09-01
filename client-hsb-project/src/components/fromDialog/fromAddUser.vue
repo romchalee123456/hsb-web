@@ -6,6 +6,7 @@ import InputText from "primevue/inputtext";
 import Dropdown from "primevue/dropdown";
 import userService from "@/service/userService";
 import Toast from "primevue/toast";
+import PeriodDetailFrom from "./PeriodDetailFrom.vue";
 import { useToast } from "primevue/usetoast";
 const toast = useToast();
 useToast
@@ -18,6 +19,7 @@ const { fromVisible, id } = toRefs(props);
 
 const userId = ref(0);
 const modeView = ref(true);
+const periodDetailVisble = ref(false);
 
 
 const selectedRole = ref( { id: 1, name: 'admin' });
@@ -223,6 +225,7 @@ onMounted(async () => {
 });
 </script>
 <template>
+
   <Toast />
   <div class="card flex justify-center">
     <Dialog v-model:visible="fromVisible" maximizable modal :header="'เพิ่มข้อมูลผู้ใช้'" :style="{ width: '80rem' }"
