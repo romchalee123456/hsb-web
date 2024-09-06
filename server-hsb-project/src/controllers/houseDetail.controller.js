@@ -31,6 +31,32 @@ exports.findAllHouseDetail = async(req, res) => {
     
 };
 
+exports.findHouseDetailById = async(req, res) => {
+
+    const { id } = req.params;
+
+    const data = await prisma.housedetail.findUnique({
+        where: { houseDetailid: Number(id) },
+        include: {
+          houseDetailname: true,
+        },
+      })
+        if (!data) {
+            res.status(500).send({
+                status: "error",
+                 message: err.message
+            });
+        } else {
+
+            res.status(201).send({
+                status: "success",
+                data: 
+                    data
+                
+            });
+        }
+    
+};
 
 exports.findAllFileByHouseDetail = async(req, res) => {
 
@@ -55,5 +81,6 @@ exports.findAllFileByHouseDetail = async(req, res) => {
         }
     
 };
+
 
 

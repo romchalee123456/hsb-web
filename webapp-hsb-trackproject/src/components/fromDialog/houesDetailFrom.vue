@@ -3,7 +3,7 @@ import { ref, onMounted, defineProps, defineEmits ,toRefs} from 'vue';
 import houseDetailService from '@/service/houseDetailService';
 import Textarea from 'primevue/textarea';
 import houseDeiailSendApproveFrom from './houseDeiailSendApproveFrom.vue';
-
+import periodDetailService from '@/service/periodDetailService';
 const emit = defineEmits(['valueChanged','onClosed']);
 const props = defineProps({
     fromVisible: Boolean,
@@ -18,6 +18,8 @@ const { fromVisible } = toRefs(props);
 
 const fromApproveVisible = ref(false);
 const houseDetailid = ref(0);
+const periodDetail = ref([]);
+const description = ref("");
 
 
 const houseDetailSendApproveFrom = async(value) =>{
@@ -29,10 +31,9 @@ const houseDetailSendApproveFrom = async(value) =>{
 
 const fetchData = async() =>{
     const res = await houseDetailService.findAllHouseDetail(props.id);
-
+    const res1 = await periodDetailService.findPeriodDetailById(props.id);
     houesDetailList.value = res.data;
-
-    
+    description.value = res1.data.description;
 
 }
 
@@ -78,7 +79,7 @@ await fetchData();
             </div>
             <div class="col-12 diagonal-gradient">
                 <div class="pl-4 pr-4">
-                    <Textarea class="w-full bg-primary" placeholder="รายละเอียด...."></Textarea>
+                    <Textarea class="w-full bg-primary text-white" v-model="description"></Textarea>
                 </div>
             </div>
          

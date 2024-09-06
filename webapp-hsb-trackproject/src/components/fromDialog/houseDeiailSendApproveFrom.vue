@@ -15,6 +15,9 @@ const onClosed = () => {
 const { fromVisible } = toRefs(props);
 
 const fromUploadFileVisible = ref(false);
+const houseDetailName = ref("");
+const uploadFileData = ref([]);
+const deleteUploadFile = ref([]);
 
 
 const fileList = ref([]);
@@ -22,7 +25,9 @@ const fileList = ref([]);
 const fetchData = async () => {
 
     const res = await houseDetailService.findAllFileByHouseDetail(props.id);
+    const res1 = await houseDetailService.findHouseDetailById(props.id);
     fileList.value = res.data;
+    houseDetailName.value = res1.data.houseDetailname.houseDetailName;
 
 }
 
@@ -31,6 +36,10 @@ const onClickUploadFile = async () => {
     fromUploadFileVisible.value = true;
 }
 
+const uploadFileDelete = (index,data) => {
+    uploadFileData.value.splice(index,1);
+    deleteUploadFile.value.push(data);
+};
 
 onMounted(async () => {
 
@@ -71,7 +80,7 @@ onMounted(async () => {
             <i class="pi pi-chevron-left" style="font-size: 1.5rem; color: #192a51" @click="onClosed"></i>
 
             <div>
-                <Button @click="visible = true"><span style="font-size: 0.8rem;" @click="onClickUploadFile">เพิ่มรูป</span></Button>
+                <Button @click="visible = true" style="margin-right: 10px;" ><span style="font-size: 0.8rem;" @click="onClickUploadFile">เพิ่มรูป</span></Button>
                 <Button @click="visible = true"><span style="font-size: 0.8rem;">ส่งอนุมัติ</span></Button>
 
             </div>
@@ -84,7 +93,7 @@ onMounted(async () => {
             </div>
             <div class="col-12 diagonal-gradient">
                 <div class="pl-4 pr-4">
-                    <Textarea class="w-full bg-primary" placeholder="รายละเอียด...."></Textarea>
+                    <Textarea class="w-full bg-primary text-white" v-model="houseDetailName" ></Textarea>
                 </div>
             </div>
 
@@ -94,24 +103,23 @@ onMounted(async () => {
          
             <template #content>
                 <div v-for="file of fileList" :key="file.fileid">
-                    <div class="pb-5">
-                        <div class="bg-primary  grid col-12 ">
+                    <div class="pb-3">
+                        <div class="bg-primary  grid col-12 rounded-md">
                             <div class="col-4 ">
-                                <Image :src="file.filePath" alt="Image" width="150rem" preview />
+                                <Image :src="'http://localhost:3001/'+file.filePath" alt="Image" width="150rem" preview />
                             </div>
                             <div class="col-8 flex flex-column">
-                                <span style="color: aliceblue;">{{ file.fileName }}</span>
+                                <span style="color: aliceblue; font-size: 1.1rem;">{{ file.fileName }}</span>
                                 <div class="flex justify-end">
 
 
                                     <Button @click="visible = true"
-                                    style="background-color: red;border: black;"
+                                    style="background-color: #fede00; border: black; "
                                     > 
-                                        <i class="pi pi-trash text-white "
-                                            style="font-size: 2.5rem; border: black;box-sizing: 1px;" @click="() => {
-                                                fromVisible = true;
-                                            }
-                                                "></i></Button>
+                                        <i class="pi pi-trash text-black "
+                                            style="font-size: 2.0rem; border: black;box-sizing: 1px;" @click="(uploadFileDelete)">
+                                        </i>
+                                    </Button>
                                 </div>
                             </div>
 

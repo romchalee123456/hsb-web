@@ -115,16 +115,6 @@ onMounted(async () => {
                         <span class="p-2" style="font-size: 1rem; letter-spacing: 0.1rem">งวด : {{ periodTotal }}</span>
                     </div>
                 </div>
-                <div class="col-12 p-0 navbarApp text-white">
-                    <div class="font-bold" style="padding-left: 4rem; padding-right: 4rem; padding-top: 0.5rem">
-                        <span class="p-2" style="font-size: 1rem; letter-spacing: 0.1rem">โครงการ : {{ projectName }}</span>
-                    </div>
-                </div>
-                <div class="col-12 p-0 navbarApp text-white">
-                    <div class="font-bold" style="padding-left: 4rem; padding-right: 4rem; padding-top: 0.5rem">
-                        <span class="p-2" style="font-size: 0.8rem; letter-spacing: 0.1rem">รายละเอียด : {{ description }}</span>
-                    </div>
-                </div>
                 <div class="col-12 text-center pt-0 pl-6 pr-6 pb-0 diagonal-gradient">
                     <div class="col">
                         <InputGroup>
@@ -142,21 +132,21 @@ onMounted(async () => {
 
     <div class="content bg-white content-gradient">
         <div class="col-12 p-0 text-white">
-            <div class="font-bold flex justify-end items-center" style="padding-left: 4rem; padding-right: 4rem; padding-top: 0.5rem">
+            <div class="font-bold flex justify-end items-center" style="padding-left: 3rem; padding-right: 3rem; padding-top: 0.4rem">
                 
-                <span class="p-2" style="font-size: 1rem; letter-spacing: 0.1rem; border: 2px; background-color: #192a51">อนุมัติ : {{ periodApproveTotal }}</span>
+                <span class="p-2" style="font-size: 1rem; letter-spacing: 0.1rem; border: 2px; border-radius: 10px; background-color: #2E8B57">อนุมัติ : {{ periodApproveTotal }}</span>
             </div>
         </div>
 
-        <div class="px-5" v-for="period of periodList" :key="period.periodid">
+        <div class="px-5 pt-2" v-for="period of periodList" :key="period.periodid">
             <div class="pt-[2px] pb-3">
                 <Card  style="background-color: #192a51;" @click="toPeriodDetail(period.periodid)">
                     <template #title>
                         <div class="flex justify-between items-center  w-full bg-primary">
                             <span class="font-bold kanit-thin text-white">{{ period.description }}</span>             
-                            <Badge style="font-size: 1.1rem; letter-spacing: 0.1rem; border-radius: 5px " v-if="period.periodStatusId == 1" :value="period.periodStatus.periodStatusName" severity="secondary"></Badge>
-                            <Badge style="font-size: 1.1rem; letter-spacing: 0.1rem; border-radius: 5px" v-if="period.periodStatusId == 2" :value="period.periodStatus.periodStatusName" severity="warn"></Badge>
-                            <Badge style="font-size: 1.1rem; letter-spacing: 0.1rem; border-radius: 5px" v-if="period.periodStatusId == 3" :value="period.periodStatus.periodStatusName" severity="success"></Badge>
+                            <Badge style="font-size: 1.2rem; letter-spacing: 0.1rem; border-radius: 5px " v-if="period.periodStatusId == 1" :value="period.periodStatus.periodStatusName" severity="secondary"></Badge>
+                            <Badge style="font-size: 1.2rem; letter-spacing: 0.1rem; border-radius: 5px" v-if="period.periodStatusId == 2" :value="period.periodStatus.periodStatusName" severity="warn"></Badge>
+                            <Badge style="font-size: 1.2rem; letter-spacing: 0.1rem; border-radius: 5px" v-if="period.periodStatusId == 3" :value="period.periodStatus.periodStatusName" severity="success"></Badge>
                         </div>
                     </template>
 
