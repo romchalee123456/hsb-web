@@ -132,11 +132,11 @@ onMounted(async () => {
       </div>
   
       <div class="content bg-white content-gradient ">
-        <div class="p-5"
+        <div class="px-5"
             v-for="(project) of projectList"
         :key="project.projectCode"
           >
-          <div class="pt-5">
+          <div class="pt-3">
           <Card @Click="toPeriod(project.projectid)">
         <template #title> <span class="font-bold kanit-thin">{{ project.projectName }}</span></template>
         <template #content>
