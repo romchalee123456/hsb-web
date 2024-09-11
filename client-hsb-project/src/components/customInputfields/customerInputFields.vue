@@ -38,7 +38,7 @@ onMounted(async()=>{
 <template>
     <div>
         <InputGroup>
-    <InputText placeholder="" v-model="customerName"    readonly
+    <InputText placeholder="" v-model="customerName"    readonly class="w-full"
     :disabled="modeReadonly"  />
 
     <Button icon="pi pi-search" style="background-color:#192a51;" @click="visible = true" :disabled="modeReadonly"/>
