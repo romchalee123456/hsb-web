@@ -97,10 +97,17 @@ model project {
   amount          Decimal?  @db.Decimal(10, 0)
   userid          Int?
   projectStatusid Int?
-  responseid       Int?
+  responseid      Int?
+  locationName    String?   @db.VarChar(255)
+  locationCode    String?   @db.VarChar(255)
+  lat             Decimal?    @db.Decimal(9, 6)
+  lon             Decimal?    @db.Decimal(9, 6)
+  customerid      Int?
 
   periods period[]
+
 }
+
 
 model user {
   id          Int      @id @default(autoincrement())
@@ -121,4 +128,5 @@ model customer {
   customerLine String? @db.VarChar(255)
   customerPhone String?  @db.VarChar(50)
   customerAddress String? @db.VarChar(500)
+
 }

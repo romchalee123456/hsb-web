@@ -21,5 +21,7 @@ router.route('/projectDelete/:id')
 
 router.route('/getPeriodDetail/:id')
     .get(asyncHandler(projectController.findAllPeriodDetail));
+router.route('/updateProjectLocation/:id')
+    .put(asyncHandler(projectController.updateProjectLocation));
 
 module.exports = router;
