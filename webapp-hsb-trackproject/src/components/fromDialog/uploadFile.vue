@@ -4,15 +4,18 @@ import Dialog from "primevue/dialog";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import FileUpload from 'primevue/fileupload';
-const toast = useToast();
 import uploadFileService from "@/service/uploadFileService";
-useToast
+
+
+// const emit = defineEmits(['update:fromVisible']);
+const toast = useToast();
 const props = defineProps({
   fromVisible: Boolean,
   id: Number,
   onload: Function
 });
-const { fromVisible, id } = toRefs(props);
+
+const { fromVisible } = toRefs(props);
 
 const onAdvancedUpload = async (event) => {
   const files = Array.from(event.files);
@@ -49,11 +52,22 @@ const onAdvancedUpload = async (event) => {
 
 
 
+onMounted(async () => {
+
+if (id.value) {
+    fileid.value = id.value;
+    await fetchData(id.value);
+    modeView.value = true;
+} else {
+    modeView.value = false;
+}
+});
+
 </script>
 <template>
   <Toast />
   <div class="card flex justify-center">
-    <Dialog v-model:visible="fromVisible" maximizable modal :header="'เพิ่มข้อมูลผู้ใช้'" :style="{ width: '80rem' }"
+    <Dialog v-model:visible="fromVisible" maximizable modal :header="'เพิ่มรูปภาพ'" :style="{ width: '80rem' }"
       :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" :pt="{
         root: {
           // class:'p-dialog-maximized'
@@ -61,14 +75,15 @@ const onAdvancedUpload = async (event) => {
         header: {
           class: 'bg-hsb-primary text-white text-base modal-font-Prompt',
         },
-      }">
+      }"
+      >
 
 <div class="card">
         <Toast />
         <FileUpload name="files[]" 
         customUpload
         @uploader="onAdvancedUpload"
-        :multiple="true" accept="image/*" :maxFileSize="1000000">
+        :multiple="true" accept="image/*" :maxFileSize="52428800">
             <template #empty>
                 <span>กด chose</span>
             </template>

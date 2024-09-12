@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const util = require("util");
 const fs = require("fs");
+const { connect } = require('tls');
 
 const writeFileAsync = util.promisify(fs.writeFile); 
 
@@ -48,15 +49,17 @@ exports.uploadFileHouseDetail = async (req, res) => {
       await writeFileAsync(filepath, base64Image, { encoding: "base64" });
       console.log("File created");
     }
+    await prisma.file.create({
+      data: {
+        fileName: filename,
+        filePath: filepathdb,
+        statusId: 1,
+        houseDetailId: id,
+        backUpStatus: 1,
+        fileBackupPath: '',
+      },
+    });
 
-        // Assuming you want to create a new record in the houseDetail table for each file
-        // await prisma.houseDetail.create({
-        //   data: {
-        //     id: parseInt(id),
-        //     filename: filename,
-        //     filepath: filepathdb
-        //   }
-        // });
       }
 
       res.status(200).json({ message: "Files uploaded successfully!" });

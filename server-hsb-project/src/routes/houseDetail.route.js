@@ -8,8 +8,13 @@ const houseDetailController = require('../controllers/houseDetail.controller');
 router.route('/findAllHouseDetail/:id')
     .get(asyncHandler(houseDetailController.findAllHouseDetail));
 
+router.route('/findHouseDetailById/:id')
+    .get(asyncHandler(houseDetailController.findHouseDetailById));
+
 router.route('/findAllFileByHouseDetail/:id')
     .get(asyncHandler(houseDetailController.findAllFileByHouseDetail));
-
+   
+router.route('/deleteFileByID/:id')
+    .delete(asyncHandler(houseDetailController.deleteFileByID));
 
 module.exports = router;

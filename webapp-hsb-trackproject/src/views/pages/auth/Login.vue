@@ -75,6 +75,53 @@ const onLogin = async() => {
 </template>
 
 <style scoped>
+/* กรอบการออกแบบหลัก */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+/* ขนาดหน้าจอขนาดเล็ก (มือถือ) */
+@media (max-width: 767px) {
+  .header {
+    font-size: 24px;
+    text-align: center;
+  }
+  .cta-button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+  }
+}
+
+/* ขนาดหน้าจอขนาดกลาง (แท็บเล็ต) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .header {
+    font-size: 30px;
+    text-align: center;
+  }
+  .cta-button {
+    width: auto;
+    padding: 12px 24px;
+    font-size: 20px;
+  }
+}
+
+/* ขนาดหน้าจอขนาดใหญ่ (เดสก์ท็อป) */
+@media (min-width: 1025px) {
+  .header {
+    font-size: 36px;
+    text-align: left;
+  }
+  .cta-button {
+    display: inline-block;
+    width: auto;
+    padding: 10px 20px;
+    font-size: 22px;
+  }
+}
 .pi-eye {
     transform: scale(1.6);
     margin-right: 1rem;

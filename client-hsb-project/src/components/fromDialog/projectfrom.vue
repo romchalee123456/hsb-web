@@ -245,6 +245,7 @@ onMounted(async () => {
 v-if="periodfromVisible"
 :fromVisible="periodfromVisible"
 :id="periodid"
+:projectid="id"
 @close="()=>{periodfromVisible = false}"
 ></PeriodDetailFrom>
     <Toast />
