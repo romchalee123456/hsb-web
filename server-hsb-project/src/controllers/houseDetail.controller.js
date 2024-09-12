@@ -82,5 +82,30 @@ exports.findAllFileByHouseDetail = async(req, res) => {
     
 };
 
+exports.deleteFileByID = async(req, res) => {
+
+    const { id } = req.params;
+
+    const data = await prisma.file.delete({
+        where: { fileid: Number(id) },
+      })
+        if (!data) {
+            res.status(500).send({
+                status: "error",
+                 message: err.message
+            });
+        } else {
+
+            res.status(201).send({
+                status: "success",
+                data: 
+                    data
+                
+            });
+        }
+    
+};
+
+
 
 

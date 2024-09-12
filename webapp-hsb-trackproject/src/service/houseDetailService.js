@@ -15,5 +15,9 @@ export default {
         const res = await http.get(`/houseDetail/findAllFileByHouseDetail/${id}`);
         return res.data;
     },
-
+    
+    async deleteFileByID(id) {
+        const res = await http.delete(`/houseDetail/deleteFileByID/${id}`);
+        return res.data;
+    },
 };

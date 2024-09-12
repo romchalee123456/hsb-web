@@ -7,7 +7,7 @@ import FileUpload from 'primevue/fileupload';
 import uploadFileService from "@/service/uploadFileService";
 
 
-const emit = defineEmits(['update:fromVisible']);
+// const emit = defineEmits(['update:fromVisible']);
 const toast = useToast();
 const props = defineProps({
   fromVisible: Boolean,
@@ -15,7 +15,7 @@ const props = defineProps({
   onload: Function
 });
 
-const visible = ref(props.fromVisible);
+const { fromVisible } = toRefs(props);
 
 const onAdvancedUpload = async (event) => {
   const files = Array.from(event.files);
@@ -50,22 +50,24 @@ const onAdvancedUpload = async (event) => {
   await uploadFileService.UploadFileHouseDetail(uploadPayload);
 };
 
-// Watch for prop changes and update the local state accordingly
-import { watch } from 'vue';
-watch(() => props.fromVisible, (newValue) => {
-  visible.value = newValue;
-});
-// Emit the updated visibility status when the dialog is closed or opened
-const handleDialogClose = () => {
-  emit('update:fromVisible', false);
-};
 
+
+onMounted(async () => {
+
+if (id.value) {
+    fileid.value = id.value;
+    await fetchData(id.value);
+    modeView.value = true;
+} else {
+    modeView.value = false;
+}
+});
 
 </script>
 <template>
   <Toast />
   <div class="card flex justify-center">
-    <Dialog v-model:visible="visible" maximizable modal :header="'เพิ่มรูปภาพ'" :style="{ width: '80rem' }"
+    <Dialog v-model:visible="fromVisible" maximizable modal :header="'เพิ่มรูปภาพ'" :style="{ width: '80rem' }"
       :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" :pt="{
         root: {
           // class:'p-dialog-maximized'
@@ -73,13 +75,15 @@ const handleDialogClose = () => {
         header: {
           class: 'bg-hsb-primary text-white text-base modal-font-Prompt',
         },
-      }">
+      }"
+      >
 
 <div class="card">
         <Toast />
         <FileUpload name="files[]" 
         customUpload
         @uploader="onAdvancedUpload"
+        :multiple="true" accept="image/*" :maxFileSize="52428800">
         :multiple="true" accept="image/*" :maxFileSize="52428800">
             <template #empty>
                 <span>กด chose</span>

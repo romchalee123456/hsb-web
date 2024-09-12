@@ -11,7 +11,7 @@ const handleClickAdd = () =>{
     fromVisible.value = true;
 }
 
-const handleClickClose = () =>{
+const fromUploadFileVisible = () =>{
     fromVisible.value = false;
     id.value = 0;
 }

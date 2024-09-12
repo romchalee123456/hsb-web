@@ -13,6 +13,8 @@ router.route('/findHouseDetailById/:id')
 
 router.route('/findAllFileByHouseDetail/:id')
     .get(asyncHandler(houseDetailController.findAllFileByHouseDetail));
-
+   
+router.route('/deleteFileByID/:id')
+    .delete(asyncHandler(houseDetailController.deleteFileByID));
 
 module.exports = router;
