@@ -84,6 +84,7 @@ if (id.value) {
         customUpload
         @uploader="onAdvancedUpload"
         :multiple="true" accept="image/*" :maxFileSize="52428800">
+        :multiple="true" accept="image/*" :maxFileSize="52428800">
             <template #empty>
                 <span>กด chose</span>
             </template>

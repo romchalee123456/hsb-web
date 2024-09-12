@@ -9,9 +9,10 @@ import userService from '@/service/userService';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import customerInputFields from '../customInputfields/customerInputFields.vue';
+import locationsInputFields from '../customInputfields/locationsInputFields.vue';
 import PeriodDetailFrom from './PeriodDetailFrom.vue';
 const toast = useToast();
-useToast;
+
 const props = defineProps({
     fromVisible: Boolean,
     id: Number,
@@ -39,6 +40,11 @@ const projectStatus = ref([
     { id: 2, name: 'เสร็จสิ้น' },
     { id: 3, name: 'ปิดโครงการ' }
 ]);
+const locationsName = ref('');
+const locationCode = ref('');
+const lat = ref();
+const lon = ref();
+
 
 const emit = defineEmits(['buttonClose']);
 
@@ -126,7 +132,7 @@ const validatedata = async () => {
 };
 
 const handleClickSave = async () => {
-    console.log(customerSelected.value)
+ 
     const validate = await validatedata();
     if (!validate) {
         return false;
@@ -226,6 +232,11 @@ const fetchData = async (value) => {
     selectedRole.value = projectStatus.value[res.data.projectStatusid - 1];
     selectedRoleSponse.value = responses.value[res.data.responseid - 1];
     periodData.value = res.periodData;
+    locationsName.value = res.data.locationName;
+    locationCode.value = res.data.locationCode;
+    lat.value = res.data.lat;
+    lon.value = res.data.lon;
+    customerSelected.value = res.customerData;
 };
 onMounted(async () => {
     const res = await userService.getAllUser();
@@ -316,12 +327,29 @@ v-if="periodfromVisible"
                         </div>
                         <div class="col-span-4">
                           <customerInputFields
-                          :selected-value="customerSelected"
-                          @valueChanged="(value)=>{
-                            customerSelected = value;
-                          }"
-                          :disabled="modeView"
+                         v-model="customerSelected"
+                         :modeReadonly="modeView" 
                           ></customerInputFields>
+
+                        </div>
+                    </div>
+                    <div class="field grid grid-cols-5 gap-4">
+                        <div>
+                            <label class="">ตำแหน่งที่ตั้ง</label>
+                        </div>
+                        <div class="col-span-4">
+                          <locationsInputFields
+                          :id="projectid"
+                          v-model="locationsName"
+                          :locations-code="locationCode"
+                          :lat="lat"
+                          :lon="lon"
+                       
+                     
+                          @valueChanged="fetchData(projectid)"
+                          :modeReadonly="modeView" 
+                          ></locationsInputFields>
+                          
                         </div>
                     </div>
                     <br />

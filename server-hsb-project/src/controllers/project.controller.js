@@ -32,7 +32,6 @@ exports.createProject = async (req, res) => {
                         description: element.description,
                         createOn: createOn,
                         periodStatusId: element.periodStatusId,
-                        periodnameid: 1,
                     },
                 });
             }
@@ -76,6 +75,35 @@ exports.findAllProject = async(req, res) => {
     
 };
 
+exports.updateProjectLocation = async(req, res) => {
+    const { locationCode,locationName,lon,lat } = req.body;
+    const { id } = req.params;
+
+    const result = await prisma.project.update({
+        where: { projectid: Number(id) },
+        data: {
+            locationCode:locationCode,
+            locationName:locationName,
+            lon:lon,
+            lat:lat,
+    }
+
+   
+})
+if (!result) {
+    res.status(500).send({
+        status: "error",
+        message: err.message
+    });
+} else {
+    res.status(201).send({
+        status: "success",
+        data: {
+            result
+        }
+    });
+}
+}
 exports.updateProjectId = async(req, res) => {
     const { projectCode, projectName, description, amount,projectStatusid,responseid,periodData,deletePeriod} = req.body;
     const { id } = req.params;
@@ -107,7 +135,6 @@ exports.updateProjectId = async(req, res) => {
                     description: element.description,
                     createOn: createOn,
                     periodStatusId: element.periodStatusId,
-                    periodnameid: 1,
                 },
             });
             }
@@ -173,6 +200,10 @@ exports.findProjectById = async(req, res) => {
             periodStatusId: 3,
         },
     });
+    console.log(data);
+    const customerData = await prisma.customer.findUnique({
+        where: { customerid: Number(data.customerid) },
+    });
     
     if (!data) {
         res.status(500).send({
@@ -185,7 +216,8 @@ exports.findProjectById = async(req, res) => {
             status: "success",
             data: data, 
             periodData: periodData,
-            countApprovePeriod: countApprovePeriod
+            countApprovePeriod: countApprovePeriod,
+            customerData:customerData,
             
         });
     }

@@ -27,7 +27,10 @@ export default {
         const res = await http.get(`/project/getPeriodDetail/${id}`);
         return res.data;
     },
-
+    async updateProjectLocation(data,id) {
+        const res = await http.put(`/project/updateProjectLocation/${id}`, data);
+        return res.data;
+    },
 
 
 };
