@@ -14,7 +14,16 @@ router.route('/findHouseDetailById/:id')
 router.route('/findAllFileByHouseDetail/:id')
     .get(asyncHandler(houseDetailController.findAllFileByHouseDetail));
    
-router.route('/deleteFileByID/:id')
-    .delete(asyncHandler(houseDetailController.deleteFileByID));
+router.route('/createHouseDetail')
+    .post(asyncHandler(houseDetailController.createHouseDetail));
 
+router.route('/updateHouseDetail/:id')
+    .put(asyncHandler(houseDetailController.updateHouseDetailId));
+
+router.route('/findAllHoseDetailName')
+    .get(asyncHandler(houseDetailController.findAllHoseDetailName));
+
+router.route('/deleteHouseDetailId/:id')
+    .delete(asyncHandler(houseDetailController.deleteHouseDetailId));
+    
 module.exports = router;

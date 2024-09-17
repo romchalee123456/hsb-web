@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, defineProps, defineEmits } from 'vue';
-import periodDetailService from '@/service/periodDetailService';
+import houseDetailService from '@/service/houseDetailService';
 import DataTable from 'primevue/datatable';
 
 const emit = defineEmits(['valueChanged']);
@@ -13,33 +13,33 @@ const props = defineProps({
     },
 });
 
-console.log(props);
+
 
 
 const visible = ref(false);
-const periodname = ref([]);
-const periodName = ref();
+const housedetailname = ref([]);
+const houseDetailName = ref();
 
 const onRowDblClick = (event) => {
    
-    periodName.value = event.data.periodName;
-    emit('valueChanged', event.data.periodNameid);
+    houseDetailName.value = event.data.houseDetailName;
+    emit('valueChanged', event.data.houseDetailNameid);
     visible.value = false;
 };
 
 onMounted(async () => {
-    const res = await periodDetailService.findAllPeriodName();
-    periodname.value = res.data;
-
+    const res = await houseDetailService.findAllHoseDetailName();
+    housedetailname.value = res.data;
+    console.log(props);
     if (props.id) {
-        const periodSelected = periodname.value.find((value) => {
-        if(value.periodNameid === props.id) {
+        const houseDetailNameSelected = housedetailname.value.find((value) => {
+        if(value.houseDetailNameid === props.id) {
            return value;
         }
     });
 
     
-    periodName.value = periodSelected.periodName;
+    houseDetailName.value = houseDetailNameSelected.houseDetailName;
 }
     
 });
@@ -50,7 +50,7 @@ onMounted(async () => {
         <InputGroup>
             <InputText
                 placeholder=""
-                v-model="periodName"
+                v-model="houseDetailName"
                 readonly
                 class="w-full"
                 :disabled="modeReadonly"
@@ -65,12 +65,12 @@ onMounted(async () => {
                 v-model:visible="visible"
                 maximizable
                 modal
-                header="งวด"
+                header="งานรอง'"
                 :style="{ width: '80rem' }"
                 :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
             >
                 <DataTable
-                    :value="periodname"
+                    :value="housedetailname"
                     tableStyle="min-width: 50rem"
                     paginator
                     :rows="5"
@@ -80,7 +80,7 @@ onMounted(async () => {
                     selectionMode="single"
                     :rowsPerPageOptions="[5, 10, 20, 50]"
                 >
-                    <Column header="ชื่องวด" field="periodName"></Column>
+                    <Column header="'ชื่องานรอง'" field="houseDetailName"></Column>
                 </DataTable>
             </Dialog>
         </InputGroup>
