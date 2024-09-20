@@ -3,6 +3,10 @@ import { ref, watch, onMounted, defineProps, defineEmits, toRefs } from 'vue';
 import Textarea from 'primevue/textarea';
 import houseDetailService from '@/service/houseDetailService';
 import uploadFile from './uploadFile.vue';
+import { useToast } from 'primevue/usetoast';
+import houseDeiailApproveHistory from './houseDeiailApproveHistory.vue';
+import notificationsService from '@/service/notificationsService';
+const toast = useToast();
 const emit = defineEmits(['valueChanged', 'onClosed']);
 const props = defineProps({
     fromVisible: Boolean,
@@ -14,8 +18,12 @@ const onClosed = () => {
 }
 const { fromVisible } = toRefs(props);
 
+const fromHistoryVisible = ref(false);
 const fromUploadFileVisible = ref(false);
 const houseDetailName = ref("");
+const houseDetailStatus = ref();
+const houseDetailDescriptions = ref("");
+
 const fileList = ref([]);
 const deleteUploadFile = ref([]);
 
@@ -23,17 +31,14 @@ const fetchData = async () => {
 
     const res = await houseDetailService.findAllFileByHouseDetail(props.id);
     const res1 = await houseDetailService.findHouseDetailById(props.id);
-    const res1 = await houseDetailService.findHouseDetailById(props.id);
+
     fileList.value = res.data;
     houseDetailName.value = res1.data.houseDetailname.houseDetailName;
-    houseDetailName.value = res1.data.houseDetailname.houseDetailName;
+    houseDetailStatus.value = res1.data.houseDetailStatus;
 
 }
 
-const onClickUploadFile = async () => {
- 
-    fromUploadFileVisible.value = true;
-}
+
 
 const deleteFileFromDatabase = async (fileid) => {
         await houseDetailService.deleteFileByID(fileid); // Adjust according to your service
@@ -43,8 +48,34 @@ const uploadFileDelete = async (index, file) => {
     await deleteFileFromDatabase(file.fileid);
     fileList.value.splice(index,1);
     deleteUploadFile.value.push(file);
+    await fetchData();
+
+    toast.add({
+    severity: 'success',
+    summary: 'Save Success',
+    detail: 'ส่งอนุมัติสำเร็จ',
+    life: 5000
+  });
 };
 
+// Show dialog based on a condition or event
+const showDialog = () => {
+    fromUploadFileVisible.value = true;
+};
+const showDialogHistory = () => {
+    fromHistoryVisible.value = true;
+};
+const sendApprove = async() => {
+
+    const notifications = {
+        description:houseDetailDescriptions.value,
+        houseDetailId:props.id
+    }
+    
+   await notificationsService.createNewNotification(notifications);
+
+   await fetchData();
+};
 onMounted(async () => {
     await fetchData();
 })
@@ -65,11 +96,23 @@ onMounted(async () => {
     ]
 } -->
 <template>
-    <uploadFile
-    v-if="fromUploadFileVisible"
-    :fromVisible="fromUploadFileVisible"
+ 
+
+    <uploadFile :fromVisible="fromUploadFileVisible"
+     @buttonClose="fromUploadFileVisible = false"
+     :onload="fetchData"
+     :id="props.id"
+     />
+
+     <houseDeiailApproveHistory
+     v-if="fromHistoryVisible"
+    :fromVisible="fromHistoryVisible"
     :id="props.id"
-    ></uploadFile>
+
+    @onClosed="(value)=>{fromHistoryVisible = value}"
+    :onload="fetchData"
+     ></houseDeiailApproveHistory>
+  
     <Dialog v-model:visible="fromVisible" modal :closable="false" :pt="{
         root: {
             class: 'p-dialog-maximized'
@@ -81,12 +124,20 @@ onMounted(async () => {
     
         <div class="flex justify-content-between flex-wrap pl-2 pr-2">
             <i class="pi pi-chevron-left" style="font-size: 1.5rem; color: #192a51" @click="onClosed"></i>
+<div>
+    <h1>houseDetailName
+        <Badge v-if="houseDetailStatus == 1" :value="'ร่าง'" severity="secondary"></Badge>
+                            <Badge v-if="houseDetailStatus == 2" :value="'รออนุมัติ'" severity="warn"></Badge>
+                            <Badge v-if="houseDetailStatus == 3" :value="'อนุมัติ'" severity="success"></Badge>
+    </h1>
+</div>
+            <div v-if="houseDetailStatus == 1">
+                <Button style="margin-right: 10px;" ><span style="font-size: 0.8rem;" @click="showDialog" >เพิ่มรูป</span></Button>
+                <Button @click="visible = true"><span style="font-size: 0.8rem;"  @click="sendApprove" >ส่งอนุมัติ</span></Button>
 
-            <div>
-                <Button @click="visible = true" style="margin-right: 10px;" ><span style="font-size: 0.8rem;" @click="onClickUploadFile">เพิ่มรูป</span></Button>
-                <Button @click="visible = true" style="margin-right: 10px;" ><span style="font-size: 0.8rem;" @click="onClickUploadFile">เพิ่มรูป</span></Button>
-                <Button @click="visible = true"><span style="font-size: 0.8rem;">ส่งอนุมัติ</span></Button>
-
+            </div>
+            <div v-else>
+                <Button @click="visible = true"><span style="font-size: 0.8rem;"  @click="showDialogHistory" >ประวัติ</span></Button>
             </div>
         </div>
         <div class="grid pt-3 col">
@@ -97,15 +148,14 @@ onMounted(async () => {
             </div>
             <div class="col-12 diagonal-gradient">
                 <div class="pl-4 pr-4">
-                    <Textarea class="w-full bg-primary text-white" v-model="houseDetailName" ></Textarea>
-                    <Textarea class="w-full bg-primary text-white" v-model="houseDetailName" ></Textarea>
+       
+                    <Textarea class="w-full bg-primary text-white" v-model="houseDetailDescriptions" ></Textarea>
                 </div>
             </div>
 
         </div>
 
         <Card>
-         
             <template #content>
                 <div v-for="file of fileList" :key="file.fileid">
                     <div class="pb-3">
@@ -114,10 +164,8 @@ onMounted(async () => {
                         <div class="bg-primary  grid col-12 rounded-md">
                             <div class="col-4 ">
                                 <Image :src="'http://localhost:3001/'+file.filePath" alt="Image" width="150rem" preview />
-                                <Image :src="'http://localhost:3001/'+file.filePath" alt="Image" width="150rem" preview />
                             </div>
                             <div class="col-8 flex flex-column">
-                                <span style="color: aliceblue; font-size: 1.1rem;">{{ file.fileName }}</span>
                                 <span style="color: aliceblue; font-size: 1.1rem;">{{ file.fileName }}</span>
                                 <div class="flex justify-end">
 
@@ -131,6 +179,8 @@ onMounted(async () => {
                                     </Button>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
                         </div>
                     </div>

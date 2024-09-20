@@ -1,4 +1,4 @@
-const { decodeToken: decodeToken } = require('../utils/token');
+const { decodeToken: decodeToken,decodeTokenForId:decodeTokenForId } = require('../utils/token');
 const authorization = (req, res, next) => {
   
     const authHeader = req.headers['authorization'];
@@ -8,7 +8,9 @@ const authorization = (req, res, next) => {
         return res.status(401).send('UnAuthorization')
     } 
    var decode =  decodeToken(token)
+   var decodeId =  decodeTokenForId(token)
 
+   req.currentUserId = decodeId.id;
     if(decode == false){
         return res.status(401).send('UnAuthorization')
     }

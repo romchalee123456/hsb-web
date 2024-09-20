@@ -47,7 +47,7 @@ await fetchData();
     v-if="fromApproveVisible"
     :fromVisible="fromApproveVisible"
     :id="houseDetailid"
-    @onClosed="(value)=>{fromApproveVisible = value}"
+       @onClosed="(value)=>{fromApproveVisible = value}"
     ></houseDeiailSendApproveFrom>
     <Dialog
         v-model:visible="fromVisible"

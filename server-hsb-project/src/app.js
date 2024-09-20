@@ -9,8 +9,8 @@ const customerRoute = require('./routes/customer.route');
 const houseDetailRoute = require('./routes/houseDetail.route');
 const uploadFileRoute = require('./routes/uploadFile.route');
 const periodDetailRoute = require('./routes/periodDetail.route');
-
 const projectTrackingRoute  = require('./routes/projectTracking.route');
+const notificationRoute  = require('./routes/notification.route');
 
 const { httpLogStream } = require('./utils/logger');
 const { PrismaClient } = require('@prisma/client')
@@ -33,6 +33,7 @@ app.use('/api/customer', customerRoute);
 app.use('/api/houseDetail', houseDetailRoute);
 app.use('/api/uploadFile', uploadFileRoute);
 app.use('/api/periodDetail', periodDetailRoute);
+app.use('/api/notification', notificationRoute);
 
 app.get('/',(req, res) => {
     res.status(200).send({

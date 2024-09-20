@@ -48,7 +48,9 @@ import projectTrackingService from '@/service/projectTrackingService';
 const toPeriod = async (projectid) => {
   router.push('/period/'+ projectid)
 }
-
+const toNotifications = async () => {
+  router.push('/notifications')
+}
 
 const fetchData = async () => {
     const res = await projectTrackingService.getProject();
@@ -74,7 +76,7 @@ onMounted(async () => {
       <!-- Header Section -->
       <div class="header-top">
         <div class=" flex flex-wrap justify-end  navbarApp pb-2 pl-0 pr-0 pt-4" >
-        <OverlayBadge value="2" severity="danger">
+        <OverlayBadge value="2" severity="danger" @click="toNotifications">
             <i class="pi pi-bell" style="font-size: 2rem" />
         </OverlayBadge>
         <Button
