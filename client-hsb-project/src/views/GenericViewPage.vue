@@ -4,9 +4,12 @@ import InputText from "primevue/inputtext";
 const props = defineProps({
     list: Array,
     title: String,
+    addBottonVisible: {
+        Type: Boolean, default: true
+    }
 });
 
-const { list } = toRefs(props);
+const { list, addBottonVisible } = toRefs(props);
 
 const search = ref('');
 
@@ -51,7 +54,7 @@ onMounted(async () => {
                 </IconField>
             </template>
 
-            <template #end> <Button  severity="info" label="เพิ่มข้อมูล"   @Click="handleClickAdd" />
+            <template #end> <Button  severity="info" label="เพิ่มข้อมูล" v-if="addBottonVisible"  @Click="handleClickAdd" />
                 <Button label="ค้นหา" raised @Click="searchData" v-if="false"/>
             </template>
         </Toolbar>

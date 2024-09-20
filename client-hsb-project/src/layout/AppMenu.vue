@@ -19,6 +19,10 @@ const model = ref([
         label: 'ลูกค้า',
         items: [{ label: 'เพิ่มลูกค้า', icon: 'pi pi-fw pi pi-user-plus', to: '/customer' }]
     },
+    {
+        label: 'รายงาน',
+        items: [{ label: 'รายงาน', icon: 'pi pi-fw pi pi-images', to: '/gallery' }]
+    },
 ]);
 </script>
 

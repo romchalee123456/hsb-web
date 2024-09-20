@@ -160,8 +160,6 @@ onMounted(async () => {
                 <div v-for="file of fileList" :key="file.fileid">
                     <div class="pb-3">
                         <div class="bg-primary  grid col-12 rounded-md">
-                    <div class="pb-3">
-                        <div class="bg-primary  grid col-12 rounded-md">
                             <div class="col-4 ">
                                 <Image :src="'http://localhost:3001/'+file.filePath" alt="Image" width="150rem" preview />
                             </div>
@@ -183,9 +181,7 @@ onMounted(async () => {
                     </div>
 
                         </div>
-                    </div>
-
-                </div>
+          
                 
 
             </template>

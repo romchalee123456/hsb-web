@@ -6,7 +6,8 @@ import DataTable from 'primevue/datatable';
 
 const emit = defineEmits(['valueChanged']);
 const props = defineProps({
-    selectedValue: String,
+    modelValue: String,
+    id: Number,
     modeReadonly: {
     type: Boolean,
     default: false,
@@ -32,7 +33,20 @@ onMounted(async()=>{
     const res = await customerService.getAllCustomer();
 
      customer.value = res.data;
-})
+
+     if (props.id) {
+      const customerSelected = customer.value.find((value)=>{
+            if (value.customerid==props.id) {  
+                return value.customerFirstname ;
+            }
+        });
+        customerName.value = customerSelected.customerFirstname + " " +customerSelected.customerLastname;
+     }
+
+     console.log(customerName.value);
+     
+     
+});
 </script>
 
 <template>

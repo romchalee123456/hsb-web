@@ -14,6 +14,18 @@ router.route('/findHouseDetailById/:id')
 router.route('/findAllFileByHouseDetail/:id')
     .get(asyncHandler(authorization),asyncHandler(houseDetailController.findAllFileByHouseDetail));
    
+router.route('/createHouseDetail')
+    .post(asyncHandler(houseDetailController.createHouseDetail));
+
+router.route('/updateHouseDetail/:id')
+    .put(asyncHandler(houseDetailController.updateHouseDetailId));
+
+router.route('/findAllHoseDetailName')
+    .get(asyncHandler(houseDetailController.findAllHoseDetailName));
+
+router.route('/deleteHouseDetailId/:id')
+    .delete(asyncHandler(houseDetailController.deleteHouseDetailId));
+    
 router.route('/deleteFileByID/:id')
     .delete(asyncHandler(authorization),asyncHandler(houseDetailController.deleteFileByID));
 
