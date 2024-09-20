@@ -23,9 +23,7 @@ const fetchData = async () => {
 
     const res = await houseDetailService.findAllFileByHouseDetail(props.id);
     const res1 = await houseDetailService.findHouseDetailById(props.id);
-    const res1 = await houseDetailService.findHouseDetailById(props.id);
     fileList.value = res.data;
-    houseDetailName.value = res1.data.houseDetailname.houseDetailName;
     houseDetailName.value = res1.data.houseDetailname.houseDetailName;
 
 }
@@ -84,7 +82,6 @@ onMounted(async () => {
 
             <div>
                 <Button @click="visible = true" style="margin-right: 10px;" ><span style="font-size: 0.8rem;" @click="onClickUploadFile">เพิ่มรูป</span></Button>
-                <Button @click="visible = true" style="margin-right: 10px;" ><span style="font-size: 0.8rem;" @click="onClickUploadFile">เพิ่มรูป</span></Button>
                 <Button @click="visible = true"><span style="font-size: 0.8rem;">ส่งอนุมัติ</span></Button>
 
             </div>
@@ -98,7 +95,6 @@ onMounted(async () => {
             <div class="col-12 diagonal-gradient">
                 <div class="pl-4 pr-4">
                     <Textarea class="w-full bg-primary text-white" v-model="houseDetailName" ></Textarea>
-                    <Textarea class="w-full bg-primary text-white" v-model="houseDetailName" ></Textarea>
                 </div>
             </div>
 
@@ -110,14 +106,10 @@ onMounted(async () => {
                 <div v-for="file of fileList" :key="file.fileid">
                     <div class="pb-3">
                         <div class="bg-primary  grid col-12 rounded-md">
-                    <div class="pb-3">
-                        <div class="bg-primary  grid col-12 rounded-md">
                             <div class="col-4 ">
-                                <Image :src="'http://localhost:3001/'+file.filePath" alt="Image" width="150rem" preview />
                                 <Image :src="'http://localhost:3001/'+file.filePath" alt="Image" width="150rem" preview />
                             </div>
                             <div class="col-8 flex flex-column">
-                                <span style="color: aliceblue; font-size: 1.1rem;">{{ file.fileName }}</span>
                                 <span style="color: aliceblue; font-size: 1.1rem;">{{ file.fileName }}</span>
                                 <div class="flex justify-end">
 

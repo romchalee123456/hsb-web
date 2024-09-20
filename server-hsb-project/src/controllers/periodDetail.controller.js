@@ -3,13 +3,16 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 exports.createPeriodDetail = async (req, res) => {
-    const { description, projectid } = req.body;
+    const { description, projectid , periodNameid, periodid} = req.body;
     
     const result = await prisma.periodDetail.create({
         data: {
+            periodid: periodid,
+            projectid: projectid,
             description: description,
-            projectid: projectid
-        },
+            periodDetailStatusId: 1,
+            periodnameid: periodNameid,
+          },
     });
 
     if (!result) {
@@ -28,13 +31,14 @@ exports.createPeriodDetail = async (req, res) => {
 };
 
 exports.updatePeriodDetailId = async (req, res) => {
-        const { description } = req.body;
+        const { description, periodNameid} = req.body;
         const { id } = req.params;
 
         const result = await prisma.periodDetail.update({
             where: { periodDetailid: Number(id) }, 
             data: {
                 description: description,
+                periodnameid: periodNameid
             },
         });
 
@@ -57,6 +61,13 @@ exports.findPeriodDetailById = async(req, res) => {
     const { id } = req.params;
 
     const data = await prisma.periodDetail.findUnique({
+        include: {
+            periodname: {
+              select: {
+                periodName: true,
+              },
+            },
+          },
         where: { periodDetailid: Number(id) },
     })
     
@@ -118,4 +129,5 @@ exports.findAllPeriodName = async(req, res) => {
         }
     
 };
+
 

@@ -4,6 +4,8 @@ import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
+import Checkbox from 'primevue/checkbox';
+import Image from 'primevue/image';
 import projectService from '@/service/projectService';
 import userService from '@/service/userService';
 import Toast from 'primevue/toast';
@@ -11,6 +13,8 @@ import { useToast } from 'primevue/usetoast';
 import customerInputFields from '../customInputfields/customerInputFields.vue';
 import locationsInputFields from '../customInputfields/locationsInputFields.vue';
 import PeriodDetailFrom from './PeriodDetailFrom.vue';
+import periodDetailService from '@/service/periodDetailService';
+import houseDetailService from '@/service/houseDetailService';
 const toast = useToast();
 
 const props = defineProps({
@@ -30,12 +34,17 @@ const selectedRoleSponse = ref();
 const responses = ref([]);
 const projectCode = ref('');
 const periodData = ref([]);
+const periodDetailData = ref([]);
+const houseDetailData = ref([]);
+const houseDetailFileData = ref([]);
 const deletePeriod = ref([]);
 const description = ref('');
 const projectName = ref('');
 const amount = ref('');
-const customerid = ref([]);
 const customerSelected = ref();
+const houseDetailSelected = ref();
+const periodSelected = ref();
+const periodDetailSelected = ref();
 const projectStatus = ref([
     { id: 1, name: 'ดำเนินการ' },
     { id: 2, name: 'เสร็จสิ้น' },
@@ -45,7 +54,8 @@ const locationsName = ref('');
 const locationCode = ref('');
 const lat = ref();
 const lon = ref();
-const fetchEd = ref(false);
+const checkedFiles = ref([]);
+const createReport = ref(false);
 
 const emit = defineEmits(['buttonClose']);
 
@@ -148,8 +158,7 @@ const handleClickSave = async () => {
                 responseid: selectedRoleSponse.value.id,
                 projectStatusid: selectedRole.value.id,
                 description: description.value,
-                periodData: periodData.value,
-                customerid: customerid.value
+                periodData: periodData.value
             };
             const res = await projectService.createProject(payload);
 
@@ -184,8 +193,7 @@ const handleClickSave = async () => {
                 projectStatusid: selectedRole.value.id,
                 description: description.value,
                 periodData: periodData.value,
-                deletePeriod: deletePeriod.value,
-                customerid: customerid.value
+                deletePeriod: deletePeriod.value
             };
             const res = await projectService.updateProjectId(payload, projectid.value);
 
@@ -240,9 +248,29 @@ const fetchData = async (value) => {
     lat.value = res.data.lat;
     lon.value = res.data.lon;
     customerSelected.value = res.customerData;
-    customerid.value = res.customerData.customerid;
-    console.log(customerid.value);
-    fetchEd.value = true;
+};
+
+const fetchPeriodDetail = async (period) => {
+    const res1 = await projectService.getPeriodDetail(period.periodid);
+    periodDetailData.value = res1.data
+    
+};
+
+const fetchHouseDetail = async (periodDetail) => {
+    const res2 = await houseDetailService.findAllHouseDetail(periodDetail.periodDetailid);
+    houseDetailData.value = res2.data
+    
+};
+
+const fetchHouseDetailFile = async (houseDetail) => {
+    const res3 = await houseDetailService.findAllFileByHouseDetail(houseDetail.houseDetailid);
+    houseDetailFileData.value = res3.data
+    
+    houseDetailFileData.value.forEach(file => {
+            checkedFiles.value.push(false);
+    });
+
+    createReport.value = true;
 };
 
 
@@ -273,7 +301,7 @@ v-if="periodfromVisible"
             v-model:visible="fromVisible"
             maximizable
             modal
-            :header="'เพิ่มโครงการ'"
+            :header="'รายงาน'"
             :style="{ width: '80rem' }"
             :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
             :pt="{
@@ -286,140 +314,60 @@ v-if="periodfromVisible"
             }"
             @update:visible="handleClickClose"
         >
-            <div class="container mx-auto px-4 pt-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="field grid grid-cols-5 gap-4">
-                        <div>
-                            <label class="mr-5">รหัสโครงการ</label>
-                        </div>
-                        <div class="col-span-4">
-                            <InputText class="w-full" id="projectCode1" type="text" v-model="projectCode" :disabled="modeView" />
-                        </div>
-                    </div>
-
-                    <div class="field grid grid-cols-5 gap-4">
-                        <div>
-                            <label class="mr-5">ชื่อโครงการ</label>
-                        </div>
-                        <div class="col-span-4">
-                            <InputText class="w-full" id="projectCode1" type="text" v-model="projectName" :disabled="modeView" />
-                        </div>
-                    </div>
-                    <div class="field grid grid-cols-5 gap-4">
-                        <div>
-                            <label class="mr-5">มูลค่า</label>
-                        </div>
-                        <div class="col-span-4">
-                            <InputText class="w-full" id="projectCode1" type="text" v-model="amount" :disabled="modeView" />
-                        </div>
-                    </div>
-                    <div class="field grid grid-cols-5 gap-4">
-                        <div>
-                            <label class="">สถานะ</label>
-                        </div>
-                        <div class="col-span-4">
-                            <Dropdown v-model="selectedRole" :options="projectStatus" optionLabel="name" placeholder="" checkmark :highlightOnSelect="false" class="w-full md:w-14rem" :disabled="modeView" />
-                        </div>
-                    </div>
-                    <div class="field grid grid-cols-5 gap-4">
-                        <div>
-                            <label class="">ผู้รับผิดชอบ</label>
-                        </div>
-                        <div class="col-span-4">
-                            <Dropdown v-model="selectedRoleSponse" :options="responses" optionLabel="firstname" placeholder="" checkmark :highlightOnSelect="false" class="w-full md:w-14rem" :disabled="modeView" />
-                        </div>
-                    </div>
-                    <div class="field grid grid-cols-5 gap-4">
-                        <div>
-                            <label class="">ลูกค้า</label>
-                        </div>
-                        <div class="col-span-4">
-                          <customerInputFields
-                         v-model="customerSelected"
-                         :modeReadonly="modeView" 
-                         :id ="customerid"
-                         v-if = "fetchEd"
-                         @value-changed="(value)=>{customerid=value}"
-                          ></customerInputFields>
-
-                        </div>
-                    </div>
-                    <div class="field grid grid-cols-5 gap-4">
-                        <div>
-                            <label class="">ตำแหน่งที่ตั้ง</label>
-                        </div>
-                        <div class="col-span-4">
-                          <locationsInputFields
-                          :id="projectid"
-                          v-model="locationsName"
-                          :locations-code="locationCode"
-                          :lat="lat"
-                          :lon="lon"
-                       
-                     
-                          @valueChanged="fetchData(projectid)"
-                          :modeReadonly="modeView" 
-                          ></locationsInputFields>
-                          
-                        </div>
-                    </div>
-                    <br />
-                    <div class="grid col-span-2 gap-4">
-                        <div>
-                            <label class="mr-5">รายละเอียด</label>
-                        </div>
-                        <div>
-                            <div class="col-span-10">
-                                <Textarea class="w-full" v-model="description" variant="filled" rows="5" cols="30" :disabled="modeView"  />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="container mx-auto px-4 pt-4">
+        <div class="grid grid-cols-3 gap-4">
+          <div class="field grid grid-cols-5 gap-4">
+            <div>
+              <label class="mr-5 ">งวด</label>
             </div>
-            <div class="datatable-wrapper flex items-center justify-center">
-                <DataTable :value="periodData" stripedRows class="w-[1150px]"
-                @row-dblclick="openPeriodDetail"
-                >
-                    <Column field="description" header="งวด">
-                        <template #body="{index}">
-                            <InputText v-model="periodData[index].description" :disabled="modeView"
-                             class="w-full"
-                            >
-                            </InputText>
-                        </template>
-                    </Column>
-                    <Column  header="สถานะ">
-                        <template #body="{ data }">
-                            <Badge v-if="data.periodStatusId == 1" :value="data.periodStatus.periodStatusName" severity="secondary"></Badge>
-                            <Badge v-if="data.periodStatusId == 2" :value="data.periodStatus.periodStatusName" severity="warn"></Badge>
-                            <Badge v-if="data.periodStatusId == 3" :value="data.periodStatus.periodStatusName" severity="success"></Badge>
-                        </template>
-                    </Column>
-                    <Column  header="เปิด/ปิด" style="width: 15%" headerStyle="text-center">
-                        <template #body="{ data, index }">
-                            <div class="flex justify-center align-center">
-                                <Button v-if="data.periodStatusId == 1" severity="success" label="เปิด" raised @Click="openPeriod(index)" :disabled="modeView"/>
-                                <Button v-if="data.periodStatusId !== 1" severity="danger" label="ปิด" raised @Click="closePeriod(index)" :disabled="modeView"/>
-                            </div>
-                        </template>
-                    </Column>
-                    <Column >
-                        <template #body="{index,data}">
-                            <Button icon="pi pi-trash"  style="background-color: yellow; color: black; border-color: yellow;" @Click="periodDelete(index,data)" :disabled="modeView"></Button>
-                            
-                        </template>
-                    </Column>
-                </DataTable>
+            <div class="col-span-4">
+                <Select v-model="periodSelected" :options="periodData" optionLabel="description" placeholder="เลือกงวด" class="w-full md:w-56"
+                @change="fetchPeriodDetail(periodSelected)"
+                > 
+                </Select>
             </div>
-
-            <template #footer>
-                <Button severity="info" label="เพิ่มงวด" raised @Click="addPeriod" v-if="!modeView" />
-                <Button severity="info" label="บันทึกข้อมูล" raised @Click="handleClickSave" v-if="!modeView" />
-                <Button severity="info" label="แก้ไขข้อมูล" raised @Click="handleClickEdit" v-if="modeView" />
-                <Button severity="info" label="ลบข้อมูล" raised @Click="handleClickDelete" v-if="projectid != 0 && !modeView" />
-
-                <Button severity="secondary" label="ปิด" raised @Click="handleClickClose" />
-            </template>
+          </div>
+          <div class="field grid grid-cols-5 gap-4">
+            <div>
+              <label class="">งานหลัก</label>
+            </div>
+            <div class="col-span-4">
+                <Select v-model="periodDetailSelected" :options="periodDetailData" optionLabel="periodname.periodName" placeholder="เลือกงานหลัก" class="w-full md:w-56"
+                @change="fetchHouseDetail(periodDetailSelected)"
+                > 
+            </Select>
+            </div>
+          </div>
+          <div class="field grid grid-cols-5 gap-4">
+            <div>
+              <label class="">งานรอง</label>
+            </div>
+            <div class="col-span-4">
+                <Select v-model="houseDetailSelected" :options="houseDetailData" optionLabel="houseDetailname.houseDetailName" placeholder="เลือกงานรอง" class="w-full md:w-56"
+                @change="fetchHouseDetailFile(houseDetailSelected)"
+                > 
+            </Select>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="container mx-auto px-4 pt-10">
+            <div class="grid grid-cols-4 gap-4 border border-slate-200">
+                <div class="field pt-2 pb-2" v-for="(file,index) of houseDetailFileData"
+                :key="file.fileid">
+                    <Image :src="'http://localhost:3001/'+file.filePath" alt="Image" width="250rem" hight="250rem" preview />
+                    <Checkbox
+                            v-model="checkedFiles[index]"
+                            binary
+                            variant="filled"
+                            class="absolute bottom-2 right-2"
+                        />
+                </div>     
+            </div>
+        </div>
+        <div class="pt-4 flex justify-end">
+        <Button severity="info" label="สร้างรายงาน" raised  v-if="createReport" onClick=""/>
+        </div>
         </Dialog>
     </div>
 </template>

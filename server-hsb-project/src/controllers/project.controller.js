@@ -3,7 +3,7 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 exports.createProject = async (req, res) => {
-    const { projectCode, projectName, description, amount, projectStatusid, responseid, periodData } = req.body;
+    const { projectCode, projectName, description, amount, projectStatusid, responseid, periodData, customerid } = req.body;
 
     try {
         // Create the project
@@ -15,6 +15,7 @@ exports.createProject = async (req, res) => {
                 amount: amount,
                 projectStatusid: projectStatusid,
                 responseid: responseid,
+                customerid: customerid,
             },
         });
 
@@ -103,9 +104,10 @@ if (!result) {
         }
     });
 }
-}
+};
+
 exports.updateProjectId = async(req, res) => {
-    const { projectCode, projectName, description, amount,projectStatusid,responseid,periodData,deletePeriod} = req.body;
+    const { projectCode, projectName, description, amount,projectStatusid,responseid,periodData,deletePeriod , customerid} = req.body;
     const { id } = req.params;
 
     const result = await prisma.project.update({
@@ -117,7 +119,7 @@ exports.updateProjectId = async(req, res) => {
              amount: amount,
              projectStatusid: projectStatusid,
              responseid: responseid,
-
+             customerid: customerid,
 
         },
       })
