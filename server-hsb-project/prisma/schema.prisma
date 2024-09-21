@@ -25,9 +25,12 @@ model housedetail {
   createOn          DateTime @default(now())
   houseDetailNameId Int
   periodDetailid    Int
+  houseDetailStatus Int?
   houseDetailname housedetailname @relation(fields: [houseDetailNameId], references: [houseDetailNameid])
   periodDetail periodDetail @relation(fields: [periodDetailid], references: [periodDetailid])
   files           file[]
+  notifications notifications[] 
+  notificationsHistory notificationsHistory[] 
 }
 
 model housedetailname {
@@ -123,10 +126,54 @@ model user {
 
 model customer {
   customerid Int @id @default(autoincrement())
+  house_Detail_id      Int?
   customerFirstname String? @db.VarChar(255)
   customerLastname String? @db.VarChar(255) 
   customerLine String? @db.VarChar(255)
   customerPhone String?  @db.VarChar(50)
   customerAddress String? @db.VarChar(500)
 
+}
+
+model notifications {
+  notificationsId Int @id @default(autoincrement())
+  description String? @db.VarChar(255) 
+  notificationsTypeId      Int
+  createBy      Int?
+  actionNotificationsId      Int
+  houseDetailId  Int
+  actionNotifications actionNotifications @relation(fields: [actionNotificationsId], references: [actionNotificationsId])
+  notificationsType notificationsType @relation(fields: [notificationsTypeId], references: [notificationsTypeId])
+  housedetail housedetail @relation(fields: [houseDetailId], references: [houseDetailid])
+
+}
+model notificationsHistory {
+  notificationsHistoryId Int @id @default(autoincrement())
+ description String? @db.VarChar(255) 
+  notificationsTypeId      Int
+  createBy      Int?
+  actionNotificationsId      Int
+  houseDetailId  Int
+  actionNotifications actionNotifications @relation(fields: [actionNotificationsId], references: [actionNotificationsId])
+  notificationsType notificationsType @relation(fields: [notificationsTypeId], references: [notificationsTypeId])
+  housedetail housedetail @relation(fields: [houseDetailId], references: [houseDetailid])
+
+}
+
+model actionNotifications {
+  actionNotificationsId Int      @id @default(autoincrement())
+  createOn     DateTime @default(now())
+  actionNotificationsName   String   @db.VarChar(500)
+  
+  notifications notifications[]
+  notificationsHistory notificationsHistory[]
+}
+
+model notificationsType {
+  notificationsTypeId Int      @id @default(autoincrement())
+  createOn     DateTime @default(now())
+  notificationsTypeName   String   @db.VarChar(500)
+
+  notifications notifications[]
+  notificationsHistory notificationsHistory[]
 }

@@ -2,21 +2,23 @@ const express = require('express');
 const router = express.Router();
 const { asyncHandler } = require('../middlewares/asyncHandler');
 const customerController = require('../controllers/customer.controller');
+const authorization = require('../middlewares/authorization');
+
 
 
 router.route('/customerCreate')
-    .post(asyncHandler(customerController.createCustomer));
+    .post(asyncHandler(authorization),asyncHandler(customerController.createCustomer));
 
 router.route('/getCustomer')
-    .get(asyncHandler(customerController.findAllCustomer));
+    .get(asyncHandler(authorization),asyncHandler(customerController.findAllCustomer));
 
 router.route('/customerFind/:id')
-    .get(asyncHandler(customerController.findCustomerById));
+    .get(asyncHandler(authorization),asyncHandler(customerController.findCustomerById));
 
 router.route('/customerUpdate/:id')
-    .put(asyncHandler(customerController.updateCustomerId));
+    .put(asyncHandler(authorization),asyncHandler(customerController.updateCustomerId));
     
 router.route('/customertDelete/:id')
-    .delete(asyncHandler(customerController.deleteCustomerId));
+    .delete(asyncHandler(authorization),asyncHandler(customerController.deleteCustomerId));
 
 module.exports = router;

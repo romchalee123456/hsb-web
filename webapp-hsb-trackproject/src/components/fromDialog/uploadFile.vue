@@ -1,14 +1,14 @@
 <script setup>
-import { ref, defineProps, toRefs, onMounted, defineEmits } from "vue";
+import { ref, defineProps, toRefs, defineEmits } from "vue";
 import Dialog from "primevue/dialog";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import FileUpload from 'primevue/fileupload';
 import uploadFileService from "@/service/uploadFileService";
 
-
-// const emit = defineEmits(['update:fromVisible']);
+const emit = defineEmits(['buttonClose']);
 const toast = useToast();
+
 const props = defineProps({
   fromVisible: Boolean,
   id: Number,
@@ -33,67 +33,62 @@ const onAdvancedUpload = async (event) => {
     files.map(async (file) => {
       const base64 = await convertToBase64(file);
       return {
-        name: file.name,         // Optional: Include file name
-        type: file.type,         // Optional: Include file type
-        size: file.size,         // Optional: Include file size
-        base64: base64.split(',')[1]  // Exclude the metadata part of the base64 string
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        base64: base64.split(',')[1]
       };
     })
   );
 
   const uploadPayload = {
     id: props.id,
-    files: base64Files // Include the base64-encoded files
+    files: base64Files
   };
 
-  console.log(uploadPayload);
+
   await uploadFileService.UploadFileHouseDetail(uploadPayload);
+
+  await props.onload();
 };
 
-
-
-onMounted(async () => {
-
-if (id.value) {
-    fileid.value = id.value;
-    await fetchData(id.value);
-    modeView.value = true;
-} else {
-    modeView.value = false;
-}
-});
+const handleClickClose = () => {
+  emit('buttonClose'); // Notify parent to update fromVisible
+};
 
 </script>
+
 <template>
   <Toast />
   <div class="card flex justify-center">
     <Dialog v-model:visible="fromVisible" maximizable modal :header="'เพิ่มรูปภาพ'" :style="{ width: '80rem' }"
       :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" :pt="{
-        root: {
-          // class:'p-dialog-maximized'
-        },
+        root: {},
         header: {
           class: 'bg-hsb-primary text-white text-base modal-font-Prompt',
         },
       }"
-      >
+     :closable="false"
+    >
+    <template #header>
+      <div class="flex justify-content-between flex-wrap pl-2 pr-2">
+            <i class="pi pi-chevron-left" style="font-size: 1.5rem; color: white" @click="handleClickClose"></i>
 
-<div class="card">
+        </div>
+    </template>
+
+      <div class="card">
         <Toast />
-        <FileUpload name="files[]" 
-        customUpload
-        @uploader="onAdvancedUpload"
-        :multiple="true" accept="image/*" :maxFileSize="52428800">
-        :multiple="true" accept="image/*" :maxFileSize="52428800">
-            <template #empty>
-                <span>กด chose</span>
-            </template>
+        <FileUpload name="files[]" customUpload @uploader="onAdvancedUpload" :multiple="true" accept="image/*" :maxFileSize="52428800">
+          <template #empty>
+            <span>กด chose</span>
+          </template>
         </FileUpload>
-    </div>
+      </div>
     </Dialog>
-
   </div>
 </template>
+
 <style>
 .bg-hsb-primary {
   background-color: #192a51;

@@ -24,6 +24,11 @@ const routes = [
               name: 'periodDetail',
               component: () => import('@/views/pages/periodDetail.vue')
           },
+          {
+            path: '/notifications',
+            name: 'notifications',
+            component: () => import('@/views/pages/ืnotifications.vue')
+        }, 
         ]
   },
   { path: '/login', name: 'Login', component: Login },
