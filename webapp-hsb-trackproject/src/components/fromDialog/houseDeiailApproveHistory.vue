@@ -51,7 +51,7 @@ onMounted(async () => {
     ]
 } -->
 <template>
-  
+
     <Dialog v-model:visible="fromVisible" modal :closable="false" :pt="{
         root: {
             class: 'p-dialog-maximized'
@@ -60,35 +60,34 @@ onMounted(async () => {
             class: 'job-content'
         }
     }" contentStyle="font-size: 1.5rem;padding:0px">
-    
-    
-    <div class="flex justify-content-between flex-wrap pl-2 pr-2">
+
+
+        <div class="flex justify-content-between flex-wrap pl-2 pr-2">
             <i class="pi pi-chevron-left" style="font-size: 1.5rem; color: #192a51" @click="onClosed"></i>
-    </div>
+        </div>
         <Card>
             <template #content>
                 <div class="content bg-white content-gradient ">
-        <div class="px-5"
-        v-for="(notifications) of notificationsList"
-        :key="notifications.notificationsId"
-          >
-          <div class="pt-3">
-          <Card @Click="onNotificationsClick(notifications.notificationsHistoryId,notifications.houseDetailId)">
-        <template #title> <span class="font-bold kanit-thin">{{ notifications.notificationsType.notificationsTypeName +" "+notifications.description }}</span> </template>
-    
-        <template #footer>
-          <div class="flex justify-content-start gap-4">
+                    <div class="px-5" v-for="(notifications) of notificationsList" :key="notifications.notificationsId">
+                        <div class="pt-3">
+                            <Card
+                                @Click="onNotificationsClick(notifications.notificationsHistoryId, notifications.houseDetailId)">
+                                <template #title> <span class="font-bold kanit-thin">{{
+                                    notifications.notificationsType.notificationsTypeName +" "+notifications.description }}</span> </template>
 
- 
-          </div>
-        </template>
-    </Card>
-  </div>
-  
-        </div>
-    
-      </div>
-                
+                                <template #footer>
+                                    <div class="flex justify-content-start gap-4">
+
+
+                                    </div>
+                                </template>
+                            </Card>
+                        </div>
+
+                    </div>
+
+                </div>
+
 
             </template>
         </Card>

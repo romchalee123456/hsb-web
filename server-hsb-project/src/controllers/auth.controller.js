@@ -39,44 +39,58 @@ exports.signup = async(req, res) => {
     
 };
 
-exports.signin = async(req, res) => {
+exports.signin = async (req, res) => {
     const { email, password } = req.body;
-    const user = await prisma.user.findUnique({
-        where: {
-          email: email
-        },
-      })
-
-      if(user){
-        if (comparePassword(password.trim(), user.password)) {
-            if (comparePassword(password.trim(), user.password)) {
-                const token = generateAccessToken(user.id);
-                const refreshToken = generateRefreshToken(user.id);
-                res.status(200).send({
-                    status: 'success',
-                    data: { 
-                        token,
-                        refreshToken,
-                        firstname: user.firstname,
-                        lastname: user.lastname,
-                        email: user.email
-                    }
-                });
-                return;
-            }
-            res.status(401).send({
-                status: 'error',
-                message: 'Incorrect password'
-            });
-        }
-      }else{
-                        res.status(404).send({
-                    status: 'error',
-                    message: `User with email ${email} was not found`
-                });
-                return;
+  
+    try {
+      // Check if the user exists by email
+      const user = await prisma.user.findUnique({
+        where: { email: email },
+      });
+  
+      // If the user does not exist, return a 404 response
+      if (!user) {
+        return res.status(404).send({
+          status: 'error',
+          message: `User with email ${email} was not found`,
+        });
       }
-}
+  
+      // Check if the password is correct
+      const isPasswordValid = comparePassword(password.trim(), user.password);
+      if (!isPasswordValid) {
+        // If password is incorrect, return a 401 response
+        return res.status(401).send({
+          status: 'error',
+          message: 'Incorrect password',
+        });
+      }
+  
+      // Generate access and refresh tokens
+      const token = generateAccessToken(user.id);
+      const refreshToken = generateRefreshToken(user.id);
+  
+      // Return the success response with tokens and user info
+      return res.status(200).send({
+        status: 'success',
+        data: {
+          token,
+          refreshToken,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          email: user.email,
+        },
+      });
+  
+    } catch (error) {
+      // Catch any errors and return a 500 response
+      return res.status(500).send({
+        status: 'error',
+        message: 'Internal server error',
+      });
+    }
+  };
+  
 
 exports.update = async(req, res) => {
     const { firstname, lastname, email,role,teamName,phoneNumber } = req.body;

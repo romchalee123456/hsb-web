@@ -1,17 +1,6 @@
 
 <script setup>
-import Card from 'primevue/card';
-import userService from '@/service/userService';
-import loginService from '@/service/loginService';
-import { onMounted, ref } from 'vue';
-import InputText from 'primevue/inputtext';
-import logo from '@/assets/image/huglogo1-ai.png';
-import engineer  from '@/assets/image/engineer.jpg';
-const firstname = ref('');
-const lastname = ref('');
 
-const menu = ref();
-import home from './pages/home.vue';
 </script>
 <template>
     <div class="wrapper">

@@ -5,7 +5,7 @@ import loginService from '@/service/loginService';
 import { onMounted, ref } from 'vue';
 import InputText from 'primevue/inputtext';
 import logo from '@/assets/image/huglogo1-ai.png';
-import projectService from '@/service/projectService';
+import projectTrackingService from '@/service/projectTrackingService';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 const route = useRoute();
@@ -56,7 +56,7 @@ const toPeriodDetail = (periodDetailId) => {
 
 const fetchData = async () => {
     const projectId = route.params.id;
-    const res = await projectService.findProjectById(projectId);
+    const res = await projectTrackingService.findProjectById(projectId);
 
     projectName.value = res.data.projectName;
     projectCode.value = res.data.projectCode;

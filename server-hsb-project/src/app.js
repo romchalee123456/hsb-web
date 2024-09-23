@@ -52,6 +52,21 @@ app.get('/feed', async (req, res) => {
     res.json(posts)
   })
 
+  app.post('/callback', async (req, res) => {
+    const events = req.body.events;
+  
+    const posts = await prisma.lineeventhook.create({
+      data: {
+        lineeventhookText: JSON.stringify(events), // Convert events to string
+      },
+    });
+  
+    res.json(posts);
+    // Handle other event types as needed
+  
+    res.status(200).send('OK');
+  });
+  
 app.use((err, req, res, next) => {
     res.status(err.statusCode || 500).send({
         status: "error",

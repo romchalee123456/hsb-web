@@ -14,25 +14,46 @@ const checked = ref(false);
 
 const onLogin = async() => {
   
-  try{
-    const res = await   loginService.login(email.value, password.value);
+  try {
+  const res = await loginService.login(email.value, password.value);
 
-
-  if(res.status == "success"){
+  if (res.status == "success") {
     const user = {
-        username: email.value,
-        password: password.value,
-      };
+      username: email.value,
+      password: password.value,
+    };
 
-        authStore.login(user);
+    authStore.login(user);
 
-        router.push('/')
-  }else{
-    toast.add({ severity: 'error', summary: 'เข้าสู่ระบบไม่สำเร็จ', detail: res.data.message, life: 3000 });
+    router.push('/');
+  } else {
+    toast.add({
+      severity: 'error',
+      summary: 'เข้าสู่ระบบไม่สำเร็จ',
+      detail: res.message, // Assuming res.message contains the error details
+      life: 3000,
+    });
   }
-  }catch(error){
-    toast.add({ severity: 'error', summary: 'เข้าสู่ระบบไม่สำเร็จ', detail: error, life: 3000 });
+} catch (error) {
+  if (error.response && error.response.status === 400) {
+    // If the error response has a 400 status code, extract the message
+    toast.add({
+      severity: 'error',
+      summary: 'เข้าสู่ระบบไม่สำเร็จ',
+      detail: error.response.data.message, // Show the error message from the response
+      life: 3000,
+    });
+  } else {
+    // Handle other errors
+    toast.add({
+      severity: 'error',
+      summary: 'เข้าสู่ระบบไม่สำเร็จ',
+      detail: error.message || error, // Show general error message
+      life: 3000,
+    });
   }
+}
+
 
  
 };
