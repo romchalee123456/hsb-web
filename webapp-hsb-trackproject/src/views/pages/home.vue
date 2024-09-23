@@ -170,7 +170,7 @@ onMounted(async () => {
 
   <style>
 .content-gradient {
-  background: linear-gradient(to bottom, rgb(255, 255, 255) 70%, #79a1b8 30%);
+  background: linear-gradient(to bottom, rgb(255, 255, 255) 70%, #79a1b8 0%);
 }
 </style>
   

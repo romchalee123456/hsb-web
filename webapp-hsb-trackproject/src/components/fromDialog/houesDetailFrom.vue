@@ -87,7 +87,9 @@ await fetchData();
                 <Card @Click="houseDetailSendApproveFrom(houesDetail.houseDetailid)">
         <template #title> {{ houesDetail.houseDetailname.houseDetailName}}</template>
         <template #content>
-     
+            <Badge v-if="houesDetail.houseDetailStatus == 1" :value="'ร่าง'" severity="secondary"></Badge>
+                    <Badge v-if="houesDetail.houseDetailStatus == 2" :value="'รออนุมัติ'" severity="warn"></Badge>
+                    <Badge v-if="houesDetail.houseDetailStatus == 3" :value="'อนุมัติ'" severity="success"></Badge>
         </template>
                  </Card>
             </div>

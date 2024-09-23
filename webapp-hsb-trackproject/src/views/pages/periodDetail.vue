@@ -142,7 +142,7 @@ onMounted(async () => {
                     <template #content>
                         <div class="pt-[2px] pb-3" v-for="periodDetail of periodDetalList" :key="periodDetail.periodDetailid">
                             <Card @Click="houseDetailFrom(periodDetail.periodDetailid)">
-                                <template #title>{{ periodDetail.periodname.periodname }}</template>
+                                <template #title>{{ periodDetail.periodname.periodName }}</template>
                                 <template #content>
                                     <p class="m-0">
                                         {{ periodDetail.description }}

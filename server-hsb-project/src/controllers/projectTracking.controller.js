@@ -6,19 +6,13 @@ const prisma = new PrismaClient()
 
 exports.findAllProject = async(req, res) => {
 
-    const authHeader = req.headers['authorization'];
-  
-    const token = authHeader && authHeader.split(' ')[1];
-    if (!token) {
-        return res.status(401).send('UnAuthorization')
-    } 
-   var decode =  decodeTokenForId(token)
+    const userId = req.currentUserId;  // Access decodeId here
 
     const projectTotal = await prisma.project.count({
-        where: { responseid: Number(decode.id) },
+        where: { responseid: Number(userId) },
     });
     const projects = await prisma.project.findMany({
-        where: { responseid: Number(decode.id) },
+        where: { responseid: Number(userId) },
         include:{
             _count:{
                 select:{periods:true}
@@ -27,9 +21,15 @@ exports.findAllProject = async(req, res) => {
         
     });
         if (!projectTotal) {
-            res.status(500).send({
-                status: "error",
-                 message: err.message
+            res.status(201).send({
+                status: "success",
+                data: 
+                    {
+                        projectTotal : 0,
+                        projects:[],
+
+
+                    }
             });
         } else {
 
@@ -71,6 +71,53 @@ exports.findPeriodName = async(req, res) => {
         });
     }
 }
+
+exports.findProjectById = async(req, res) => {
+    const { id } = req.params;
+
+    const data = await prisma.project.findUnique({
+        where: { projectid: Number(id) },
+    })
+
+    const periodData = await prisma.period.findMany({
+        include: {
+            periodStatus: {
+              select: {
+                periodStatusName: true,
+              },
+            },
+          },
+        where: {projectid: Number(id),periodStatusId:2 },
+    })
+
+    const countApprovePeriod = await prisma.period.count({
+        where: {
+            projectid: Number(id),
+            periodStatusId: 3,
+        },
+    });
+    const customerData = await prisma.customer.findUnique({
+        where: { customerid: Number(data.customerid) },
+    });
+    
+    if (!data) {
+        res.status(500).send({
+            status: "error",
+            message: err.message
+        });
+    } else {
+
+        res.status(201).send({
+            status: "success",
+            data: data, 
+            periodData: periodData,
+            countApprovePeriod: countApprovePeriod,
+            customerData:customerData,
+            
+        });
+    }
+
+};
 
 
 

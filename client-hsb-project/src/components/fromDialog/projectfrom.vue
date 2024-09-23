@@ -310,7 +310,7 @@ v-if="periodfromVisible"
                             <label class="mr-5">มูลค่า</label>
                         </div>
                         <div class="col-span-4">
-                            <InputText class="w-full" id="projectCode1" type="text" v-model="amount" :disabled="modeView" />
+                            <InputNumber class="w-full" id="projectCode1" type="text" v-model="amount" :disabled="modeView" :minFractionDigits="2" :maxFractionDigits="5" fluid  />
                         </div>
                     </div>
                     <div class="field grid grid-cols-5 gap-4">

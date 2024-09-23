@@ -16,6 +16,7 @@ model file {
   houseDetailId  Int
   backUpStatus   Int
   fileBackupPath String   @db.VarChar(500)
+  reportSelected Boolean @default(false)
 
   housedetail housedetail @relation(fields: [houseDetailId], references: [houseDetailid])
 }
@@ -106,6 +107,8 @@ model project {
   lat             Decimal?    @db.Decimal(9, 6)
   lon             Decimal?    @db.Decimal(9, 6)
   customerid      Int?
+  
+
 
   periods period[]
 
@@ -122,6 +125,7 @@ model user {
   role        Int?
   teamName    String?  @db.VarChar(100)
   phoneNumber String?  @db.VarChar(50)
+  userLineNotificationsid     String?   @db.VarChar(500)
 }
 
 model customer {
@@ -140,6 +144,7 @@ model notifications {
   description String? @db.VarChar(255) 
   notificationsTypeId      Int
   createBy      Int?
+  approver      Int?
   actionNotificationsId      Int
   houseDetailId  Int
   actionNotifications actionNotifications @relation(fields: [actionNotificationsId], references: [actionNotificationsId])
@@ -152,6 +157,7 @@ model notificationsHistory {
  description String? @db.VarChar(255) 
   notificationsTypeId      Int
   createBy      Int?
+  approver      Int?
   actionNotificationsId      Int
   houseDetailId  Int
   actionNotifications actionNotifications @relation(fields: [actionNotificationsId], references: [actionNotificationsId])
@@ -176,4 +182,11 @@ model notificationsType {
 
   notifications notifications[]
   notificationsHistory notificationsHistory[]
+}
+
+model lineeventhook {
+
+  lineeventhookId Int      @id @default(autoincrement())
+  lineeventhookText   String   @db.VarChar(500)
+
 }

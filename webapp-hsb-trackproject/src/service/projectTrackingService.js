@@ -8,6 +8,10 @@ export default {
         var res = await http.get('/projectTracking/getPeriodName');
         return res.data;
     },
+    async findProjectById(id) {
+        const res = await http.get(`/projectTracking/findProjectById/${id}`);
+        return res.data;
+    },
     
     
 };
