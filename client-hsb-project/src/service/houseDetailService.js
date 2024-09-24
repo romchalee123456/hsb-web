@@ -25,7 +25,7 @@ export default {
         return res.data;
     },
     async updateHouseDetailId(id, data) {
-        const res = await http.put(`/houseDetail/updateHouseDetailId/${id}`, data);
+        const res = await http.put(`/houseDetail/updateHouseDetail/${id}`, data);
         return res.data;
     },
     async findAllHoseDetailName() {

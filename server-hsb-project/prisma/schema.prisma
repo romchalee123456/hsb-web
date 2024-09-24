@@ -48,7 +48,8 @@ model period {
   description    String   @db.VarChar(500)
   createOn       DateTime @default(now()) @db.Timestamp(6)
   periodStatusId Int
-
+  periodsamount          Decimal?  @db.Decimal(10, 0)
+  
   project    project    @relation(fields: [projectid], references: [projectid])
   periodStatus periodStatus @relation(fields: [periodStatusId], references: [periodStatusId])
 

@@ -1,9 +1,7 @@
 <script setup>
 import { ref, onMounted, defineProps, defineEmits, toRefs } from 'vue';
 import { useToast } from 'primevue/usetoast';
-import projectService from '@/service/projectService';
 import DataTable from 'primevue/datatable';
-import periodDetailService from '@/service/periodDetailService';
 import houseDetailService from '@/service/houseDetailService';
 import housedetailnameInputFields from '../customInputfields/housedetailnameInputFields.vue';
 
@@ -47,20 +45,49 @@ const addHouseDetail = () => {
     houseDetail.value.push(housedetail);
   };
 
-const handleClickSave = async (data) => {
+const handleClickSave = async () => {
+    const save = ref(false);
 
-    try {
+    for (const data of houseDetail.value) {
+        try {
         let payload;
+        save.value = true
         if (!data.houseDetailid) { 
+          
             payload = {
-                houseDetailNameId: houseDetailNameSelected.value,
+                houseDetailNameId: data.houseDetailNameId,
                 periodDetailid: id.value,
                 
             };
             const res = await houseDetailService.createHouseDetail(payload);
 
-            if (res.status === 'success') {
-                houseDetailid.value = res.data.result.houseDetailid;
+           
+        } else { // Update existing record
+            payload = {
+                houseDetailNameId: data.houseDetailNameId,
+                periodDetailid: id.value,
+                
+            };
+            const res = await houseDetailService.updateHouseDetailId( data.houseDetailid,payload);
+
+         
+        }
+    } catch (ex) {
+        const errorMessage = ex.response?.data?.message || ex.message || 'An error occurred';
+
+        toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: errorMessage,
+            life: 5000
+        });
+
+        console.error('Error during save operation:', ex);
+    }
+    }
+
+    if (save.value) {
+
                 await fetchData(id.value);
 
                 toast.add({
@@ -80,46 +107,7 @@ const handleClickSave = async (data) => {
                     life: 5000
                 });
             }
-        } else { // Update existing record
-            payload = {
-                houseDetailNameId: houseDetailNameSelected.value,
-                periodDetailid: id.value,
-            };
-            const res = await houseDetailService.updateHouseDetailId(payload, data.houseDetailid);
-
-            if (res.status === 'success') {
-                await fetchData(houseDetailid.value);
-
-                toast.add({
-                    severity: 'success',
-                    summary: 'Save Success',
-                    detail: 'แก้ไขข้อมูลสำเร็จ',
-                    life: 5000
-                });
-
-                emit('valueChanged', houseDetailid.value);
-                await handleClickEdit();
-            } else {
-                toast.add({
-                    severity: 'error',
-                    summary: 'Save Error',
-                    detail: 'แก้ไขไม่สำเร็จ',
-                    life: 5000
-                });
-            }
-        }
-    } catch (ex) {
-        const errorMessage = ex.response?.data?.message || ex.message || 'An error occurred';
-
-        toast.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: errorMessage,
-            life: 5000
-        });
-
-        console.error('Error during save operation:', ex);
-    }
+  
 };
 
 
@@ -176,6 +164,8 @@ onMounted(async () => {
                     <template #header>
                         <div class="flex justify-end items-center">
                             <Button severity="info" label="เพิ่มงานรอง" raised @click="addHouseDetail" />
+                            <Button severity="info" label="บันทึกข้อมูล" raised @click="handleClickSave()" v-if="!modeView" />
+                            <Button severity="info" label="แก้ไขข้อมูล" raised @click="handleClickEdit()" v-if="modeView" />
                         </div>
                     </template>
                     <Column header="ชื่อ" field="houseDetailName">
@@ -185,7 +175,7 @@ onMounted(async () => {
                                 :selected-value="houseDetailNameSelected"
                                 :modeReadonly="modeView"
                                 :id ="data.houseDetailNameId"
-                                @valueChanged="(value) => { houseDetailNameSelected = value }"
+                                @valueChanged="(value) => { data.houseDetailNameId = value }"
                                 :disabled="modeView"
                             ></housedetailnameInputFields>
                         </template>
@@ -194,8 +184,7 @@ onMounted(async () => {
                         <template #body="{ index, data }">
                             <div class="flex flex-row justify-around">
                                 <Button icon="pi pi-trash" style="background-color: yellow; color: black; border-color: yellow" @click="houseDetailDelete(index, data)" :disabled="modeView" />
-                                <Button severity="info" label="บันทึกข้อมูล" raised @click="handleClickSave(index, data)" v-if="!modeView" />
-                                <Button severity="info" label="แก้ไขข้อมูล" raised @click="handleClickEdit(index)" v-if="modeView" />
+
                             </div>
                         </template>
                     </Column>

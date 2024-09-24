@@ -33,6 +33,7 @@ exports.createProject = async (req, res) => {
                         description: element.description,
                         createOn: createOn,
                         periodStatusId: element.periodStatusId,
+                        periodsamount: element.periodsamount??0,
                     },
                 });
             }
@@ -137,6 +138,8 @@ exports.updateProjectId = async(req, res) => {
                     description: element.description,
                     createOn: createOn,
                     periodStatusId: element.periodStatusId,
+                    periodsamount: element.periodsamount??0,
+
                 },
             });
             }
@@ -145,7 +148,8 @@ exports.updateProjectId = async(req, res) => {
                     where: { periodid: Number(element.periodid) },
                     data:{
                         description: element.description,
-                        periodStatusId: element.periodStatusId
+                        periodStatusId: element.periodStatusId,
+                        periodsamount: element.periodsamount??0,
                     },
                 })
             }

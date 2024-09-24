@@ -241,7 +241,6 @@ const fetchData = async (value) => {
     lon.value = res.data.lon;
     customerSelected.value = res.customerData;
     customerid.value = res.customerData.customerid;
-    console.log(customerid.value);
     fetchEd.value = true;
 };
 
@@ -256,6 +255,7 @@ onMounted(async () => {
         modeView.value = true;
     } else {
         modeView.value = false;
+        fetchEd.value = true;
     }
 });
 </script>
@@ -344,7 +344,7 @@ v-if="periodfromVisible"
 
                         </div>
                     </div>
-                    <div class="field grid grid-cols-5 gap-4">
+                    <div class="field grid grid-cols-5 gap-4" v-if="projectid">
                         <div>
                             <label class="">ตำแหน่งที่ตั้ง</label>
                         </div>
@@ -386,6 +386,12 @@ v-if="periodfromVisible"
                              class="w-full"
                             >
                             </InputText>
+                        </template>
+                    </Column>
+                    <Column field="description" header="งวด/เงิน">
+                        <template #body="{index}">
+                            <InputNumber class="w-full" type="text" v-model="periodData[index].periodsamount" :disabled="modeView" :minFractionDigits="2" :maxFractionDigits="5" fluid  />
+                    
                         </template>
                     </Column>
                     <Column  header="สถานะ">
