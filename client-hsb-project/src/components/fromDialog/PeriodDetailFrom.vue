@@ -38,6 +38,7 @@ const handleClickEdit = () => {
 };
 
 const addPeriodDetail = () => {
+    modeView.value = false;
     const perioddetail = {
         periodid: id.value,
         projectid: projectid.value,
@@ -52,107 +53,75 @@ const addHouseDetail = (value) => {
     periodDetailid.value = value;
 };
 
-const handleClickSave = async (index, data) => {
-    const validate = await validatedata(index);
-    console.log(data);
 
-    if (!validate) {
-        return false;
+
+const handleClickSave = async () => {
+    const save = ref(false);
+
+    for (const data of periodDetail.value) {
+        save.value = true;
+        try {
+            let payload;
+            if (!data.periodDetailid) {
+                // Check if new record
+                payload = {
+                    periodid: id.value,
+                    description: data.description,
+                    periodNameid: data.periodnameid,
+                    projectid: projectid.value
+                };
+                await periodDetailService.createPeriodDetail(payload);
+            } else {
+                // Update existing record
+                payload = {
+                    description: data.description,
+                    periodDetailData: periodDetailData.value,
+                    deletePeriodDetail: deletePeriodDetail.value,
+                    periodNameid: data.periodnameid,
+                    projectid: projectid.value
+                };
+                await periodDetailService.updatePeriodDetailId(payload, data.periodDetailid);
+            }
+        } catch (ex) {
+            save.value = false;
+            const errorMessage = ex.response?.data?.message || ex.message || 'An error occurred';
+            toast.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: errorMessage,
+                life: 5000
+            });
+            console.error('Error during save operation:', ex);
+            return;  // Early exit on error to avoid further updates
+        }
     }
 
-    try {
-        let payload;
-        if (!data.periodDetailid) {
-            // Check if new record
-            payload = {
-                periodid: id.value,
-                description: data.description,
-                periodNameid: periodNameSelected.value,
-                projectid: projectid.value
-            };
-            const res = await periodDetailService.createPeriodDetail(payload);
-
-            if (res.status === 'success') {
-                periodDetailid.value = res.data.result.periodDetailid;
-                await fetchData(id.value);
-
-                toast.add({
-                    severity: 'success',
-                    summary: 'Save Success',
-                    detail: 'บันทึกข้อมูลสำเร็จ',
-                    life: 5000
-                });
-
-                emit('valueChanged', periodDetailid.value);
-                await handleClickEdit();
-            } else {
-                toast.add({
-                    severity: 'error',
-                    summary: 'Save Error',
-                    detail: 'บันทึกไม่สำเร็จ',
-                    life: 5000
-                });
-            }
-        } else {
-            // Update existing record
-            payload = {
-                description: description.value,
-                periodDetailData: periodDetailData.value,
-                deletePeriodDetail: deletePeriodDetail.value,
-                periodNameid: periodNameSelected.value,
-                projectid: projectid.value
-            };
-            const res = await periodDetailService.updatePeriodDetailId(payload, data.periodDetailid);
-
-            if (res.status === 'success') {
-                await fetchData(periodDetailid.value);
-
-                toast.add({
-                    severity: 'success',
-                    summary: 'Save Success',
-                    detail: 'แก้ไขข้อมูลสำเร็จ',
-                    life: 5000
-                });
-
-                emit('valueChanged', periodDetailid.value);
-                await handleClickEdit();
-            } else {
-                toast.add({
-                    severity: 'error',
-                    summary: 'Save Error',
-                    detail: 'แก้ไขไม่สำเร็จ',
-                    life: 5000
-                });
-            }
-        }
-    } catch (ex) {
-        const errorMessage = ex.response?.data?.message || ex.message || 'An error occurred';
-
+    if (save.value) {
         toast.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: errorMessage,
+            severity: 'success',
+            summary: 'Save Success',
+            detail: 'บันทึกข้อมูลสำเร็จ',
             life: 5000
         });
-
-        console.error('Error during save operation:', ex);
+        await fetchData(id.value);
+        emit('valueChanged', periodDetailid.value);
+        await handleClickEdit();
+    } else {
+        toast.add({
+            severity: 'error',
+            summary: 'Save Error',
+            detail: 'บันทึกไม่สำเร็จ',
+            life: 5000
+        });
     }
 };
 
-const validatedata = async (data) => {
-    if (data.description === '') {
-        toast.add({ severity: 'warn', summary: 'Warning', detail: 'กรุณากรอกรายละเอียด', life: 5000 });
-        return false;
-    }
-    return true;
-};
+
 
 const fetchData = async (value) => {
     const res = await projectService.getPeriodDetail(value);
     periodDetail.value = res.data;
     description.value = res.data.description;
-
-    console.log(res);
 
     periodNameSelected.value = res.data.periodnameid;
 };
@@ -207,6 +176,8 @@ onMounted(async () => {
                     <template #header>
                         <div class="flex justify-end items-center">
                             <Button severity="info" label="เพิ่มงานหลัก" raised @click="addPeriodDetail" />
+                            <Button severity="info" label="บันทึกข้อมูล" raised @click="handleClickSave" v-if="!modeView" />
+                            <Button severity="info" label="แก้ไขข้อมูล" raised @click="handleClickEdit" v-if="modeView" />
                         </div>
                     </template>
                     <Column header="ชื่อ" field="periodName">
@@ -217,7 +188,7 @@ onMounted(async () => {
                                 :id="data.periodnameid"
                                 @valueChanged="
                                     (value) => {
-                                        periodNameSelected = value;
+                                        data.periodnameid = value;
                                     }
                                 "
                                 :disabled="modeView"
@@ -225,17 +196,16 @@ onMounted(async () => {
                         </template>
                     </Column>
                     <Column header="รายละเอียด" field="description">
-                        <template #body="{ index }">
-                            <InputText v-model="periodDetail[index].description" class="w-full" :disabled="modeView"></InputText>
+                        <template #body="{ index,data }">
+                            <InputText v-model="data.description" class="w-full" :disabled="modeView"></InputText>
                         </template>
                     </Column>
                     <Column>
                         <template #body="{ index, data }">
                             <div class="flex flex-row justify-around">
-                                <Button severity="info" label="เพิ่มงานรอง" raised @Click="addHouseDetail(data.periodDetailid)" v-if="!modeView" />
+                                <Button severity="info" label="เพิ่มงานรอง" raised @Click="addHouseDetail(data.periodDetailid)" v-if="!modeView && (data.periodDetailid)" />
                                 <Button icon="pi pi-trash" style="background-color: yellow; color: black; border-color: yellow" @click="periodDetailDelete(index, data)" :disabled="modeView" />
-                                <Button severity="info" label="บันทึกข้อมูล" raised @click="handleClickSave(index, data)" v-if="!modeView" />
-                                <Button severity="info" label="แก้ไขข้อมูล" raised @click="handleClickEdit(index)" v-if="modeView" />
+                                   
                             </div>
                         </template>
                     </Column>

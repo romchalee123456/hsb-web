@@ -6,7 +6,6 @@ import InputText from "primevue/inputtext";
 import Dropdown from "primevue/dropdown";
 import userService from "@/service/userService";
 import Toast from "primevue/toast";
-import PeriodDetailFrom from "./PeriodDetailFrom.vue";
 import { useToast } from "primevue/usetoast";
 const toast = useToast();
 useToast
@@ -19,9 +18,6 @@ const { fromVisible, id } = toRefs(props);
 
 const userId = ref(0);
 const modeView = ref(true);
-const periodDetailVisble = ref(false);
-
-
 const selectedRole = ref( { id: 1, name: 'admin' });
 const password = ref('');
 const rePassword = ref('');
@@ -30,6 +26,8 @@ const lastname = ref('');
 const email = ref('');
 const teamName = ref('');
 const phoneNumber = ref('');
+const userLineNotificationsid = ref('');
+
 const role = ref([
   { id: 1, name: 'admin' },
   { id: 2, name: 'ผู้ดูแลโครงการ' },
@@ -117,7 +115,8 @@ const handleClickSave = async () => {
     password: password.value,
     role: selectedRole.value.id,
     teamName: teamName.value,
-    phoneNumber: phoneNumber.value
+    phoneNumber: phoneNumber.value,
+    userLineNotificationsid:userLineNotificationsid.value
   }
   const res = await userService.insertUser(payload);
 
@@ -152,7 +151,8 @@ const handleClickSave = async () => {
     email: email.value,
     role: selectedRole.value.id,
     teamName: teamName.value,
-    phoneNumber: phoneNumber.value.toString()
+    phoneNumber: phoneNumber.value.toString(),
+    userLineNotificationsid:userLineNotificationsid.value
   }
   const res = await userService.UpdateUser(payload,userId.value);
 
@@ -211,7 +211,7 @@ const fetchData = async (value) => {
   phoneNumber.value = res.data.phoneNumber;
   password.value = '';
   rePassword.value = '';
-
+  userLineNotificationsid.value = res.data.userLineNotificationsid;
 }
 onMounted(async () => {
   if (id.value) {
@@ -261,7 +261,7 @@ onMounted(async () => {
           </div>
           <div class="field grid grid-cols-5 gap-4">
             <div>
-              <label class="mr-5">email</label>
+              <label class="mr-5">LoginName</label>
             </div>
             <div class="col-span-4">
               <InputText class="w-full" id="firstname1" type="text" v-model="email" :disabled="modeView" />
@@ -309,6 +309,14 @@ onMounted(async () => {
             <div class="col-span-4">
               <Dropdown v-model="selectedRole" :options="role" optionLabel="name" placeholder="" checkmark
                 :highlightOnSelect="false" class="w-full md:w-14rem" :disabled="modeView" />
+            </div>
+          </div>
+          <div class="field grid grid-cols-5 gap-4">
+            <div>
+              <label class="">Line NotificationId</label>
+            </div>
+            <div class="col-span-4">
+              <InputText class="w-full" id="firstname1" type="text" v-model="userLineNotificationsid" :disabled="modeView" />
             </div>
           </div>
 
