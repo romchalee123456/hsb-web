@@ -114,6 +114,7 @@ exports.createHouseDetail = async (req, res) => {
         data: {
             houseDetailNameId: houseDetailNameId,
             periodDetailid: periodDetailid,
+            houseDetailStatus: 1,
           },
     });
 
