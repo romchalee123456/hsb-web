@@ -202,3 +202,110 @@ exports.deleteHouseDetailId = async(req, res) => {
     }
 };
 
+exports.getInformationByHouseDetail = async(req, res) => {
+    const { id } = req.params;
+
+    const data = await prisma.housedetail.findUnique({
+        where: { houseDetailid: Number(id) },
+        include: {
+          houseDetailname: true, // Include housedetailname in the relation
+          periodDetail:{
+            include: {
+              periodname:true,
+              period:{
+                include: {
+                  project: true
+                }
+              }
+            }
+          }
+        },
+    })
+    if (!data) {
+        res.status(500).send({
+            status: "error",
+            message: err.message
+        });
+    } else {
+
+        res.status(201).send({
+            status: "success",
+            data: 
+                data
+            
+        });
+    }
+};
+
+exports.updateSelectedFile = async (req, res) => {
+    const { id } = req.params;
+    const result = await prisma.file.update({
+        where: { fileid: Number(id) }, 
+        data: {
+            reportSelected: true,
+        },
+    });
+
+    if (!result) {
+        res.status(500).send({
+            status: "error",
+            message: err.message
+        });
+    } else {
+        res.status(201).send({
+            status: "success",
+            data: {
+                result
+            }
+        });
+    }
+};
+
+exports.updateSelectedFileFalse = async (req, res) => {
+    const { id } = req.params;
+    const result = await prisma.file.update({
+        where: { fileid: Number(id) }, 
+        data: {
+            reportSelected: false,
+        },
+    });
+
+    if (!result) {
+        res.status(500).send({
+            status: "error",
+            message: err.message
+        });
+    } else {
+        res.status(201).send({
+            status: "success",
+            data: {
+                result
+            }
+        });
+    }
+};
+
+exports.getSelectedFile = async(req, res) => {
+
+    const { id } = req.params;
+    const data = await prisma.file.findMany({
+        where: { houseDetailId: Number(id) ,
+                reportSelected: true
+        },
+      })
+        if (!data) {
+            res.status(500).send({
+                status: "error",
+                 message: err.message
+            });
+        } else {
+
+            res.status(201).send({
+                status: "success",
+                data: 
+                    data
+                
+            });
+        }
+    
+};

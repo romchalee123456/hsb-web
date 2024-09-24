@@ -36,4 +36,23 @@ export default {
         const res = await http.delete(`/houseDetail/deleteHouseDetailId/${id}`);
         return res.data;
     },
+
+    async getInformationByHouseDetail(id) {
+        const res = await http.get(`/houseDetail/getInformationByHouseDetail/${id}`);
+        return res.data;
+    },
+    async updateSelectedFile(id) {
+        const res = await http.put(`/houseDetail/updateSelectedFile/${id}`);
+        return res.data;
+    },
+
+    async updateSelectedFileFalse(id) {
+        const res = await http.put(`/houseDetail/updateSelectedFileFalse/${id}`);
+        return res.data;
+    },
+
+    async getSelectedFile(id) {
+        const res = await http.get(`/houseDetail/getSelectedFile/${id}`);
+        return res.data;
+    },
 };
