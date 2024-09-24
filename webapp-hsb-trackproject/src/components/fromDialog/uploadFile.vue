@@ -72,7 +72,7 @@ const handleClickClose = () => {
     >
     <template #header>
       <div class="flex justify-content-between flex-wrap pl-2 pr-2">
-            <i class="pi pi-chevron-left" style="font-size: 1.5rem; color: white" @click="handleClickClose"></i>
+            <i class="pi pi-chevron-left" style="font-size: 1.5rem; color: white" @click="handleClickClose" ></i>
 
         </div>
     </template>

@@ -29,4 +29,16 @@ router.route('/deleteHouseDetailId/:id')
 router.route('/deleteFileByID/:id')
     .delete(asyncHandler(authorization),asyncHandler(houseDetailController.deleteFileByID));
 
+router.route('/getInformationByHouseDetail/:id')
+    .get(asyncHandler(authorization),asyncHandler(houseDetailController.getInformationByHouseDetail));
+
+router.route('/updateSelectedFile/:id')
+    .put(asyncHandler(houseDetailController.updateSelectedFile));
+
+router.route('/updateSelectedFileFalse/:id')
+    .put(asyncHandler(houseDetailController.updateSelectedFileFalse));
+
+router.route('/getSelectedFile/:id')
+    .get(asyncHandler(authorization),asyncHandler(houseDetailController.getSelectedFile));
+
 module.exports = router;
