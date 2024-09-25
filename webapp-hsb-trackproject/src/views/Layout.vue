@@ -65,7 +65,7 @@ html, body {
 .header-top {
   flex-shrink: 0;
   width: 100%;
-  background-color: #79a1b8;
+  background: linear-gradient( #567a8f 5%,#79a1b8,#79a1b8);
 }
 
 /* Content area */
@@ -90,7 +90,7 @@ html, body {
 
 /* Other utility styles */
 .navbarApp {
-  background-color: #79a1b8;
+  background-color: 0;
 }
 
 .nostyle {
@@ -99,7 +99,7 @@ html, body {
 }
 
 .diagonal-gradient {
-  background: linear-gradient(to top, rgb(255, 255, 255) 50%, #79a1b8 50%);
+  background: linear-gradient(to top, rgb(250, 248, 248)50%, #79a1b8 50%);
 }
 
 
