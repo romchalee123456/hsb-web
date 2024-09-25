@@ -14,81 +14,62 @@ const props = defineProps({
 });
 const onClosed = () => {
     emit('onClosed', false);
-}
+};
 const { fromVisible } = toRefs(props);
 
 const fromUploadFileVisible = ref(false);
 const fromHistoryVisible = ref(false);
 
-
 const notificationsList = ref([]);
 
 const fetchData = async () => {
-
     const res = await notificationsService.findAllNotificationHistory(props.id);
 
     notificationsList.value = res.data;
-}
-
+};
 
 onMounted(async () => {
     await fetchData();
-})
+});
 </script>
-<!-- {
-    "status": "success",
-    "data": [
-        {
-            "fileid": 1,
-            "fileName": "คาน.png",
-            "filePath": "https://เสาคานสําเร็จรูป.com/wp-content/uploads/2022/10/170364_210318_0-1024x768.jpg",
-            "statusId": 1,
-            "createOn": "2024-08-28T16:26:29.473Z",
-            "houseDetailId": 1,
-            "backUpStatus": 1,
-            "fileBackupPath": "https://เสาคานสําเร็จรูป.com/wp-content/uploads/2022/10/170364_210318_0-1024x768.jpg"
-        }
-    ]
-} -->
+
 <template>
-
-    <Dialog v-model:visible="fromVisible" modal :closable="false" :pt="{
-        root: {
-            class: 'p-dialog-maximized'
-        },
-        content: {
-            class: 'job-content'
-        }
-    }" contentStyle="font-size: 1.5rem;padding:0px">
-
-
-        <div class="flex justify-content-between flex-wrap pl-2 pr-2">
-            <i class="pi pi-chevron-left" style="font-size: 1.5rem; color: #192a51" @click="onClosed"></i>
+    <Dialog
+        v-model:visible="fromVisible"
+        modal
+        :closable="false"
+        :pt="{
+            root: {
+                class: 'p-dialog-maximized'
+            },
+            content: {
+                class: 'job-content'
+            }
+        }"
+        contentStyle="font-size: 1.5rem;padding:0px"
+    >
+        <div class="header-top p-0">
+            <div class="flex justify-content-between flex-wrap pl-2 pr-2">
+                <i class="pi pi-chevron-left" style="font-size: 1.5rem; color: #192a51" @click="onClosed"></i>
+            </div>
+            <div class="flex justify-center items-center text-white p-0">
+                <span class="pb-3" style="font-size: 1.5rem; letter-spacing: 0.1rem">ประวัติการส่งอนุมัติ</span>
+            </div>
         </div>
-        <Card>
+        <Card style="height: 79vh;">
             <template #content>
-                <div class="content bg-white content-gradient ">
-                    <div class="px-5" v-for="(notifications) of notificationsList" :key="notifications.notificationsId">
+                <div class="content bg-white content-gradient">
+                    <div class="px-5" v-for="notifications of notificationsList" :key="notifications.notificationsId">
                         <div class="pt-3">
-                            <Card
-                                @Click="onNotificationsClick(notifications.notificationsHistoryId, notifications.houseDetailId)">
-                                <template #title> <span class="font-bold kanit-thin">{{
-                                    notifications.notificationsType.notificationsTypeName +" "+notifications.description }}</span> </template>
-
-                                <template #footer>
-                                    <div class="flex justify-content-start gap-4">
-
-
-                                    </div>
+                            <Card style="background-color: #e9f2f7; border-radius: 10px; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2)">
+                                <template #title>
+                                    <span class="font-bold kanit-thin">{{ notifications.notificationsType.notificationsTypeName + ' ' + notifications.description }}</span>
                                 </template>
                             </Card>
                         </div>
-
                     </div>
-
+                    <br>
                 </div>
-
-
             </template>
         </Card>
     </Dialog>

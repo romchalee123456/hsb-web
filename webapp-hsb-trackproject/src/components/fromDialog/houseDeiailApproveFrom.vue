@@ -102,13 +102,14 @@ onMounted(async () => {
                 class: 'job-content'
             }
         }"
-        contentStyle="font-size: 1.5rem;padding:0px"
+        contentStyle="font-size: 1.5rem; padding:0px"
     >
-        <div class="flex justify-content-between flex-wrap pl-2 pr-2">
+    <div class="header-top p-0">
+        <div class="flex justify-content-between flex-wrap pl-2 pr-2 pt-4 ">
             <i class="pi pi-chevron-left" style="font-size: 1.5rem; color: #192a51" @click="onClosed"></i>
             <div>
                 <h1>
-                    houseDetailName
+                    <span class="p-2 text-white" style="font-size: 1.5rem; letter-spacing: 0.1rem">{{ houseDetailName }}</span>
                     <Badge v-if="houseDetailStatus == 1" :value="'ร่าง'" severity="secondary"></Badge>
                     <Badge v-if="houseDetailStatus == 2" :value="'รออนุมัติ'" severity="warn"></Badge>
                     <Badge v-if="houseDetailStatus == 3" :value="'อนุมัติ'" severity="success"></Badge>
@@ -119,28 +120,29 @@ onMounted(async () => {
                 <Button @click="visible = true"><span style="font-size: 0.8rem" @click="showDialog">ประวัติ</span></Button>
             </div>
         </div>
-        <div class="grid pt-3 col">
-            <div class="col-12 navbarApp">
-                <div class="pl-4 pr-4" v-if="notifications">
-                    <div class="col" style="font-size: 1.5rem">
-                        {{ 'งานหลัก :' + notifications.housedetail.periodDetail.periodname.periodName  }}
+                <div class="pl-4 pr-4 text-white p-0" v-if="notifications">
+                    <div class="col" style="font-size: 1.3rem; letter-spacing: 0.1rem;">
+                        {{ 'งานหลัก : ' + notifications.housedetail.periodDetail.periodname.periodName  }}
                     </div>
-                    <div class="col" style="font-size: 0.9rem">
-                        {{ '   โครงการ :' + notifications.housedetail.periodDetail.period.project.projectCode + '   งวด :' + notifications.housedetail.periodDetail.period.description }}
+                    <div class="col" style="font-size: 1rem; letter-spacing: 0.1rem;">
+                        {{ '   โครงการ : ' + notifications.housedetail.periodDetail.period.project.projectCode }}
                     </div>
-                    <div class="col" style="font-size: 0.9rem">
-                        {{ '   รายละเอียด:' + notifications.description }}
+                    <div class="col" style="font-size: 1rem; letter-spacing: 0.1rem;">
+                        {{'   งวด : ' + notifications.housedetail.periodDetail.period.description }}
+                    </div>
+                    <div class="col" style="font-size: 1rem; letter-spacing: 0.1rem;">
+                        {{ '   รายละเอียด : ' + notifications.description }}
                     </div>
                 </div>
             </div>
-            <div class="col-12 diagonal-gradient">
-                <div class="pl-4 pr-4">
-                    <Textarea class="w-full bg-primary text-white" 
+            <div class="col-12 diagonal-gradient p-0">
+                <div class="pl-4 pr-4 ">
+                    <Textarea class="w-full bg-primary text-white " 
                     placeholder="ความเห็น"
                     v-model="houseDetailDescriptions"></Textarea>
                 </div>
             </div>
-        </div>
+
        
         <div class="flex flex-wrap gap-4 justify-center">
             <Button label="อนุมัติ" icon="pi pi-check"  @click="approveNotificationsId(props.notificationsId)" v-if="buttonVisible"/>
@@ -148,13 +150,9 @@ onMounted(async () => {
            
         </div>
    
-
-
         <Card>
             <template #content>
                 <div v-for="file of fileList" :key="file.fileid">
-                    <div class="pb-3">
-                        <div class="bg-primary grid col-12 rounded-md">
                             <div class="pb-3">
                                 <div class="bg-primary grid col-12 rounded-md">
                                     <div class="col-4">
@@ -164,8 +162,6 @@ onMounted(async () => {
                                         <span style="color: aliceblue; font-size: 1.1rem">{{ file.fileName }}</span>
                                         <div class="flex justify-end"></div>
                                     </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -173,3 +169,10 @@ onMounted(async () => {
         </Card>
     </Dialog>
 </template>
+<style>
+.p-dialog-header {
+    background: #567a8f;
+    padding: 0px;
+};
+
+</style>

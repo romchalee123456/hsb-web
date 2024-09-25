@@ -24,7 +24,6 @@ const selectedRole = ref();
 const periodTotal = ref(0);
 const periodApproveTotal = ref(0);
 const fromVisible = ref(false);
-
 const periodList = ref([]);
 const periodDetalList = ref([]);
 
@@ -67,14 +66,13 @@ const fetchData = async () => {
 
     const res = await projectService.findProjectById(projectId);
     const resPeriodDetail = await projectService.getPeriodDetail(periodId);
-
+    
     periodDetalList.value = resPeriodDetail.data;
-
     projectName.value = res.data.projectName;
     projectCode.value = res.data.projectCode;
     description.value = res.data.description;
     periodList.value = res.periodData;
-    periodTotal.value = periodList.value.length;
+    periodTotal.value = periodDetalList.value.length;
     periodApproveTotal.value = res.countApprovePeriod;
 
     const resUser = await userService.getDefult();
@@ -115,33 +113,22 @@ onMounted(async () => {
         </div>
 
         <div class="grid">
-            <div class="col-12 p-0">
-                <div class="col-12 grid p-0 navbarApp">
-                    <div class="col-4 p-0 flex justify-end">
-                        <Image :src="logo" alt="Image" width="40" h image-style="border-radius: 50%;" />
-                    </div>
-
-                    <div class="col-8 p-0 navbarApp text-white">
-                        <div class="font-bold">
-                            <span class="p-2" style="font-size: 1.2rem; letter-spacing: 0.1rem">{{ firstname }}</span>
-                            <span class="p-2" style="font-size: 1.2rem; letter-spacing: 0.1rem">{{ lastname }}</span>
-                        </div>
-                        <div class="font-bold">
-                            <span class="p-2" style="font-size: 1rem; letter-spacing: 0.1rem">ตำแหน่ง : {{ selectedRole }}</span>
-                        </div>
+                <div class="col-12 grid p-0  pb-3 text-white justify-center">
+                    <div class="col-4 p-0 flex justify-center">
+                        <span class="p-2" style="font-size: 1.5rem; letter-spacing: 0.1rem">งานหลัก : {{ periodTotal}}</span>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
 
     <div class="content content-gradient">
-        <div class="px-5">
+        <div class="px-5 pt-3">
             <div class="pt-[2px] pb-3">
-                <Card style="background-color: #192a51; height: 80vh">
+                <Card style=" height: 79vh; ">
                     <template #content>
                         <div class="pt-[2px] pb-3" v-for="periodDetail of periodDetalList" :key="periodDetail.periodDetailid">
-                            <Card @Click="houseDetailFrom(periodDetail.periodDetailid)">
+                            <Card style="background-color: #e9f2f7 ; border-radius: 10px; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2); " @Click="houseDetailFrom(periodDetail.periodDetailid)">
                                 <template #title>{{ periodDetail.periodname.periodName }}</template>
                                 <template #content>
                                     <p class="m-0">
@@ -159,6 +146,6 @@ onMounted(async () => {
 
 <style>
 .content-gradient {
-    background: linear-gradient(to bottom, rgb(255, 255, 255) 70%, #79a1b8 30%);
+    background: linear-gradient(to bottom, rgb(255, 255, 255) 100%, #79a1b8 0%);
 }
 </style>
