@@ -108,7 +108,7 @@ const fetchHouseDetailFile = async (houseDetail) => {
     houseDetailFileData.value = res3.data
     
     houseDetailFileData.value.forEach(file => {
-            checkedFiles.value.push(false);
+            checkedFiles.value.push(file.reportSelected);
     });
 };
 

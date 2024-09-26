@@ -17,7 +17,11 @@ exports.findAllProject = async(req, res) => {
             _count:{
                 select:{periods:true}
             }
-        }
+        }  ,
+            orderBy: {
+                projectid: 'desc'  // Order by id in descending order
+            }
+        
         
     });
         if (!projectTotal) {
@@ -51,6 +55,11 @@ exports.findAllProject = async(req, res) => {
 exports.findPeriodName = async(req, res) => {
 
     const periodname = await prisma.periodname.findMany({
+        
+            orderBy: {
+                periodNameid: 'desc'  // Order by id in descending order
+            }
+        
     });
 
     if (!periodname) {

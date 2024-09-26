@@ -277,6 +277,11 @@ exports.findAllNotification = async (req, res) => {
           },
         },
       },
+      
+        orderBy: {
+            notificationsId: 'desc'  // Order by id in descending order
+        }
+    
     });
 
     res.status(201).send({
@@ -366,4 +371,64 @@ exports.findAllNotificationHistory = async (req, res) => {
   }
 };
 
+exports.sendLineReport = async (req, res) => {
+  const { id ,customerId} = req.params;
+
+
+  try {
+    // Fetch the notifications data first
+    const notificationsdata = await prisma.notifications.findUnique({
+      where: { notificationsId: Number(id) },
+    });
+
+    // Fetch the house detail data before using it
+    const data = await prisma.housedetail.findUnique({
+      where: { houseDetailid: Number(id) },
+      include: {
+        houseDetailname: true, // Include housedetailname in the relation
+        periodDetail: {
+          include: {
+            periodname: true,
+            period: {
+              include: {
+                project: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const customerData = await prisma.customer.findUnique({
+      where: { customerid: Number(customerId) },
+    });
+
+
+    const message = `
+    เรียนคุณ: ${customerData.customerFirstname} ${customerData.customerLastname}
+    บริษัทขอส่งรายงานความคืบหน้างาน
+    งาน: ${data.houseDetailname.houseDetailName}
+    งานหลัก: ${data.periodDetail.periodname.periodName}
+    โครงการ: ${data.periodDetail.period.project.projectCode} ${data.periodDetail.period.project.projectName}
+    งวด: ${data.periodDetail.period.description}
+    สามารถตรวจสอบรายละเอียดได้ที่ http://localhost:5174/report/${id}
+    `;
+
+    // Assuming sendnotificationsline is a function to send notifications
+    if(customerData.customerLine != null && customerData.customerLine != ""){
+      sendnotificationsline(customerData.customerLine, message);
+    }
+   
+
+    res.status(201).send({
+      status: "success",
+      data: notificationsdata,
+    });
+  } catch (err) {
+    res.status(500).send({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
 

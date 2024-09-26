@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/assets/stores/auth';
 import Login from '@/views/pages/auth/Login.vue';
 import AppLayout from '@/layout/AppLayout.vue';
+import reportPage from '@/views/pages/reportPage.vue';
 
 const routes = [
     {
@@ -36,7 +37,8 @@ const routes = [
             }
         ]
     },
-    { path: '/login', name: 'Login', component: Login }
+    { path: '/login', name: 'Login', component: Login },
+    { path: '/report/:id', name: 'report', component: reportPage }
 ];
 
 const router = createRouter({

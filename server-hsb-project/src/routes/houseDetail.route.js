@@ -30,7 +30,7 @@ router.route('/deleteFileByID/:id')
     .delete(asyncHandler(authorization),asyncHandler(houseDetailController.deleteFileByID));
 
 router.route('/getInformationByHouseDetail/:id')
-    .get(asyncHandler(authorization),asyncHandler(houseDetailController.getInformationByHouseDetail));
+    .get(asyncHandler(houseDetailController.getInformationByHouseDetail));
 
 router.route('/updateSelectedFile/:id')
     .put(asyncHandler(houseDetailController.updateSelectedFile));

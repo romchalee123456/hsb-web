@@ -34,7 +34,14 @@ exports.createCustomer = async(req, res) => {
 
 exports.findAllCustomer = async(req, res) => {
 
-    const data = await prisma.customer.findMany();
+    const data = await prisma.customer.findMany(
+
+        {
+            orderBy: {
+                customerid: 'desc'  // Order by id in descending order
+            }
+        }
+    );
         if (!data) {
             res.status(500).send({
                 status: "error",

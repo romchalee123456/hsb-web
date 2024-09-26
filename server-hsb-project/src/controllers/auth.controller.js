@@ -129,24 +129,26 @@ exports.update = async(req, res) => {
 };
 
 exports.findAllUser = async(req, res) => {
+    try {
+        const data = await prisma.user.findMany({
+            orderBy: {
+                id: 'desc'  // Order by id in descending order
+            }
+        });
 
-    const data = await prisma.user.findMany();
-        if (!data) {
-            res.status(500).send({
-                status: "error",
-                message: err.message
-            });
-        } else {
+        res.status(201).send({
+            status: "success",
+            data: data
+        });
 
-            res.status(201).send({
-                status: "success",
-                data: 
-                    data
-                
-            });
-        }
-    
+    } catch (err) {
+        res.status(500).send({
+            status: "error",
+            message: err.message
+        });
+    }
 }
+
 
 exports.findUserById = async(req, res) => {
     const { id } = req.params;

@@ -112,7 +112,11 @@ exports.deletePeriodDetailId = async(req, res) => {
 
 exports.findAllPeriodName = async(req, res) => {
 
-    const data = await prisma.periodname.findMany();
+    const data = await prisma.periodname.findMany(  {
+        orderBy: {
+            periodNameid: 'desc'  // Order by id in descending order
+        }
+    });
 
         if (!data) {
             res.status(500).send({

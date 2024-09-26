@@ -59,7 +59,11 @@ exports.createProject = async (req, res) => {
 
 exports.findAllProject = async(req, res) => {
 
-    const data = await prisma.project.findMany();
+    const data = await prisma.project.findMany(  {
+        orderBy: {
+            projectid: 'desc'  // Order by id in descending order
+        }
+    });
         if (!data) {
             res.status(500).send({
                 status: "error",
@@ -263,6 +267,10 @@ exports.findAllPeriodDetail= async(req, res) => {
         include: {
           periodname: true,
         },
+        orderBy: {
+            periodid: 'desc'  // Order by id in descending order
+        }
+        
       })
         if (!data) {
             res.status(500).send({
