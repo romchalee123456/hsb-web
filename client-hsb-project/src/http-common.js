@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { useCookies } from 'vue3-cookies';
 import router from './router';
-
+import apiName from './currentName';
 const { cookies } = useCookies();
 let isRefreshing = false;
 let refreshSubscribers = [];
 
 const instance = axios.create({
-    baseURL: 'http://localhost:3001/api', // Replace with your API's base URL
+    baseURL: apiName+'/api', // Replace with your API's base URL
     headers: {
         'Content-Type': 'application/json'
         // You can add more default headers here if needed

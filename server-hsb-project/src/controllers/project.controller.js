@@ -65,19 +65,29 @@ exports.createProject = async (req, res) => {
   }
 };
 
-exports.findAllProject = async (req, res) => {
-  const data = await prisma.project.findMany();
-  if (!data) {
-    res.status(500).send({
-      status: "error",
-      message: err.message,
+
+exports.findAllProject = async(req, res) => {
+
+    const data = await prisma.project.findMany(  {
+        orderBy: {
+            projectid: 'desc'  // Order by id in descending order
+        }
     });
-  } else {
-    res.status(201).send({
-      status: "success",
-      data: data,
-    });
-  }
+        if (!data) {
+            res.status(500).send({
+                status: "error",
+                 message: err.message
+            });
+        } else {
+
+            res.status(201).send({
+                status: "success",
+                data: 
+                    data
+                
+            });
+        }
+    
 };
 
 exports.updateProjectLocation = async (req, res) => {
@@ -256,21 +266,29 @@ exports.deleteProjectId = async (req, res) => {
 exports.findAllPeriodDetail = async (req, res) => {
   const { id } = req.params;
 
-  const data = await prisma.periodDetail.findMany({
-    where: { periodid: Number(id) },
-    include: {
-      periodname: true,
-    },
-  });
-  if (!data) {
-    res.status(500).send({
-      status: "error",
-      message: err.message,
-    });
-  } else {
-    res.status(201).send({
-      status: "success",
-      data: data,
-    });
-  }
+    const data = await prisma.periodDetail.findMany({
+        where: { periodid: Number(id) },
+        include: {
+          periodname: true,
+        },
+        orderBy: {
+            periodid: 'desc'  // Order by id in descending order
+        }
+        
+      })
+        if (!data) {
+            res.status(500).send({
+                status: "error",
+                 message: err.message
+            });
+        } else {
+
+            res.status(201).send({
+                status: "success",
+                data: 
+                    data
+                
+            });
+        }
+    
 };

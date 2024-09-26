@@ -15,7 +15,9 @@ const generateRefreshToken = (id) => {
 
 // Decode Access or Refresh Token
 const decodeToken = (token, isRefreshToken = false) => {
- 
+    console.log("decodeToken");
+
+ console.log(token);
     try {
         const secret = isRefreshToken ? JWT_REFRESH_SECRET_KEY : JWT_SECRET_KEY;
         return jwt.verify(token, secret);
@@ -26,6 +28,9 @@ const decodeToken = (token, isRefreshToken = false) => {
 };
 
 const decodeTokenForId = (token, isRefreshToken = false) => {
+    console.log("decodeTokenForId");
+    
+    console.log(token);
  
     try {
         const secret = isRefreshToken ? JWT_REFRESH_SECRET_KEY : JWT_SECRET_KEY;

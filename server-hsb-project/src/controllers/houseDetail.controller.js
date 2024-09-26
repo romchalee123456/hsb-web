@@ -5,23 +5,31 @@ const prisma = new PrismaClient();
 exports.findAllHouseDetail = async (req, res) => {
   const { id } = req.params;
 
-  const data = await prisma.housedetail.findMany({
-    where: { periodDetailid: Number(id) },
-    include: {
-      houseDetailname: true,
-    },
-  });
-  if (!data) {
-    res.status(500).send({
-      status: "error",
-      message: err.message,
-    });
-  } else {
-    res.status(201).send({
-      status: "success",
-      data: data,
-    });
-  }
+    const data = await prisma.housedetail.findMany({
+        where: { periodDetailid: Number(id) },
+        include: {
+          houseDetailname: true,
+        },
+            orderBy: {
+                houseDetailid: 'desc'  // Order by id in descending order
+            }
+      
+      })
+        if (!data) {
+            res.status(500).send({
+                status: "error",
+                 message: err.message
+            });
+        } else {
+
+            res.status(201).send({
+                status: "success",
+                data: 
+                    data
+                
+            });
+        }
+    
 };
 
 exports.findHouseDetailById = async (req, res) => {
@@ -49,20 +57,29 @@ exports.findHouseDetailById = async (req, res) => {
 exports.findAllFileByHouseDetail = async (req, res) => {
   const { id } = req.params;
 
-  const data = await prisma.file.findMany({
-    where: { houseDetailId: Number(id) },
-  });
-  if (!data) {
-    res.status(500).send({
-      status: "error",
-      message: err.message,
-    });
-  } else {
-    res.status(201).send({
-      status: "success",
-      data: data,
-    });
-  }
+    const data = await prisma.file.findMany({
+        where: { houseDetailId: Number(id) },
+        
+            orderBy: {
+                houseDetailId: 'desc'  // Order by id in descending order
+            }
+        
+      })
+        if (!data) {
+            res.status(500).send({
+                status: "error",
+                 message: err.message
+            });
+        } else {
+
+            res.status(201).send({
+                status: "success",
+                data: 
+                    data
+                
+            });
+        }
+    
 };
 
 exports.deleteFileByID = async (req, res) => {
@@ -137,8 +154,13 @@ exports.updateHouseDetailId = async (req, res) => {
   }
 };
 
-exports.findAllHoseDetailName = async (req, res) => {
-  const data = await prisma.housedetailname.findMany();
+exports.findAllHoseDetailName = async(req, res) => {
+
+    const data = await prisma.housedetailname.findMany(  {
+        orderBy: {
+            houseDetailNameid: 'desc'  // Order by id in descending order
+        }
+    });
 
   if (!data) {
     res.status(500).send({

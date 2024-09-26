@@ -69,9 +69,9 @@ onMounted(async () => {
     <!-- Header Section -->
     <div class="header-top">
         <div class="flex flex-wrap justify-end navbarApp pb-2 pl-0 pr-0 pt-4">
-            <OverlayBadge value="2" severity="danger" @click="toNotifications">
-                <i class="pi pi-bell" style="font-size: 2rem" />
-            </OverlayBadge>
+            <!-- <OverlayBadge value="2" severity="danger"> -->
+                <i class="pi pi-bell" style="font-size: 2rem"   @click="toNotifications"/>
+            <!-- </OverlayBadge> -->
             <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" style="background-color: transparent; padding: 0; border: 0" />
             <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
         </div>

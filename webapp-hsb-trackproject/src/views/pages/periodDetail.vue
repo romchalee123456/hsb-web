@@ -81,6 +81,10 @@ const fetchData = async () => {
 
     selectedRole.value = role.value[resUser.data.role - 1].name;
 };
+
+const toNotifications = async () => {
+    router.push('/notifications');
+};
 onMounted(async () => {
     await fetchData();
 });
@@ -104,9 +108,9 @@ onMounted(async () => {
 
             <!-- Right Side -->
             <div class="flex items-center space-x-4">
-                <OverlayBadge value="2" severity="danger">
-                    <i class="pi pi-bell" style="font-size: 2rem"></i>
-                </OverlayBadge>
+                <!-- <OverlayBadge value="2" severity="danger"> -->
+                    <i class="pi pi-bell" style="font-size: 2rem"   @click="toNotifications"/>
+                <!-- </OverlayBadge> -->
                 <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" style="background-color: transparent; padding: 0; border: 0"></Button>
                 <Menu ref="menu" id="overlay_menu" :model="items" :popup="true"></Menu>
             </div>

@@ -36,19 +36,31 @@ exports.createCustomer = async (req, res) => {
   }
 };
 
-exports.findAllCustomer = async (req, res) => {
-  const data = await prisma.customer.findMany();
-  if (!data) {
-    res.status(500).send({
-      status: "error",
-      message: err.message,
-    });
-  } else {
-    res.status(201).send({
-      status: "success",
-      data: data,
-    });
-  }
+exports.findAllCustomer = async(req, res) => {
+
+    const data = await prisma.customer.findMany(
+
+        {
+            orderBy: {
+                customerid: 'desc'  // Order by id in descending order
+            }
+        }
+    );
+        if (!data) {
+            res.status(500).send({
+                status: "error",
+                 message: err.message
+            });
+        } else {
+
+            res.status(201).send({
+                status: "success",
+                data: 
+                    data
+                
+            });
+        }
+    
 };
 
 exports.updateCustomerId = async (req, res) => {

@@ -1,13 +1,8 @@
 import http from '@/http-common';
 export default {
-
-
-
-    async createProject(data) {
-        const res = await http.post('/notification/createNewNotification', data);
+    async sendReportNotification(id,customerId) {
+        const res = await http.get(`/notification/sendLineReport/${id}/${customerId}`);
         return res.data;
     },
-
-
 
 };

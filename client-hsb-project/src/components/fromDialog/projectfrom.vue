@@ -26,7 +26,7 @@ const modeView = ref(true);
 const periodfromVisible = ref(false);
 
 const selectedRole = ref({ id: 1, name: 'ดำเนินการ' });
-const selectedRoleSponse = ref();
+const selectedRoleSponse = ref([]);
 const responses = ref([]);
 const projectCode = ref('');
 const periodData = ref([]);
@@ -230,7 +230,8 @@ const fetchData = async (value) => {
     amount.value = res.data.amount;
     description.value = res.data.description;
     selectedRole.value = projectStatus.value[res.data.projectStatusid - 1];
-    selectedRoleSponse.value = responses.value[res.data.responseid - 1];
+
+    // selectedRoleSponse.value = responses.value[res.data.responseid - 1];
     periodData.value = res.periodData;
     locationsName.value = res.data.locationName;
     locationCode.value = res.data.locationCode;
@@ -238,6 +239,8 @@ const fetchData = async (value) => {
     lon.value = res.data.lon;
     customerSelected.value = res.customerData;
     customerid.value = res.customerData.customerid;
+
+    selectedRoleSponse.value = responses.value .find(item => item.id === res.data.responseid);
     fetchEd.value = true;
 };
 
