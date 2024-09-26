@@ -1,12 +1,10 @@
-const { PrismaClient } = require('@prisma/client')
-const {decodeTokenForId:decodeTokenForId} = require('../utils/token')
+const { PrismaClient } = require("@prisma/client");
+const { decodeTokenForId: decodeTokenForId } = require("../utils/token");
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
-
-exports.findAllProject = async(req, res) => {
-
-    const userId = req.currentUserId;  // Access decodeId here
+exports.findAllProject = async (req, res) => {
+  const userId = req.currentUserId; // Access decodeId here
 
     const projectTotal = await prisma.project.count({
         where: { responseid: Number(userId) },
@@ -62,71 +60,61 @@ exports.findPeriodName = async(req, res) => {
         
     });
 
-    if (!periodname) {
-        res.status(500).send({
-            status: "error",
-             message: err.message
-        });
-    } else {
-
-        res.status(201).send({
-            status: "success",
-            data: 
-                {
-                 periodname,
-
-                }
-            
-        });
-    }
-}
-
-exports.findProjectById = async(req, res) => {
-    const { id } = req.params;
-
-    const data = await prisma.project.findUnique({
-        where: { projectid: Number(id) },
-    })
-
-    const periodData = await prisma.period.findMany({
-        include: {
-            periodStatus: {
-              select: {
-                periodStatusName: true,
-              },
-            },
-          },
-        where: {projectid: Number(id),periodStatusId:2 },
-    })
-
-    const countApprovePeriod = await prisma.period.count({
-        where: {
-            projectid: Number(id),
-            periodStatusId: 3,
-        },
+  if (!periodname) {
+    res.status(500).send({
+      status: "error",
+      message: err.message,
     });
-    const customerData = await prisma.customer.findUnique({
-        where: { customerid: Number(data.customerid) },
+  } else {
+    res.status(201).send({
+      status: "success",
+      data: {
+        periodname,
+      },
     });
-    
-    if (!data) {
-        res.status(500).send({
-            status: "error",
-            message: err.message
-        });
-    } else {
-
-        res.status(201).send({
-            status: "success",
-            data: data, 
-            periodData: periodData,
-            countApprovePeriod: countApprovePeriod,
-            customerData:customerData,
-            
-        });
-    }
-
+  }
 };
 
+exports.findProjectById = async (req, res) => {
+  const { id } = req.params;
 
+  const data = await prisma.project.findUnique({
+    where: { projectid: Number(id) },
+  });
 
+  const periodData = await prisma.period.findMany({
+    include: {
+      periodStatus: {
+        select: {
+          periodStatusName: true,
+        },
+      },
+    },
+    where: { projectid: Number(id), periodStatusId: 2 },
+  });
+
+  const countApprovePeriod = await prisma.period.count({
+    where: {
+      projectid: Number(id),
+      periodStatusId: 3,
+    },
+  });
+  const customerData = await prisma.customer.findUnique({
+    where: { customerid: Number(data.customerid) },
+  });
+
+  if (!data) {
+    res.status(500).send({
+      status: "error",
+      message: err.message,
+    });
+  } else {
+    res.status(201).send({
+      status: "success",
+      data: data,
+      periodData: periodData,
+      countApprovePeriod: countApprovePeriod,
+      customerData: customerData,
+    });
+  }
+};

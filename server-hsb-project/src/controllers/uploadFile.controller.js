@@ -1,12 +1,12 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const multer = require('multer');
-const path = require('path');
+const multer = require("multer");
+const path = require("path");
 const util = require("util");
 const fs = require("fs");
-const { connect } = require('tls');
+const { connect } = require("tls");
 
-const writeFileAsync = util.promisify(fs.writeFile); 
+const writeFileAsync = util.promisify(fs.writeFile);
 
 // Set up storage engine
 const storage = multer.diskStorage({
@@ -14,8 +14,8 @@ const storage = multer.diskStorage({
     cb(null, path.join(__dirname, "files")); // Save files to the "files" directory
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname); // Use a unique filename
-  }
+    cb(null, Date.now() + "-" + file.originalname); // Use a unique filename
+  },
 });
 
 const upload = multer({
@@ -39,27 +39,26 @@ exports.uploadFileHouseDetail = async (req, res) => {
       for (const file of files) {
         const filename = file.name;
         console.log(file);
-     
-    const filepath = path.join(__dirname, "files", filename);
-    const filepathdb = path.join("files", filename);
 
-    // Save base64 data to a file
-    if (file.base64 !== "") {
-      let base64Image = file.base64.split(";base64,").pop();
-      await writeFileAsync(filepath, base64Image, { encoding: "base64" });
-      console.log("File created");
-    }
-    await prisma.file.create({
-      data: {
-        fileName: filename,
-        filePath: filepathdb,
-        statusId: 1,
-        houseDetailId: id,
-        backUpStatus: 1,
-        fileBackupPath: '',
-      },
-    });
+        const filepath = path.join(__dirname, "files", filename);
+        const filepathdb = path.join("files", filename);
 
+        // Save base64 data to a file
+        if (file.base64 !== "") {
+          let base64Image = file.base64.split(";base64,").pop();
+          await writeFileAsync(filepath, base64Image, { encoding: "base64" });
+          console.log("File created");
+        }
+        await prisma.file.create({
+          data: {
+            fileName: filename,
+            filePath: filepathdb,
+            statusId: 1,
+            houseDetailId: id,
+            backUpStatus: 1,
+            fileBackupPath: "",
+          },
+        });
       }
 
       res.status(200).json({ message: "Files uploaded successfully!" });

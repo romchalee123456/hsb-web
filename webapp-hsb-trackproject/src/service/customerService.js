@@ -16,8 +16,8 @@ export default {
         const res = await http.delete(`/customer/customertDelete/${id}`);
         return res.data;
     },
-    async updateCustomerId(data,id) {
+    async updateCustomerId(data, id) {
         const res = await http.put(`/customer/customerUpdate/${id}`, data);
         return res.data;
-    },
+    }
 };

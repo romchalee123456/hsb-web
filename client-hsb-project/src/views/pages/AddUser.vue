@@ -7,58 +7,42 @@ import fromAddUser from '@/components/fromDialog/fromAddUser.vue';
 const users = ref([]);
 const fromVisible = ref(false);
 const id = ref(0);
-const handleClickAdd = () =>{
+const handleClickAdd = () => {
     fromVisible.value = true;
-}
+};
 
-const handleClickClose = () =>{
+const handleClickClose = () => {
     fromVisible.value = false;
     id.value = 0;
-}
-const onRowDbClick = (event) =>{
-   console.log(event.data);
+};
+const onRowDbClick = (event) => {
+    console.log(event.data);
     fromVisible.value = true;
     id.value = event.data.id;
-}
+};
 
-const loadData = async() =>{
+const loadData = async () => {
     const res = await userService.getAllUser();
 
-users.value = res.data;
-}
+    users.value = res.data;
+};
 const searchData = (value) => {
-    
-   console.log(value)
-}
+    console.log(value);
+};
 
 onMounted(async () => {
-   await loadData();
+    await loadData();
 });
 </script>
 <template>
-    <GenericViewPage
-    :list="users"
-@button-add="handleClickAdd"
-@onRowDbClick="onRowDbClick"
-@search="searchData"
-:title="'ผู้ใช้งาน'"
-    >
-    <template #Column>
-        <Column header="ชื่อ" filterField="firstname" field="firstname"> </Column>
-                <Column header="นามสกุล"  field="lastname"></Column>
-                <Column header="ชื่อทีม" field="teamName"></Column>
-                <Column header="เบอร์โทร" field="phoneNumber"></Column>
-    </template>
+    <GenericViewPage :list="users" @button-add="handleClickAdd" @onRowDbClick="onRowDbClick" @search="searchData" :title="'ผู้ใช้งาน'">
+        <template #Column>
+            <Column header="ชื่อ" filterField="firstname" field="firstname"> </Column>
+            <Column header="นามสกุล" field="lastname"></Column>
+            <Column header="ชื่อทีม" field="teamName"></Column>
+            <Column header="เบอร์โทร" field="phoneNumber"></Column>
+        </template>
     </GenericViewPage>
-<fromAddUser
-v-if="fromVisible"
-:from-visible="fromVisible"
-:id="id"
-:onload="loadData"
-@button-close="handleClickClose"
-></fromAddUser>
+    <fromAddUser v-if="fromVisible" :from-visible="fromVisible" :id="id" :onload="loadData" @button-close="handleClickClose"></fromAddUser>
 </template>
-<style>
-
-
-</style>
+<style></style>

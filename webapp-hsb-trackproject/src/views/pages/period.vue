@@ -48,10 +48,8 @@ const toggle = (event) => {
     menu.value.toggle(event);
 };
 
-
-
 const toPeriodDetail = (periodDetailId) => {
-    router.push('periodDetail/'+route.params.id+'/'+periodDetailId)
+    router.push('periodDetail/' + route.params.id + '/' + periodDetailId);
 };
 
 const fetchData = async () => {
@@ -79,79 +77,58 @@ onMounted(async () => {
     <!-- Header Section -->
     <div class="header-top">
         <div class="flex justify-between items-center navbarApp pb-2 pl-0 pr-0 pt-4">
-  <!-- Left Side -->
-  <a href="/"><i class="pi pi-chevron-left" style="font-size: 1.5rem; color: #192a51;"></i></a>
-  
-  <!-- Right Side -->
-  <div class="flex items-center space-x-4">
-    <OverlayBadge value="2" severity="danger">
-      <i class="pi pi-bell" style="font-size: 2rem"></i>
-    </OverlayBadge>
-    <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" style="background-color: transparent; padding: 0; border: 0"></Button>
-    <Menu ref="menu" id="overlay_menu" :model="items" :popup="true"></Menu>
-  </div>
-</div>
+            <!-- Left Side -->
+            <a href="/"><i class="pi pi-chevron-left" style="font-size: 1.5rem; color: #192a51"></i></a>
+
+            <!-- Right Side -->
+            <div class="flex items-center space-x-4">
+                <OverlayBadge value="2" severity="danger">
+                    <i class="pi pi-bell" style="font-size: 2rem"></i>
+                </OverlayBadge>
+                <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" style="background-color: transparent; padding: 0; border: 0"></Button>
+                <Menu ref="menu" id="overlay_menu" :model="items" :popup="true"></Menu>
+            </div>
+        </div>
 
         <div class="grid">
-            <div class="col-12 p-0">
-                <div class="col-12 grid p-0 navbarApp">
-                    <div class="col-4 p-0 flex justify-end">
-                        <Image :src="logo" alt="Image" width="40" h image-style="border-radius: 50%;" />
-                    </div>
-
-                    <div class="col-8 p-0 navbarApp text-white">
-                        <div class="font-bold">
-                            <span class="p-2" style="font-size: 1.2rem; letter-spacing: 0.1rem">{{ firstname }}</span>
-                            <span class="p-2" style="font-size: 1.2rem; letter-spacing: 0.1rem">{{ lastname }}</span>
-                        </div>
-                        <div class="font-bold">
-                            <span class="p-2" style="font-size: 1rem; letter-spacing: 0.1rem">ตำแหน่ง : {{ selectedRole }}</span>
-                        </div>
-                    </div>
+            <div class="col-12 p-0 navbarApp text-white">
+                <div class="font-bold" style="padding-left: 4rem; padding-right: 4rem">
+                    <span class="p-2" style="font-size: 1.2rem; letter-spacing: 0.1rem">รหัสโครงการ : {{ projectCode }}</span>
+                    <span class="p-2" style="font-size: 1.2rem; letter-spacing: 0.1rem">งวด : {{ periodTotal }}</span>
                 </div>
-                <div class="col-12 p-0 navbarApp text-white">
-                    <div class="font-bold" style="padding-left: 4rem; padding-right: 4rem; padding-top: 1.5rem">
-                        <span class="p-2" style="font-size: 1rem; letter-spacing: 0.1rem">รหัสโครงการ : {{ projectCode }}</span>
-                        <span class="p-2" style="font-size: 1rem; letter-spacing: 0.1rem">งวด : {{ periodTotal }}</span>
-                    </div>
-                </div>
-                <div class="col-12 text-center pt-0 pl-6 pr-6 pb-0 diagonal-gradient">
-                    <div class="col">
-                        <InputGroup>
-                            <InputGroupAddon class="bg-primary text-white">
-                                <i class="pi pi-search"></i>
-                            </InputGroupAddon>
-                            <InputText class="w-full bg-primary text-white" placeholder="ค้นหา" />
-                        </InputGroup>
-                    </div>
-                </div>
-                <!-- Content Section -->
             </div>
+            <div class="col-12 text-center pt-0 pl-6 pr-6 pb-0 diagonal-gradient">
+                <div class="col">
+                    <InputGroup>
+                        <InputGroupAddon class="bg-primary text-white">
+                            <i class="pi pi-search"></i>
+                        </InputGroupAddon>
+                        <InputText class="w-full bg-primary text-white" placeholder="ค้นหา" />
+                    </InputGroup>
+                </div>
+            </div>
+            <!-- Content Section -->
         </div>
     </div>
 
     <div class="content bg-white content-gradient">
         <div class="col-12 p-0 text-white">
             <div class="font-bold flex justify-end items-center" style="padding-left: 3rem; padding-right: 3rem; padding-top: 0.4rem">
-                
-                <span class="p-2" style="font-size: 1rem; letter-spacing: 0.1rem; border: 2px; border-radius: 10px; background-color: #2E8B57">อนุมัติ : {{ periodApproveTotal }}</span>
+                <span class="p-2" style="font-size: 1rem; letter-spacing: 0.1rem; border: 2px; border-radius: 15px; background-color: #19bf62">อนุมัติ : {{ periodApproveTotal }}</span>
             </div>
         </div>
 
         <div class="px-5 pt-2" v-for="period of periodList" :key="period.periodid">
             <div class="pt-[2px] pb-3">
-                <Card  style="background-color: #192a51;" @click="toPeriodDetail(period.periodid)">
+                <Card style="background-color: #e9f2f7; border-radius: 10px; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2)" @click="toPeriodDetail(period.periodid)">
                     <template #title>
-                        <div class="flex justify-between items-center  w-full bg-primary">
-                            <span class="font-bold kanit-thin text-white">{{ period.description }}</span>             
-                            <Badge style="font-size: 1.2rem; letter-spacing: 0.1rem; border-radius: 5px " v-if="period.periodStatusId == 1" :value="period.periodStatus.periodStatusName" severity="secondary"></Badge>
-                            <Badge style="font-size: 1.2rem; letter-spacing: 0.1rem; border-radius: 5px" v-if="period.periodStatusId == 2" :value="period.periodStatus.periodStatusName" severity="warn"></Badge>
-                            <Badge style="font-size: 1.2rem; letter-spacing: 0.1rem; border-radius: 5px" v-if="period.periodStatusId == 3" :value="period.periodStatus.periodStatusName" severity="success"></Badge>
+                        <div class="flex justify-between items-center w-full">
+                            <span class="font-bold kanit-thin">{{ period.description }}</span>
+                            <Badge style="font-size: 1rem; letter-spacing: 0.1rem; border-radius: 5px" v-if="period.periodStatusId == 1" :value="period.periodStatus.periodStatusName" severity="secondary"></Badge>
+                            <Badge style="font-size: 1rem; letter-spacing: 0.1rem; border-radius: 5px" v-if="period.periodStatusId == 2" :value="period.periodStatus.periodStatusName" severity="warn"></Badge>
+                            <Badge style="font-size: 1rem; letter-spacing: 0.1rem; border-radius: 5px" v-if="period.periodStatusId == 3" :value="period.periodStatus.periodStatusName" severity="success"></Badge>
                         </div>
                     </template>
-
-                        
-
                 </Card>
             </div>
         </div>
@@ -160,9 +137,6 @@ onMounted(async () => {
 
 <style>
 .content-gradient {
-    background: linear-gradient(to bottom, rgb(255, 255, 255) 70%, #79a1b8 30%);
+    background: linear-gradient(to bottom, rgb(255, 255, 255) 100%, #79a1b8 0%);
 }
-
 </style>
-
-

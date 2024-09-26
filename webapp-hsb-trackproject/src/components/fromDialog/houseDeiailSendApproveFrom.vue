@@ -15,47 +15,43 @@ const props = defineProps({
 });
 const onClosed = () => {
     emit('onClosed', false);
-}
+};
 const { fromVisible } = toRefs(props);
 
 const fromHistoryVisible = ref(false);
 const fromUploadFileVisible = ref(false);
-const houseDetailName = ref("");
+const houseDetailName = ref('');
 const houseDetailStatus = ref();
-const houseDetailDescriptions = ref("");
+const houseDetailDescriptions = ref('');
 
 const fileList = ref([]);
 const deleteUploadFile = ref([]);
 
 const fetchData = async () => {
-
     const res = await houseDetailService.findAllFileByHouseDetail(props.id);
     const res1 = await houseDetailService.findHouseDetailById(props.id);
 
     fileList.value = res.data;
     houseDetailName.value = res1.data.houseDetailname.houseDetailName;
     houseDetailStatus.value = res1.data.houseDetailStatus;
-
-}
-
-
+};
 
 const deleteFileFromDatabase = async (fileid) => {
-        await houseDetailService.deleteFileByID(fileid); // Adjust according to your service
+    await houseDetailService.deleteFileByID(fileid); // Adjust according to your service
 };
 
 const uploadFileDelete = async (index, file) => {
     await deleteFileFromDatabase(file.fileid);
-    fileList.value.splice(index,1);
+    fileList.value.splice(index, 1);
     deleteUploadFile.value.push(file);
     await fetchData();
 
     toast.add({
-    severity: 'success',
-    summary: 'Save Success',
-    detail: 'ส่งอนุมัติสำเร็จ',
-    life: 5000
-  });
+        severity: 'success',
+        summary: 'Save Success',
+        detail: 'ส่งอนุมัติสำเร็จ',
+        life: 5000
+    });
 };
 
 // Show dialog based on a condition or event
@@ -65,126 +61,107 @@ const showDialog = () => {
 const showDialogHistory = () => {
     fromHistoryVisible.value = true;
 };
-const sendApprove = async() => {
-
+const sendApprove = async () => {
     const notifications = {
-        description:houseDetailDescriptions.value,
-        houseDetailId:props.id
-    }
-    
-   await notificationsService.createNewNotification(notifications);
+        description: houseDetailDescriptions.value,
+        houseDetailId: props.id
+    };
 
-   await fetchData();
+    await notificationsService.createNewNotification(notifications);
+
+    await fetchData();
 };
 onMounted(async () => {
     await fetchData();
-})
+});
 </script>
-<!-- {
-    "status": "success",
-    "data": [
-        {
-            "fileid": 1,
-            "fileName": "คาน.png",
-            "filePath": "https://เสาคานสําเร็จรูป.com/wp-content/uploads/2022/10/170364_210318_0-1024x768.jpg",
-            "statusId": 1,
-            "createOn": "2024-08-28T16:26:29.473Z",
-            "houseDetailId": 1,
-            "backUpStatus": 1,
-            "fileBackupPath": "https://เสาคานสําเร็จรูป.com/wp-content/uploads/2022/10/170364_210318_0-1024x768.jpg"
-        }
-    ]
-} -->
+
 <template>
- 
+    <uploadFile :fromVisible="fromUploadFileVisible" @buttonClose="fromUploadFileVisible = false" :onload="fetchData" :id="props.id" />
 
-    <uploadFile :fromVisible="fromUploadFileVisible"
-     @buttonClose="fromUploadFileVisible = false"
-     :onload="fetchData"
-     :id="props.id"
-     />
+    <houseDeiailApproveHistory
+        v-if="fromHistoryVisible"
+        :fromVisible="fromHistoryVisible"
+        :id="props.id"
+        @onClosed="
+            (value) => {
+                fromHistoryVisible = value;
+            }
+        "
+        :onload="fetchData"
+    ></houseDeiailApproveHistory>
 
-     <houseDeiailApproveHistory
-     v-if="fromHistoryVisible"
-    :fromVisible="fromHistoryVisible"
-    :id="props.id"
-
-    @onClosed="(value)=>{fromHistoryVisible = value}"
-    :onload="fetchData"
-     ></houseDeiailApproveHistory>
-  
-    <Dialog v-model:visible="fromVisible" modal :closable="false" :pt="{
-        root: {
-            class: 'p-dialog-maximized'
-        },
-        content: {
-            class: 'job-content'
-        }
-    }" contentStyle="font-size: 1.5rem;padding:0px">
-    
-        <div class="flex justify-content-between flex-wrap pl-2 pr-2">
-            <i class="pi pi-chevron-left" style="font-size: 1.5rem; color: #192a51" @click="onClosed"></i>
-<div>
-    <h1>houseDetailName
-        <Badge v-if="houseDetailStatus == 1" :value="'ร่าง'" severity="secondary"></Badge>
-                            <Badge v-if="houseDetailStatus == 2" :value="'รออนุมัติ'" severity="warn"></Badge>
-                            <Badge v-if="houseDetailStatus == 3" :value="'อนุมัติ'" severity="success"></Badge>
-    </h1>
-</div>
-            <div v-if="houseDetailStatus == 1">
-                <Button style="margin-right: 10px;" ><span style="font-size: 0.8rem;" @click="showDialog" >เพิ่มรูป</span></Button>
-                <Button @click="visible = true"><span style="font-size: 0.8rem;"  @click="sendApprove" >ส่งอนุมัติ</span></Button>
-
-            </div>
-            <div v-else>
-                <Button @click="visible = true"><span style="font-size: 0.8rem;"  @click="showDialogHistory" >ประวัติ</span></Button>
+    <Dialog
+        v-model:visible="fromVisible"
+        modal
+        :closable="false"
+        :pt="{
+            root: {
+                class: 'p-dialog-maximized'
+            },
+            content: {
+                class: 'job-content'
+            }
+        }"
+        contentStyle="font-size: 1.5rem;padding:0px"
+    >
+        <div class="header-top p-0">
+            <div class="flex flex-wrap pl-2 pr-2 pb-3 pt-4">
+                <i class="pi pi-chevron-left pr-5 " style="font-size: 1.5rem; color: #192a51" @click="onClosed"></i>
+                <div>
+                    <h1>
+                        <span class="p-2 text-white pr-8" style="font-size: 1.5rem; letter-spacing: 0.1rem">{{ houseDetailName }}</span>
+                        <Badge v-if="houseDetailStatus == 1" :value="'ร่าง'" severity="secondary"></Badge>
+                        <Badge v-if="houseDetailStatus == 2" :value="'รออนุมัติ'" severity="warn"></Badge>
+                        <Badge v-if="houseDetailStatus == 3" :value="'อนุมัติ'" severity="success"></Badge>
+                    </h1>
+                </div>
+                <div class="pl-2">
+                <div v-if="houseDetailStatus == 1">
+                    <Button style="margin-right: 10px"><span style="font-size: 0.8rem" @click="showDialog">เพิ่มรูป</span></Button>
+                    <Button @click="visible = true"><span style="font-size: 0.8rem" @click="sendApprove">ส่งอนุมัติ</span></Button>
+                </div>
+                <div v-else>
+                    <Button @click="visible = true"><span style="font-size: 0.8rem" @click="showDialogHistory">ประวัติ</span></Button>
+                </div>
             </div>
         </div>
-        <div class="grid pt-3 col">
-            <div class="col-12 navbarApp">
-                <div class="pl-4 pr-4">
-
-                </div>
-            </div>
+        </div>
+        <div class="grid col p-0">
             <div class="col-12 diagonal-gradient">
                 <div class="pl-4 pr-4">
-       
-                    <Textarea class="w-full bg-primary text-white" v-model="houseDetailDescriptions" ></Textarea>
+                    <Textarea class="w-full bg-primary text-white" v-model="houseDetailDescriptions"></Textarea>
                 </div>
             </div>
-
         </div>
 
         <Card>
             <template #content>
                 <div v-for="file of fileList" :key="file.fileid">
                     <div class="pb-3">
-                        <div class="bg-primary  grid col-12 rounded-md">
-                            <div class="col-4 ">
-                                <Image :src="'http://localhost:3001/'+file.filePath" alt="Image" width="150rem" preview />
+                        <div class="bg-primary grid col-12 rounded-md">
+                            <div class="col-4">
+                                <Image :src="'http://localhost:3001/' + file.filePath" alt="Image" width="150rem" preview />
                             </div>
                             <div class="col-8 flex flex-column">
-                                <span style="color: aliceblue; font-size: 1.1rem;">{{ file.fileName }}</span>
+                                <span style="color: aliceblue; font-size: 1.1rem">{{ file.fileName }}</span>
                                 <div class="flex justify-end">
-
-
-                                    <Button @click="uploadFileDelete(index, file)"
-                                    style="background-color: #fede00; border: black; "
-                                    > 
-                                        <i class="pi pi-trash text-black "
-                                            style="font-size: 2.0rem; border: black;box-sizing: 1px;">
-                                        </i>
+                                    <Button @click="uploadFileDelete(index, file)" style="background-color: #fede00; border: black">
+                                        <i class="pi pi-trash text-black" style="font-size: 2rem; border: black; box-sizing: 1px"> </i>
                                     </Button>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                        </div>
-          
-                
-
+                </div>
             </template>
         </Card>
     </Dialog>
 </template>
+<style>
+.p-dialog-header {
+    background: #567a8f;
+    padding: 0px;
+};
+
+</style>

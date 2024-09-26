@@ -12,7 +12,7 @@ export default {
         const res = await http.delete(`/periodDetail/periodDetailDelete/${id}`);
         return res.data;
     },
-    async updatePeriodDetailId(data,id) {
+    async updatePeriodDetailId(id, data) {
         const res = await http.put(`/periodDetail/periodDetailUpdate/${id}`, data);
         return res.data;
     },

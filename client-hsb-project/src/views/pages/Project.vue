@@ -7,59 +7,42 @@ import projectfrom from '@/components/fromDialog/projectfrom.vue';
 const project = ref([]);
 const fromVisible = ref(false);
 const id = ref(0);
-const handleClickAdd = () =>{
+const handleClickAdd = () => {
     fromVisible.value = true;
-}
+};
 
-const handleClickClose = () =>{
+const handleClickClose = () => {
     fromVisible.value = false;
     id.value = 0;
-}
-const onRowDbClick = (event) =>{
-   console.log(event.data);
+};
+const onRowDbClick = (event) => {
+    console.log(event.data);
     fromVisible.value = true;
     id.value = event.data.projectid;
-}
+};
 
-const loadData = async() =>{
+const loadData = async () => {
     const res = await projectService.getAllProject();
 
-project.value = res.data;
-}
+    project.value = res.data;
+};
 const searchData = (value) => {
-    
-   console.log(value)
-}
+    console.log(value);
+};
 
 onMounted(async () => {
-   await loadData();
+    await loadData();
 });
 </script>
 <template>
-    <GenericViewPage
-    :list="project"
-@button-add="handleClickAdd"
-@onRowDbClick="onRowDbClick"
-@search="searchData"
-:title="'โครงการ'"
-    >
-    <template #Column>
-        <Column header="รหัสโครงการ"  field="projectCode" > </Column>
-                <Column header="ชื่อโครงการ"  field="projectName"></Column>
-                <Column header="รายละเอียด" field="description"></Column>
-                <Column header="มูลค่า" field="amount"></Column>
-                
-    </template>
+    <GenericViewPage :list="project" @button-add="handleClickAdd" @onRowDbClick="onRowDbClick" @search="searchData" :title="'โครงการ'">
+        <template #Column>
+            <Column header="รหัสโครงการ" field="projectCode"> </Column>
+            <Column header="ชื่อโครงการ" field="projectName"></Column>
+            <Column header="รายละเอียด" field="description"></Column>
+            <Column header="มูลค่า" field="amount"></Column>
+        </template>
     </GenericViewPage>
-<projectfrom
-v-if="fromVisible"
-:from-visible="fromVisible"
-:id="id"
-:onload="loadData"
-@button-close="handleClickClose"
-></projectfrom>
+    <projectfrom v-if="fromVisible" :from-visible="fromVisible" :id="id" :onload="loadData" @button-close="handleClickClose"></projectfrom>
 </template>
-<style>
-
-
-</style>
+<style></style>

@@ -43,7 +43,6 @@ const locationsName = ref('');
 const houseDetailName = ref('');
 const checkedFiles = ref([]);
 
-
 const emit = defineEmits(['buttonClose']);
 
 const formattedDate = ref('');
@@ -63,17 +62,15 @@ const fetchData = async (value) => {
     houseDetailName.value = res.data.houseDetailname.houseDetailName;
     customerid.value = res.data.periodDetail.period.project.customerid;
 
-    const res1 = await customerService.findCustomerById(customerid.value)
+    const res1 = await customerService.findCustomerById(customerid.value);
     customerFirstname.value = res1.data.customerFirstname;
     customerLastname.value = res1.data.customerLastname;
     customerPhone.value = res1.data.customerPhone;
     const res2 = await houseDetailService.getSelectedFile(value);
     houseDetailFileData.value = res2.data;
-
 };
 
 onMounted(async () => {
-
     if (id.value) {
         houseDetailid.value = id.value;
         await fetchData(id.value);

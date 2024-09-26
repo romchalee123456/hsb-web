@@ -20,8 +20,8 @@ export default {
         var res = await http.delete(`/auth/deleteUser/${id}`);
         return res.data;
     },
-    async UpdateUser(data,id) {
+    async UpdateUser(data, id) {
         var res = await http.post(`/auth/update/${id}`, data);
         return res.data;
-    },
+    }
 };
