@@ -3,6 +3,7 @@ const prisma = new PrismaClient();
 const {
   sendnotificationsline: sendnotificationsline,
 } = require("../utils/sendnotificationsline");
+const { APPROVER_ID } = require('../utils/secrets');
 exports.createNewNotification = async (req, res) => {
   const { description, houseDetailId } = req.body;
   const userId = req.currentUserId; // Access decodeId here
@@ -12,7 +13,7 @@ exports.createNewNotification = async (req, res) => {
         description: description,
         notificationsTypeId: 1,
         createBy: userId,
-        approver: 1,
+        approver: Number(APPROVER_ID),
         actionNotificationsId: 1,
         houseDetailId: houseDetailId,
       },
@@ -22,7 +23,7 @@ exports.createNewNotification = async (req, res) => {
         description: description,
         notificationsTypeId: 1,
         createBy: userId,
-        approver: 1,
+          approver: Number(APPROVER_ID),
         actionNotificationsId: 1,
         houseDetailId: houseDetailId,
       },
@@ -117,7 +118,7 @@ exports.approveNotification = async (req, res) => {
         description: notificationsdata.description,
         notificationsTypeId: 2,
         createBy: notificationsdata.createBy,
-        approver: 1,
+          approver: Number(APPROVER_ID),
         actionNotificationsId: 2,
         houseDetailId: notificationsdata.houseDetailId,
       },
@@ -200,7 +201,7 @@ exports.sendBackNotification = async (req, res) => {
         description: notificationsdata.description,
         notificationsTypeId: 3,
         createBy: notificationsdata.createBy,
-        approver: 1,
+          approver: Number(APPROVER_ID),
         actionNotificationsId: 3,
         houseDetailId: notificationsdata.houseDetailId,
       },

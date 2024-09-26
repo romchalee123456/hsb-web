@@ -7,6 +7,7 @@ import { useToast } from 'primevue/usetoast';
 import notificationsService from '@/service/notificationsService';
 import houseDeiailApproveHistory from './houseDeiailApproveHistory.vue';
 const toast = useToast();
+import apiName from '@/service/currentName';
 const emit = defineEmits(['valueChanged', 'onClosed']);
 const props = defineProps({
     fromVisible: Boolean,
@@ -137,7 +138,7 @@ onMounted(async () => {
                     <div class="pb-3">
                         <div class="bg-primary grid col-12 rounded-md">
                             <div class="col-4">
-                                <Image :src="'http://localhost:3001/' + file.filePath" alt="Image" width="150rem" preview />
+                                <Image :src="apiName +'/'+ file.filePath" alt="Image" width="150rem" preview />
                             </div>
                             <div class="col-8 flex flex-column">
                                 <span style="color: aliceblue; font-size: 1.1rem">{{ file.fileName }}</span>

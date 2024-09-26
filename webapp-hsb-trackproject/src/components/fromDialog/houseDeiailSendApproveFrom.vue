@@ -6,6 +6,7 @@ import uploadFile from './uploadFile.vue';
 import { useToast } from 'primevue/usetoast';
 import houseDeiailApproveHistory from './houseDeiailApproveHistory.vue';
 import notificationsService from '@/service/notificationsService';
+import apiName from '@/service/currentName';
 const toast = useToast();
 const emit = defineEmits(['valueChanged', 'onClosed']);
 const props = defineProps({
@@ -121,7 +122,7 @@ onMounted(async () => {
                     <Button style="margin-right: 10px"><span style="font-size: 0.8rem" @click="showDialog">เพิ่มรูป</span></Button>
                     <Button @click="visible = true"><span style="font-size: 0.8rem" @click="sendApprove">ส่งอนุมัติ</span></Button>
                 </div>
-                <div v-else>
+                <div >
                     <Button @click="visible = true"><span style="font-size: 0.8rem" @click="showDialogHistory">ประวัติ</span></Button>
                 </div>
             </div>
@@ -141,7 +142,7 @@ onMounted(async () => {
                     <div class="pb-3">
                         <div class="bg-primary grid col-12 rounded-md">
                             <div class="col-4">
-                                <Image :src="'http://localhost:3001/' + file.filePath" alt="Image" width="150rem" preview />
+                                <Image :src="apiName +'/'+ file.filePath" alt="Image" width="150rem" preview />
                             </div>
                             <div class="col-8 flex flex-column">
                                 <span style="color: aliceblue; font-size: 1.1rem">{{ file.fileName }}</span>

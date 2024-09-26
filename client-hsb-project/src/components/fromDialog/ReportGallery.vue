@@ -19,7 +19,7 @@ import logo from '@/assets/image/huglogo1-ai.png';
 import customerService from '@/service/customerService';
 import notificationsService from '@/service/notificationsService';
 const toast = useToast();
-
+import apiName from '@/currentName';
 const props = defineProps({
     fromVisible: Boolean,
     id: Number,
@@ -175,7 +175,7 @@ onMounted(async () => {
             <div class="container mx-auto px-4 pt-10">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 border border-slate-200"> <!-- Made responsive -->
                     <div class="field pt-2 pb-2" v-for="(file) of houseDetailFileData" :key="file.fileid">
-                        <Image :src="'http://localhost:3001/'+file.filePath" alt="Image" width="100%" height="auto" preview /> <!-- Set image responsive -->
+                        <Image :src="apiName+'/'+file.filePath" alt="Image" width="100%" height="auto" preview /> <!-- Set image responsive -->
                     </div>
                 </div>
             </div>

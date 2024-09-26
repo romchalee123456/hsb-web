@@ -9,7 +9,8 @@ const {
     DB_NAME,
     JWT_SECRET_KEY,
     JWT_REFRESH_SECRET_KEY,
-    LINE_TK
+    LINE_TK,
+    APPROVER_ID
 } = process.env;
 
 const requiredCredentials = [
@@ -19,7 +20,8 @@ const requiredCredentials = [
     'DB_NAME',
     'JWT_SECRET_KEY',
     'JWT_REFRESH_SECRET_KEY',
-    'LINE_TK'
+    'LINE_TK',
+    'APPROVER_ID'
 ];
 
 for (const credential of requiredCredentials) {
@@ -37,4 +39,5 @@ module.exports = {
     JWT_SECRET_KEY,
     JWT_REFRESH_SECRET_KEY,
     LINE_TK,
+    APPROVER_ID,
 };

@@ -20,7 +20,7 @@
                 </a>
               </div>
               <div class="col">
-                <a href="/JobCountAsset" class="nostyle">
+                <a href="/" class="nostyle">
                   <div class="text-center">
                     <span class="pi pi-search" style="font-size: 1rem"></span>
                   </div>
@@ -28,10 +28,14 @@
                 </a>
               </div>
               <div class="col">
-                <div class="text-center">
+                <a href="/notifications" class="nostyle">
+                  <div class="text-center">
                   <span class="pi pi-user" style="font-size: 1rem"></span>
                 </div>
-                <div class="text-center">โปรไฟล์</div>
+                <div class="text-center">แจ้งเตือน</div>
+
+                </a>
+                
               </div>
             </div>
           </div>
