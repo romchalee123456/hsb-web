@@ -66,7 +66,7 @@ const fetchData = async () => {
 
     const res = await projectService.findProjectById(projectId);
     const resPeriodDetail = await projectService.getPeriodDetail(periodId);
-    
+
     periodDetalList.value = resPeriodDetail.data;
     projectName.value = res.data.projectName;
     projectCode.value = res.data.projectCode;
@@ -113,22 +113,21 @@ onMounted(async () => {
         </div>
 
         <div class="grid">
-                <div class="col-12 grid p-0  pb-3 text-white justify-center">
-                    <div class="col-4 p-0 flex justify-center">
-                        <span class="p-2" style="font-size: 1.5rem; letter-spacing: 0.1rem">งานหลัก : {{ periodTotal}}</span>
-                    </div>
+            <div class="col-12 grid p-0 pb-3 text-white justify-center">
+                <div class="col-4 p-0 flex justify-center">
+                    <span class="p-2" style="font-size: 1.5rem; letter-spacing: 0.1rem">งานหลัก : {{ periodTotal }}</span>
                 </div>
             </div>
         </div>
-
+    </div>
 
     <div class="content content-gradient">
         <div class="px-5 pt-3">
             <div class="pt-[2px] pb-3">
-                <Card style=" height: 79vh; ">
+                <Card style="height: 79vh">
                     <template #content>
                         <div class="pt-[2px] pb-3" v-for="periodDetail of periodDetalList" :key="periodDetail.periodDetailid">
-                            <Card style="background-color: #e9f2f7 ; border-radius: 10px; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2); " @Click="houseDetailFrom(periodDetail.periodDetailid)">
+                            <Card style="background-color: #e9f2f7; border-radius: 10px; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2)" @Click="houseDetailFrom(periodDetail.periodDetailid)">
                                 <template #title>{{ periodDetail.periodname.periodName }}</template>
                                 <template #content>
                                     <p class="m-0">

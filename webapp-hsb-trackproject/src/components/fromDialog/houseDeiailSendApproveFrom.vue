@@ -75,21 +75,7 @@ onMounted(async () => {
     await fetchData();
 });
 </script>
-<!-- {
-    "status": "success",
-    "data": [
-        {
-            "fileid": 1,
-            "fileName": "คาน.png",
-            "filePath": "https://เสาคานสําเร็จรูป.com/wp-content/uploads/2022/10/170364_210318_0-1024x768.jpg",
-            "statusId": 1,
-            "createOn": "2024-08-28T16:26:29.473Z",
-            "houseDetailId": 1,
-            "backUpStatus": 1,
-            "fileBackupPath": "https://เสาคานสําเร็จรูป.com/wp-content/uploads/2022/10/170364_210318_0-1024x768.jpg"
-        }
-    ]
-} -->
+
 <template>
     <uploadFile :fromVisible="fromUploadFileVisible" @buttonClose="fromUploadFileVisible = false" :onload="fetchData" :id="props.id" />
 
@@ -120,16 +106,17 @@ onMounted(async () => {
         contentStyle="font-size: 1.5rem;padding:0px"
     >
         <div class="header-top p-0">
-            <div class="flex justify-content-between flex-wrap pl-2 pr-2 pb-3 pt-4">
-                <i class="pi pi-chevron-left" style="font-size: 1.5rem; color: #192a51" @click="onClosed"></i>
+            <div class="flex flex-wrap pl-2 pr-2 pb-3 pt-4">
+                <i class="pi pi-chevron-left pr-5 " style="font-size: 1.5rem; color: #192a51" @click="onClosed"></i>
                 <div>
                     <h1>
-                        <span class="p-2 text-white" style="font-size: 1.5rem; letter-spacing: 0.1rem">{{ houseDetailName }}</span>
+                        <span class="p-2 text-white pr-8" style="font-size: 1.5rem; letter-spacing: 0.1rem">{{ houseDetailName }}</span>
                         <Badge v-if="houseDetailStatus == 1" :value="'ร่าง'" severity="secondary"></Badge>
                         <Badge v-if="houseDetailStatus == 2" :value="'รออนุมัติ'" severity="warn"></Badge>
                         <Badge v-if="houseDetailStatus == 3" :value="'อนุมัติ'" severity="success"></Badge>
                     </h1>
                 </div>
+                <div class="pl-2">
                 <div v-if="houseDetailStatus == 1">
                     <Button style="margin-right: 10px"><span style="font-size: 0.8rem" @click="showDialog">เพิ่มรูป</span></Button>
                     <Button @click="visible = true"><span style="font-size: 0.8rem" @click="sendApprove">ส่งอนุมัติ</span></Button>
@@ -138,6 +125,7 @@ onMounted(async () => {
                     <Button @click="visible = true"><span style="font-size: 0.8rem" @click="showDialogHistory">ประวัติ</span></Button>
                 </div>
             </div>
+        </div>
         </div>
         <div class="grid col p-0">
             <div class="col-12 diagonal-gradient">

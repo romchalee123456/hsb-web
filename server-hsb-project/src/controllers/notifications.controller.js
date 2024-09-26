@@ -1,16 +1,18 @@
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
-const {sendnotificationsline:sendnotificationsline} = require('../utils/sendnotificationsline')
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
+const {
+  sendnotificationsline: sendnotificationsline,
+} = require("../utils/sendnotificationsline");
 exports.createNewNotification = async (req, res) => {
-    const { description, houseDetailId } = req.body;
-    const userId = req.currentUserId;  // Access decodeId here
+  const { description, houseDetailId } = req.body;
+  const userId = req.currentUserId; // Access decodeId here
   try {
     const newNotification = await prisma.notifications.create({
       data: {
         description: description,
         notificationsTypeId: 1,
         createBy: userId,
-        approver:1,
+        approver: 1,
         actionNotificationsId: 1,
         houseDetailId: houseDetailId,
       },
@@ -20,42 +22,41 @@ exports.createNewNotification = async (req, res) => {
         description: description,
         notificationsTypeId: 1,
         createBy: userId,
-        approver:1,
+        approver: 1,
         actionNotificationsId: 1,
         houseDetailId: houseDetailId,
       },
     });
-     await prisma.housedetail.update({
-        where: { houseDetailid: Number(houseDetailId) },
-        data: {
-          houseDetailStatus:2,
-    }
-    })
+    await prisma.housedetail.update({
+      where: { houseDetailid: Number(houseDetailId) },
+      data: {
+        houseDetailStatus: 2,
+      },
+    });
     const data = await prisma.housedetail.findUnique({
       where: { houseDetailid: Number(houseDetailId) },
       include: {
         houseDetailname: true, // Include housedetailname in the relation
-        periodDetail:{
+        periodDetail: {
           include: {
-            periodname:true,
-            period:{
+            periodname: true,
+            period: {
               include: {
-                project: true
-              }
-            }
-          }
-        }
+                project: true,
+              },
+            },
+          },
+        },
       },
-  })
+    });
 
+    const requestData = await prisma.user.findUnique({
+      where: { id: Number(userId) },
+    });
 
-  const requestData = await prisma.user.findUnique({
-    where: { id: Number(userId) },
-  })
-  
     const approverData = await prisma.user.findUnique({
       where: { id: 1 },
-    })
+    });
 
     const message = `
      งานขออนุมัติโดย :${requestData.firstname} ${requestData.lastname}
@@ -63,32 +64,28 @@ exports.createNewNotification = async (req, res) => {
      งาน : ${data.houseDetailname.houseDetailName} งานหลัก :${data.periodDetail.periodname.periodName}
      โครงการ :${data.periodDetail.period.project.projectCode} ${data.periodDetail.period.project.projectName}
      งวด : ${data.periodDetail.period.description}
-    `
-    sendnotificationsline(approverData.userLineNotificationsid,message);
+    `;
+    sendnotificationsline(approverData.userLineNotificationsid, message);
 
     if (!newNotification) {
-      
-      
-        res.status(500).send({
-            status: "error",
-             message: err.message
-        });
+      res.status(500).send({
+        status: "error",
+        message: err.message,
+      });
     } else {
-      
-        res.status(201).send({
-            status: "success",
-            data: data
-        });
+      res.status(201).send({
+        status: "success",
+        data: data,
+      });
     }
   } catch (error) {
-    console.error('Error creating notification:', error);
+    console.error("Error creating notification:", error);
     throw error;
   }
-}
+};
 exports.approveNotification = async (req, res) => {
   const { id } = req.params;
   const { description } = req.body;
-
 
   try {
     // Fetch the notifications data first
@@ -120,7 +117,7 @@ exports.approveNotification = async (req, res) => {
         description: notificationsdata.description,
         notificationsTypeId: 2,
         createBy: notificationsdata.createBy,
-        approver:1,
+        approver: 1,
         actionNotificationsId: 2,
         houseDetailId: notificationsdata.houseDetailId,
       },
@@ -167,7 +164,7 @@ exports.approveNotification = async (req, res) => {
       message: err.message,
     });
   }
-}
+};
 
 exports.sendBackNotification = async (req, res) => {
   const { id } = req.params;
@@ -203,7 +200,7 @@ exports.sendBackNotification = async (req, res) => {
         description: notificationsdata.description,
         notificationsTypeId: 3,
         createBy: notificationsdata.createBy,
-        approver:1,
+        approver: 1,
         actionNotificationsId: 3,
         houseDetailId: notificationsdata.houseDetailId,
       },
@@ -252,9 +249,8 @@ exports.sendBackNotification = async (req, res) => {
   }
 };
 
-
 exports.findAllNotification = async (req, res) => {
-  const userId = req.currentUserId;  // Access decodeId here
+  const userId = req.currentUserId; // Access decodeId here
   try {
     const data = await prisma.notifications.findMany({
       where: { approver: Number(userId) },
@@ -264,16 +260,16 @@ exports.findAllNotification = async (req, res) => {
         housedetail: {
           include: {
             houseDetailname: true, // Include housedetailname in the relation
-            periodDetail:{
+            periodDetail: {
               include: {
-                periodname:true,
-                period:{
+                periodname: true,
+                period: {
                   include: {
-                    project: true
-                  }
-                }
-              }
-            }
+                    project: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -292,7 +288,6 @@ exports.findAllNotification = async (req, res) => {
 };
 
 exports.findNotificationById = async (req, res) => {
- 
   const { id } = req.params;
   try {
     const data = await prisma.notifications.findUnique({
@@ -303,16 +298,16 @@ exports.findNotificationById = async (req, res) => {
         housedetail: {
           include: {
             houseDetailname: true, // Include housedetailname in the relation
-            periodDetail:{
+            periodDetail: {
               include: {
-                periodname:true,
-                period:{
+                periodname: true,
+                period: {
                   include: {
-                    project: true
-                  }
-                }
-              }
-            }
+                    project: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -320,16 +315,16 @@ exports.findNotificationById = async (req, res) => {
 
     const requestData = await prisma.user.findUnique({
       where: { id: Number(data.createBy) },
-    })
-  
+    });
+
     const approverData = await prisma.user.findUnique({
       where: { id: Number(data.approver) },
-    })
+    });
     res.status(201).send({
       status: "success",
       data: data,
-      requestData:requestData,
-      approverData:approverData
+      requestData: requestData,
+      approverData: approverData,
     });
   } catch (err) {
     res.status(500).send({
@@ -347,10 +342,9 @@ exports.findAllNotificationHistory = async (req, res) => {
       include: {
         actionNotifications: true,
         notificationsType: true,
-   
       },
       orderBy: {
-        notificationsHistoryId: 'desc', // Order by 'id' in ascending order, change to 'desc' for descending
+        notificationsHistoryId: "desc", // Order by 'id' in ascending order, change to 'desc' for descending
       },
     });
 
@@ -365,5 +359,3 @@ exports.findAllNotificationHistory = async (req, res) => {
     });
   }
 };
-
-

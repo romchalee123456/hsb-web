@@ -1,6 +1,5 @@
 import http from '@/http-common';
 export default {
-
     async getAllProject() {
         const res = await http.get('/project/getProject');
         return res.data;
@@ -18,15 +17,12 @@ export default {
         const res = await http.delete(`/project/projectDelete/${id}`);
         return res.data;
     },
-    async updateProjectId(data,id) {
+    async updateProjectId(data, id) {
         const res = await http.put(`/project/projectUpdate/${id}`, data);
         return res.data;
     },
     async getPeriodDetail(id) {
         const res = await http.get(`/project/getPeriodDetail/${id}`);
         return res.data;
-    },
-
-
-
+    }
 };

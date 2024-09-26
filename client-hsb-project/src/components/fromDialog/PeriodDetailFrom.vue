@@ -53,8 +53,6 @@ const addHouseDetail = (value) => {
     periodDetailid.value = value;
 };
 
-
-
 const handleClickSave = async () => {
     const save = ref(false);
 
@@ -92,7 +90,7 @@ const handleClickSave = async () => {
                 life: 5000
             });
             console.error('Error during save operation:', ex);
-            return;  // Early exit on error to avoid further updates
+            return; // Early exit on error to avoid further updates
         }
     }
 
@@ -115,8 +113,6 @@ const handleClickSave = async () => {
         });
     }
 };
-
-
 
 const fetchData = async (value) => {
     const res = await projectService.getPeriodDetail(value);
@@ -196,16 +192,15 @@ onMounted(async () => {
                         </template>
                     </Column>
                     <Column header="รายละเอียด" field="description">
-                        <template #body="{ index,data }">
+                        <template #body="{ index, data }">
                             <InputText v-model="data.description" class="w-full" :disabled="modeView"></InputText>
                         </template>
                     </Column>
                     <Column>
                         <template #body="{ index, data }">
                             <div class="flex flex-row justify-around">
-                                <Button severity="info" label="เพิ่มงานรอง" raised @Click="addHouseDetail(data.periodDetailid)" v-if="!modeView && (data.periodDetailid)" />
+                                <Button severity="info" label="เพิ่มงานรอง" raised @Click="addHouseDetail(data.periodDetailid)" v-if="!modeView && data.periodDetailid" />
                                 <Button icon="pi pi-trash" style="background-color: yellow; color: black; border-color: yellow" @click="periodDetailDelete(index, data)" :disabled="modeView" />
-                                   
                             </div>
                         </template>
                     </Column>

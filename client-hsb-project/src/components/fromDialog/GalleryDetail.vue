@@ -46,7 +46,6 @@ const projectStatus = ref([
 const checkedFiles = ref([]);
 const createReportFromVisible = ref(false);
 
-
 const emit = defineEmits(['buttonClose']);
 
 const handleClickClose = () => {
@@ -55,9 +54,8 @@ const handleClickClose = () => {
     emit('buttonClose');
 };
 
-
 const handleClickShowReport = () => {
-    const isAnyChecked = checkedFiles.value.some(fileChecked => fileChecked === true);
+    const isAnyChecked = checkedFiles.value.some((fileChecked) => fileChecked === true);
     if (isAnyChecked) {
         handleShowReport();
     } else {
@@ -70,14 +68,12 @@ const handleShowReport = async () => {
         if (data.reportSelected == true) {
             await houseDetailService.updateSelectedFile(data.fileid);
         } else {
-            await houseDetailService.updateSelectedFileFalse(data.fileid)
+            await houseDetailService.updateSelectedFileFalse(data.fileid);
         }
     }
 
-
-    createReportFromVisible.value = true; 
+    createReportFromVisible.value = true;
 };
-
 
 const fetchData = async (value) => {
     const res = await projectService.findProjectById(value);
@@ -92,32 +88,29 @@ const fetchData = async (value) => {
 
 const fetchPeriodDetail = async (period) => {
     const res1 = await projectService.getPeriodDetail(period.periodid);
-    periodDetailData.value = res1.data
-    
+    periodDetailData.value = res1.data;
 };
 
 const fetchHouseDetail = async (periodDetail) => {
     const res2 = await houseDetailService.findAllHouseDetail(periodDetail.periodDetailid);
-    houseDetailData.value = res2.data
-    
+    houseDetailData.value = res2.data;
 };
 
 const fetchHouseDetailFile = async (houseDetail) => {
     houseDetailid.value = houseDetail.houseDetailid;
     const res3 = await houseDetailService.findAllFileByHouseDetail(houseDetail.houseDetailid);
-    houseDetailFileData.value = res3.data
-    
-    houseDetailFileData.value.forEach(file => {
-            checkedFiles.value.push(false);
+    houseDetailFileData.value = res3.data;
+
+    houseDetailFileData.value.forEach((file) => {
+        checkedFiles.value.push(false);
     });
 };
 
 const fileReportSelected = async (file, checkedFiles) => {
     file.reportSelected = checkedFiles;
-}
+};
 
 onMounted(async () => {
-
     if (id.value) {
         projectid.value = id.value;
         await fetchData(id.value);
@@ -125,7 +118,6 @@ onMounted(async () => {
     } else {
         modeView.value = false;
     }
-    
 });
 </script>
 <template>
@@ -148,73 +140,60 @@ onMounted(async () => {
             }"
             @update:visible="handleClickClose"
         >
-        <div class="container mx-auto px-4 pt-4">
-        <div class="grid grid-cols-3 gap-4">
-          <div class="field grid grid-cols-5 gap-4">
-            <div>
-              <label class="mr-5 ">งวด</label>
+            <div class="container mx-auto px-4 pt-4">
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="field grid grid-cols-5 gap-4">
+                        <div>
+                            <label class="mr-5">งวด</label>
+                        </div>
+                        <div class="col-span-4">
+                            <Select v-model="periodSelected" :options="periodData" optionLabel="description" placeholder="เลือกงวด" class="w-full md:w-56" @change="fetchPeriodDetail(periodSelected)"> </Select>
+                        </div>
+                    </div>
+                    <div class="field grid grid-cols-5 gap-4">
+                        <div>
+                            <label class="">งานหลัก</label>
+                        </div>
+                        <div class="col-span-4">
+                            <Select v-model="periodDetailSelected" :options="periodDetailData" optionLabel="periodname.periodName" placeholder="เลือกงานหลัก" class="w-full md:w-56" @change="fetchHouseDetail(periodDetailSelected)"> </Select>
+                        </div>
+                    </div>
+                    <div class="field grid grid-cols-5 gap-4">
+                        <div>
+                            <label class="">งานรอง</label>
+                        </div>
+                        <div class="col-span-4">
+                            <Select v-model="houseDetailSelected" :options="houseDetailData" optionLabel="houseDetailname.houseDetailName" placeholder="เลือกงานรอง" class="w-full md:w-56" @change="fetchHouseDetailFile(houseDetailSelected)"> </Select>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-span-4">
-                <Select v-model="periodSelected" :options="periodData" optionLabel="description" placeholder="เลือกงวด" class="w-full md:w-56"
-                @change="fetchPeriodDetail(periodSelected)"
-                > 
-                </Select>
+            <div class="container mx-auto px-4 pt-10">
+                <div class="grid grid-cols-4 gap-4 border border-slate-200">
+                    <div class="field pt-2 pb-2" v-for="(file, index) of houseDetailFileData" :key="file.fileid">
+                        <Image :src="'http://localhost:3001/' + file.filePath" alt="Image" width="250rem" hight="250rem" preview />
+                        <Checkbox v-model="checkedFiles[index]" binary variant="filled" class="absolute bottom-2 right-2" @change="fileReportSelected(file, checkedFiles[index])" />
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="field grid grid-cols-5 gap-4">
-            <div>
-              <label class="">งานหลัก</label>
+            <div class="pt-4 flex justify-end">
+                <Button severity="info" label="สร้างรายงาน" raised @click="handleClickShowReport" />
             </div>
-            <div class="col-span-4">
-                <Select v-model="periodDetailSelected" :options="periodDetailData" optionLabel="periodname.periodName" placeholder="เลือกงานหลัก" class="w-full md:w-56"
-                @change="fetchHouseDetail(periodDetailSelected)"
-                > 
-            </Select>
-            </div>
-          </div>
-          <div class="field grid grid-cols-5 gap-4">
-            <div>
-              <label class="">งานรอง</label>
-            </div>
-            <div class="col-span-4">
-                <Select v-model="houseDetailSelected" :options="houseDetailData" optionLabel="houseDetailname.houseDetailName" placeholder="เลือกงานรอง" class="w-full md:w-56"
-                @change="fetchHouseDetailFile(houseDetailSelected)"
-                > 
-            </Select>
-            </div>
-          </div>
-        </div>
-        </div>
-        <div class="container mx-auto px-4 pt-10">
-            <div class="grid grid-cols-4 gap-4 border border-slate-200">
-                <div class="field pt-2 pb-2" v-for="(file,index) of houseDetailFileData"
-                :key="file.fileid">
-                    <Image :src="'http://localhost:3001/'+file.filePath" alt="Image" width="250rem" hight="250rem" preview />
-                    <Checkbox
-                            v-model="checkedFiles[index]"
-                            binary
-                            variant="filled"
-                            class="absolute bottom-2 right-2"
-                            @change="fileReportSelected(file, checkedFiles[index])"
-                        />
-                </div>     
-            </div>
-        </div>
-        <div class="pt-4 flex justify-end">
-        <Button severity="info" label="สร้างรายงาน" raised @click="handleClickShowReport" />
-        </div>
         </Dialog>
     </div>
     <ReportGallery
-    v-if="createReportFromVisible"
-    :fromVisible="createReportFromVisible"
-    :id="houseDetailid"
-    @buttonClose="() => {createReportFromVisible = false}"
-></ReportGallery>
+        v-if="createReportFromVisible"
+        :fromVisible="createReportFromVisible"
+        :id="houseDetailid"
+        @buttonClose="
+            () => {
+                createReportFromVisible = false;
+            }
+        "
+    ></ReportGallery>
 </template>
 <style>
 .bg-hsb-primary {
     background-color: #192a51;
 }
-
 </style>

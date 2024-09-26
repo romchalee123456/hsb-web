@@ -51,22 +51,20 @@ const emit = defineEmits(['buttonClose']);
 
 const openPeriodDetail = (event) => {
     console.log(event);
-periodfromVisible.value = true;
-console.log(event.data.periodid);
-periodid.value = event.data.periodid;
-
+    periodfromVisible.value = true;
+    console.log(event.data.periodid);
+    periodid.value = event.data.periodid;
 };
 
 const addPeriod = () => {
     const isoDateString = new Date().toISOString(); // ISO-8601 format
 
     const period = {
-
         projectid: projectid.value,
-        description: "",
+        description: '',
         periodStatusId: 1,
         periodnameid: 0,
-        createOn:isoDateString,
+        createOn: isoDateString,
         periodStatus: {
             periodStatusName: 'ปิด'
         }
@@ -75,19 +73,19 @@ const addPeriod = () => {
     periodData.value.push(period);
 };
 
-const periodDelete = (index,data) => {
-    periodData.value.splice(index,1);
+const periodDelete = (index, data) => {
+    periodData.value.splice(index, 1);
     deletePeriod.value.push(data);
 };
 
 const openPeriod = (index) => {
-    periodData.value[index].periodStatusId=2;
-    periodData.value[index].periodStatus.periodStatusName="ดำเนินการ";
+    periodData.value[index].periodStatusId = 2;
+    periodData.value[index].periodStatus.periodStatusName = 'ดำเนินการ';
 };
 
 const closePeriod = (index) => {
-    periodData.value[index].periodStatusId=1;
-    periodData.value[index].periodStatus.periodStatusName="ปิด";
+    periodData.value[index].periodStatusId = 1;
+    periodData.value[index].periodStatus.periodStatusName = 'ปิด';
 };
 
 const handleClickClose = () => {
@@ -133,7 +131,6 @@ const validatedata = async () => {
 };
 
 const handleClickSave = async () => {
- 
     const validate = await validatedata();
     if (!validate) {
         return false;
@@ -244,7 +241,6 @@ const fetchData = async (value) => {
     fetchEd.value = true;
 };
 
-
 onMounted(async () => {
     const res = await userService.getAllUser();
     responses.value = res.data;
@@ -260,13 +256,17 @@ onMounted(async () => {
 });
 </script>
 <template>
-<PeriodDetailFrom
-v-if="periodfromVisible"
-:fromVisible="periodfromVisible"
-:id="periodid"
-:projectid="id"
-@close="()=>{periodfromVisible = false}"
-></PeriodDetailFrom>
+    <PeriodDetailFrom
+        v-if="periodfromVisible"
+        :fromVisible="periodfromVisible"
+        :id="periodid"
+        :projectid="id"
+        @close="
+            () => {
+                periodfromVisible = false;
+            }
+        "
+    ></PeriodDetailFrom>
     <Toast />
     <div class="card flex justify-center">
         <Dialog
@@ -310,7 +310,7 @@ v-if="periodfromVisible"
                             <label class="mr-5">มูลค่า</label>
                         </div>
                         <div class="col-span-4">
-                            <InputNumber class="w-full" id="projectCode1" type="text" v-model="amount" :disabled="modeView" :minFractionDigits="2" :maxFractionDigits="5" fluid  />
+                            <InputNumber class="w-full" id="projectCode1" type="text" v-model="amount" :disabled="modeView" :minFractionDigits="2" :maxFractionDigits="5" fluid />
                         </div>
                     </div>
                     <div class="field grid grid-cols-5 gap-4">
@@ -334,14 +334,17 @@ v-if="periodfromVisible"
                             <label class="">ลูกค้า</label>
                         </div>
                         <div class="col-span-4">
-                          <customerInputFields
-                         v-model="customerSelected"
-                         :modeReadonly="modeView" 
-                         :id ="customerid"
-                         v-if = "fetchEd"
-                         @value-changed="(value)=>{customerid=value}"
-                          ></customerInputFields>
-
+                            <customerInputFields
+                                v-model="customerSelected"
+                                :modeReadonly="modeView"
+                                :id="customerid"
+                                v-if="fetchEd"
+                                @value-changed="
+                                    (value) => {
+                                        customerid = value;
+                                    }
+                                "
+                            ></customerInputFields>
                         </div>
                     </div>
                     <div class="field grid grid-cols-5 gap-4" v-if="projectid">
@@ -349,18 +352,7 @@ v-if="periodfromVisible"
                             <label class="">ตำแหน่งที่ตั้ง</label>
                         </div>
                         <div class="col-span-4">
-                          <locationsInputFields
-                          :id="projectid"
-                          v-model="locationsName"
-                          :locations-code="locationCode"
-                          :lat="lat"
-                          :lon="lon"
-                       
-                     
-                          @valueChanged="fetchData(projectid)"
-                          :modeReadonly="modeView" 
-                          ></locationsInputFields>
-                          
+                            <locationsInputFields :id="projectid" v-model="locationsName" :locations-code="locationCode" :lat="lat" :lon="lon" @valueChanged="fetchData(projectid)" :modeReadonly="modeView"></locationsInputFields>
                         </div>
                     </div>
                     <br />
@@ -370,49 +362,42 @@ v-if="periodfromVisible"
                         </div>
                         <div>
                             <div class="col-span-10">
-                                <Textarea class="w-full" v-model="description" variant="filled" rows="5" cols="30" :disabled="modeView"  />
+                                <Textarea class="w-full" v-model="description" variant="filled" rows="5" cols="30" :disabled="modeView" />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="datatable-wrapper flex items-center justify-center">
-                <DataTable :value="periodData" stripedRows class="w-[1150px]"
-                @row-dblclick="openPeriodDetail"
-                >
+                <DataTable :value="periodData" stripedRows class="w-[1150px]" @row-dblclick="openPeriodDetail">
                     <Column field="description" header="งวด">
-                        <template #body="{index}">
-                            <InputText v-model="periodData[index].description" :disabled="modeView"
-                             class="w-full"
-                            >
-                            </InputText>
+                        <template #body="{ index }">
+                            <InputText v-model="periodData[index].description" :disabled="modeView" class="w-full"> </InputText>
                         </template>
                     </Column>
                     <Column field="description" header="งวด/เงิน">
-                        <template #body="{index}">
-                            <InputNumber class="w-full" type="text" v-model="periodData[index].periodsamount" :disabled="modeView" :minFractionDigits="2" :maxFractionDigits="5" fluid  />
-                    
+                        <template #body="{ index }">
+                            <InputNumber class="w-full" type="text" v-model="periodData[index].periodsamount" :disabled="modeView" :minFractionDigits="2" :maxFractionDigits="5" fluid />
                         </template>
                     </Column>
-                    <Column  header="สถานะ">
+                    <Column header="สถานะ">
                         <template #body="{ data }">
                             <Badge v-if="data.periodStatusId == 1" :value="data.periodStatus.periodStatusName" severity="secondary"></Badge>
                             <Badge v-if="data.periodStatusId == 2" :value="data.periodStatus.periodStatusName" severity="warn"></Badge>
                             <Badge v-if="data.periodStatusId == 3" :value="data.periodStatus.periodStatusName" severity="success"></Badge>
                         </template>
                     </Column>
-                    <Column  header="เปิด/ปิด" style="width: 15%" headerStyle="text-center">
+                    <Column header="เปิด/ปิด" style="width: 15%" headerStyle="text-center">
                         <template #body="{ data, index }">
                             <div class="flex justify-center align-center">
-                                <Button v-if="data.periodStatusId == 1" severity="success" label="เปิด" raised @Click="openPeriod(index)" :disabled="modeView"/>
-                                <Button v-if="data.periodStatusId !== 1" severity="danger" label="ปิด" raised @Click="closePeriod(index)" :disabled="modeView"/>
+                                <Button v-if="data.periodStatusId == 1" severity="success" label="เปิด" raised @Click="openPeriod(index)" :disabled="modeView" />
+                                <Button v-if="data.periodStatusId !== 1" severity="danger" label="ปิด" raised @Click="closePeriod(index)" :disabled="modeView" />
                             </div>
                         </template>
                     </Column>
-                    <Column >
-                        <template #body="{index,data}">
-                            <Button icon="pi pi-trash"  style="background-color: yellow; color: black; border-color: yellow;" @Click="periodDelete(index,data)" :disabled="modeView"></Button>
-                            
+                    <Column>
+                        <template #body="{ index, data }">
+                            <Button icon="pi pi-trash" style="background-color: yellow; color: black; border-color: yellow" @Click="periodDelete(index, data)" :disabled="modeView"></Button>
                         </template>
                     </Column>
                 </DataTable>
@@ -433,5 +418,4 @@ v-if="periodfromVisible"
 .bg-hsb-primary {
     background-color: #192a51;
 }
-
 </style>

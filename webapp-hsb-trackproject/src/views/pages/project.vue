@@ -14,28 +14,9 @@ const fetchData = async () => {
 onMounted(async () => {
     await fetchData();
 });
-// {
-//     "status": "success",
-//     "data": {
-//         "projectTotal": 1,
-//         "projects": [
-//             {
-//                 "projectid": 1,
-//                 "projectName": "บ้านทรัพย์อนัน-คุณกลาง",
-//                 "projectCode": "PRJ001",
-//                 "description": "บ้านคุณกลาง ",
-//                 "createOn": "2024-08-25T12:19:49.589Z",
-//                 "amount": "1000",
-//                 "userid": null,
-//                 "projectStatusid": 1,
-//                 "responseid": 1
-//             }
-//         ]
-//     }
-// }
+
 </script>
 <template>
-
     <div class="col-12 text-center pt-0 pl-6 pr-6 diagonal-gradient fix-search">
         <div class="col">
             <InputGroup>
@@ -46,25 +27,19 @@ onMounted(async () => {
             </InputGroup>
         </div>
     </div>
-    <div
-            v-for="(project) of projectList"
-        :key="project.projectCode"
-          >
-          <Card>
-        <template #title>{{ project.projectName }}</template>
-        <template #content>
-            <p class="m-0">
-               {{ project.description }}
-            </p>
-        </template>
-        <template #footer>
-          <div class="flex justify-content-center">
-
-          </div>
-        </template>
-    </Card>
-        </div>
-
+    <div v-for="project of projectList" :key="project.projectCode">
+        <Card>
+            <template #title>{{ project.projectName }}</template>
+            <template #content>
+                <p class="m-0">
+                    {{ project.description }}
+                </p>
+            </template>
+            <template #footer>
+                <div class="flex justify-content-center"></div>
+            </template>
+        </Card>
+    </div>
 </template>
 
 <style scoped>
