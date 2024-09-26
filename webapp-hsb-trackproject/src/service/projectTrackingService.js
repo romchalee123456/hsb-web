@@ -11,7 +11,5 @@ export default {
     async findProjectById(id) {
         const res = await http.get(`/projectTracking/findProjectById/${id}`);
         return res.data;
-    },
-    
-    
+    }
 };

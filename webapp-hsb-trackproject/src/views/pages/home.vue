@@ -112,10 +112,10 @@ onMounted(async () => {
         </div>
     </div>
 
-    <div class="content bg-white content-gradient " >
+    <div class="content bg-white content-gradient">
         <div class="px-5" v-for="project of projectList" :key="project.projectCode">
             <div class="pt-3">
-                <Card @Click="toPeriod(project.projectid)" style="border-bottom: 1px solid rgba(0, 0, 0, 0.2);">
+                <Card @Click="toPeriod(project.projectid)" style="border-bottom: 1px solid rgba(0, 0, 0, 0.2)">
                     <template #title>
                         <span class="font-bold kanit-thin">{{ project.projectName }}</span></template
                     >
@@ -140,7 +140,4 @@ onMounted(async () => {
 .content-gradient {
     background: linear-gradient(to bottom, rgb(250, 248, 248) 100%, #79a1b8 0%);
 }
-
-
-
 </style>

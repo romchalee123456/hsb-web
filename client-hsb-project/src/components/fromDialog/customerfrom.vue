@@ -18,8 +18,6 @@ const { fromVisible, id } = toRefs(props);
 const customerid = ref(0);
 const modeView = ref(true);
 
-
-
 const customerFirstname = ref('');
 const customerLastname = ref('');
 const customerLine = ref('');
@@ -87,7 +85,7 @@ const handleClickSave = async () => {
                 customerLastname: customerLastname.value,
                 customerPhone: customerPhone.value,
                 customerLine: customerLine.value,
-                customerAddress: customerAddress.value,
+                customerAddress: customerAddress.value
             };
             const res = await customerService.createCustomer(payload);
 
@@ -119,7 +117,7 @@ const handleClickSave = async () => {
                 customerLastname: customerLastname.value,
                 customerPhone: customerPhone.value,
                 customerLine: customerLine.value,
-                customerAddress: customerAddress.value,
+                customerAddress: customerAddress.value
             };
             const res = await customerService.updateCustomerId(payload, customerid.value);
 
@@ -169,7 +167,6 @@ const fetchData = async (value) => {
     customerAddress.value = res.data.customerAddress;
 };
 onMounted(async () => {
-
     if (id.value) {
         customerid.value = id.value;
         await fetchData(id.value);
@@ -234,7 +231,7 @@ onMounted(async () => {
                             <InputText class="w-full" id="customerCode1" type="text" v-model="customerLine" :disabled="modeView" />
                         </div>
                     </div>
-                    
+
                     <div class="grid col-span-2 gap-4">
                         <div>
                             <label class="mr-5">ที่อยู่</label>
