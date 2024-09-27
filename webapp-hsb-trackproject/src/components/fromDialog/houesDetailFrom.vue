@@ -65,7 +65,7 @@ onMounted(async () => {
         contentStyle="font-size: 1.5rem;padding:0px"
     >
         <div class="header-top p-0">
-            <div class="pl-2 pr-2 pt-4">
+            <div class="pl-2 pr-2 pt-2">
                 <i class="pi pi-chevron-left" style="font-size: 1.5rem; color: #192a51" @click="onClosed"></i>
             </div>
             <div class="flex justify-center items-center text-white p-0">

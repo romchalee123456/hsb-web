@@ -49,8 +49,8 @@ const uploadFileDelete = async (index, file) => {
 
     toast.add({
         severity: 'success',
-        summary: 'Save Success',
-        detail: 'ส่งอนุมัติสำเร็จ',
+        summary: 'Delete Success',
+        detail: 'ลบรูปภาพสำเร็จ',
         life: 5000
     });
 };
@@ -107,31 +107,29 @@ onMounted(async () => {
         contentStyle="font-size: 1.5rem;padding:0px"
     >
         <div class="header-top p-0">
-            <div class="flex flex-wrap pl-2 pr-2 pb-3 pt-4">
-                <i class="pi pi-chevron-left pr-5 " style="font-size: 1.5rem; color: #192a51" @click="onClosed"></i>
+            <div class="flex justify-stretch flex-wrap pb-3 pt-2">
+                <i class="pi pi-chevron-left pr-5" style="font-size: 1.2rem; color: #192a51" @click="onClosed"></i>
                 <div>
                     <h1>
-                        <span class="p-2 text-white pr-8" style="font-size: 1.5rem; letter-spacing: 0.1rem">{{ houseDetailName }}</span>
+                        <span class="p-1 text-white pr-8" style="font-size: 1.1rem; letter-spacing: 0.1rem">{{ houseDetailName }}</span>
                         <Badge v-if="houseDetailStatus == 1" :value="'ร่าง'" severity="secondary"></Badge>
                         <Badge v-if="houseDetailStatus == 2" :value="'รออนุมัติ'" severity="warn"></Badge>
                         <Badge v-if="houseDetailStatus == 3" :value="'อนุมัติ'" severity="success"></Badge>
                     </h1>
                 </div>
-                <div class="pl-2">
-                <div v-if="houseDetailStatus == 1">
-                    <Button style="margin-right: 10px"><span style="font-size: 0.8rem" @click="showDialog">เพิ่มรูป</span></Button>
-                    <Button @click="visible = true"><span style="font-size: 0.8rem" @click="sendApprove">ส่งอนุมัติ</span></Button>
-                </div>
-                <div >
-                    <Button @click="visible = true"><span style="font-size: 0.8rem" @click="showDialogHistory">ประวัติ</span></Button>
-                </div>
             </div>
         </div>
-        </div>
-        <div class="grid col p-0">
+        <div class="grid col p-0 justify-center">
             <div class="col-12 diagonal-gradient">
                 <div class="pl-4 pr-4">
                     <Textarea class="w-full bg-primary text-white" v-model="houseDetailDescriptions"></Textarea>
+                </div>
+            </div>
+            <div class="pl-2 ">
+                <div v-if="houseDetailStatus == 1">
+                    <Button style="margin-right: 5px; margin-left: 5px"><span style="font-size: 0.8rem" @click="showDialog">เพิ่มรูป</span></Button>
+                    <Button @click="visible = true" style="margin-right: 5px"><span style="font-size: 0.8rem" @click="sendApprove">ส่งอนุมัติ</span></Button>
+                    <Button @click="visible = true"><span style="font-size: 0.8rem" @click="showDialogHistory">ประวัติ</span></Button>
                 </div>
             </div>
         </div>

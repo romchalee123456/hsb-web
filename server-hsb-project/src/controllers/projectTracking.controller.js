@@ -6,59 +6,45 @@ const prisma = new PrismaClient();
 exports.findAllProject = async (req, res) => {
   const userId = req.currentUserId; // Access decodeId here
 
-    const projectTotal = await prisma.project.count({
-        where: { responseid: Number(userId) },
+  const projectTotal = await prisma.project.count({
+    where: { responseid: Number(userId) },
+  });
+  const projects = await prisma.project.findMany({
+    where: { responseid: Number(userId) },
+    include: {
+      _count: {
+        select: { periods: true },
+      },
+    },
+    orderBy: {
+      projectid: "desc", // Order by id in descending order
+    },
+  });
+  if (!projectTotal) {
+    res.status(201).send({
+      status: "success",
+      data: {
+        projectTotal: 0,
+        projects: [],
+      },
     });
-    const projects = await prisma.project.findMany({
-        where: { responseid: Number(userId) },
-        include:{
-            _count:{
-                select:{periods:true}
-            }
-        }  ,
-            orderBy: {
-                projectid: 'desc'  // Order by id in descending order
-            }
-        
-        
+  } else {
+    res.status(201).send({
+      status: "success",
+      data: {
+        projectTotal: projectTotal,
+        projects: projects,
+      },
     });
-        if (!projectTotal) {
-            res.status(201).send({
-                status: "success",
-                data: 
-                    {
-                        projectTotal : 0,
-                        projects:[],
-
-
-                    }
-            });
-        } else {
-
-            res.status(201).send({
-                status: "success",
-                data: 
-                    {
-                        projectTotal : projectTotal,
-                        projects:projects,
-
-
-                    }
-                
-            });
-        }
-    
+  }
 };
 
-exports.findPeriodName = async(req, res) => {
-
-    const periodname = await prisma.periodname.findMany({
-        
-            orderBy: {
-                periodNameid: 'desc'  // Order by id in descending order
-            }
-        
-    });
+exports.findPeriodName = async (req, res) => {
+  const periodname = await prisma.periodname.findMany({
+    orderBy: {
+      periodNameid: "desc", // Order by id in descending order
+    },
+  });
 
   if (!periodname) {
     res.status(500).send({
