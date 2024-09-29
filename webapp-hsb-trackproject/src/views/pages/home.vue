@@ -6,6 +6,8 @@ import { onMounted, ref } from 'vue';
 import InputText from 'primevue/inputtext';
 import logo from '@/assets/image/huglogo1-ai.png';
 import router from '@/router';
+import projectTrackingService from '@/service/projectTrackingService';
+
 const firstname = ref('');
 const lastname = ref('');
 const role = ref([
@@ -37,14 +39,15 @@ const items = ref([
     }
 ]);
 
+
 const toggle = (event) => {
     menu.value.toggle(event);
 };
-import projectTrackingService from '@/service/projectTrackingService';
 
 const toPeriod = async (projectid) => {
     router.push('/period/' + projectid);
 };
+
 const toNotifications = async () => {
     router.push('/notifications');
 };
@@ -70,7 +73,7 @@ onMounted(async () => {
     <div class="header-top">
         <div class="flex flex-wrap justify-end navbarApp pb-2 pl-0 pr-0 pt-4">
             <!-- <OverlayBadge value="2" severity="danger"> -->
-                <i class="pi pi-bell" style="font-size: 2rem"   @click="toNotifications"/>
+            <i class="pi pi-bell" style="font-size: 2rem" @click="toNotifications" />
             <!-- </OverlayBadge> -->
             <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" style="background-color: transparent; padding: 0; border: 0" />
             <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
@@ -103,7 +106,7 @@ onMounted(async () => {
                             <InputGroupAddon class="bg-primary text-white">
                                 <i class="pi pi-search"></i>
                             </InputGroupAddon>
-                            <InputText class="w-full bg-primary text-white" placeholder="ค้นหา" />
+                            <InputText class="w-full bg-primary text-white" placeholder="ค้นหา"  />
                         </InputGroup>
                     </div>
                 </div>

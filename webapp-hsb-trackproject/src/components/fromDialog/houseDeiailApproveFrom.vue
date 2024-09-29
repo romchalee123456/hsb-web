@@ -91,11 +91,11 @@ onMounted(async () => {
         contentStyle="font-size: 1.5rem; padding:0px"
     >
         <div class="header-top p-0">
-            <div class="flex align-item-center flex-wrap pl-2 pr-2 pt-4">
+            <div class="flex align-item-center flex-wrap pl-2 pr-2 pt-2">
                 <i class="pi pi-chevron-left pr-5" style="font-size: 1.5rem; color: #192a51" @click="onClosed"></i>
                 <div>
                     <h1>
-                        <span class="p-2 text-white pr-8" style="font-size: 1.5rem; letter-spacing: 0.1rem">{{ houseDetailName }}</span>
+                        <span class="p-2 text-white pr-2" style="font-size: 1.5rem; letter-spacing: 0.1rem">{{ houseDetailName }}</span>
                         <Badge v-if="houseDetailStatus == 1" :value="'ร่าง'" severity="secondary"></Badge>
                         <Badge v-if="houseDetailStatus == 2" :value="'รออนุมัติ'" severity="warn"></Badge>
                         <Badge v-if="houseDetailStatus == 3" :value="'อนุมัติ'" severity="success"></Badge>
