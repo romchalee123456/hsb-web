@@ -19,4 +19,6 @@ router.route('/createNewNotification')
     .get(asyncHandler(authorization),asyncHandler(notificationsController.findAllNotificationHistory)); 
     router.route('/sendLineReport/:id/:customerId')
     .get(asyncHandler(authorization),asyncHandler(notificationsController.sendLineReport)); 
+    router.route('/getAllUserLineIds')
+    .get(asyncHandler(notificationsController.getAllUserLineIds)); 
 module.exports = router;
