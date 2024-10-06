@@ -78,7 +78,7 @@ const handleClickSave = async () => {
                     periodNameid: data.periodnameid,
                     projectid: projectid.value
                 };
-                await periodDetailService.updatePeriodDetailId(payload, data.periodDetailid);
+                await periodDetailService.updatePeriodDetailId( data.periodDetailid,payload);
             }
         } catch (ex) {
             save.value = false;

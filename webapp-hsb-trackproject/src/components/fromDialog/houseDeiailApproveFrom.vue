@@ -6,6 +6,7 @@ import uploadFile from './uploadFile.vue';
 import { useToast } from 'primevue/usetoast';
 import notificationsService from '@/service/notificationsService';
 import houseDeiailApproveHistory from './houseDeiailApproveHistory.vue';
+import ConfirmDialog from 'primevue/confirmdialog';
 const toast = useToast();
 import apiName from '@/service/currentName';
 const emit = defineEmits(['valueChanged', 'onClosed']);

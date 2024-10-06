@@ -125,7 +125,7 @@ exports.update = async (req, res) => {
       email: email.trim(),
       role: role,
       teamName: teamName.trim(),
-      password: phoneNumber.trim(),
+      phoneNumber: phoneNumber.trim(),
       userLineNotificationsid: userLineNotificationsid,
     },
   });

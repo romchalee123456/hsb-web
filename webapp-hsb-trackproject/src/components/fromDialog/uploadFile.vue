@@ -9,6 +9,7 @@ import uploadFileService from '@/service/uploadFileService';
 const emit = defineEmits(['buttonClose']);
 const toast = useToast();
 
+const loading = ref(false)
 const props = defineProps({
     fromVisible: Boolean,
     id: Number,
@@ -18,6 +19,8 @@ const props = defineProps({
 const { fromVisible } = toRefs(props);
 
 const onAdvancedUpload = async (event) => {
+
+    loading.value = true;
     const files = Array.from(event.files);
 
     const convertToBase64 = (file) => {
@@ -48,7 +51,16 @@ const onAdvancedUpload = async (event) => {
 
     await uploadFileService.UploadFileHouseDetail(uploadPayload);
 
-    await props.onload();
+    await props.onload().then(()=>{
+        loading.value = false;
+
+        toast.add({
+        severity: 'success',
+        summary: 'Delete Success',
+        detail: 'เพิ่มภาพสำเร็จ',
+        life: 5000
+    });
+    });
 };
 
 const handleClickClose = () => {
@@ -84,10 +96,16 @@ const handleClickClose = () => {
                 <Toast />
                 <FileUpload name="files[]" customUpload @uploader="onAdvancedUpload" :multiple="true" accept="image/*" :maxFileSize="52428800">
                     <template #empty>
-                        <span>กด chose</span>
+                        <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="8" fill="transparent" v-if="loading"
+                        animationDuration=".5s" aria-label="Custom ProgressSpinner" />
+                        <span v-else>กด chose</span>
+                       
                     </template>
                 </FileUpload>
             </div>
+            <div class="card flex justify-center">
+       
+    </div>
         </Dialog>
     </div>
 </template>
