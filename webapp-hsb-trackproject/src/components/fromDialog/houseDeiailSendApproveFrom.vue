@@ -4,6 +4,7 @@ import Textarea from 'primevue/textarea';
 import houseDetailService from '@/service/houseDetailService';
 import uploadFile from './uploadFile.vue';
 import { useToast } from 'primevue/usetoast';
+import ProgressSpinner from 'primevue/progressspinner';
 import houseDeiailApproveHistory from './houseDeiailApproveHistory.vue';
 import notificationsService from '@/service/notificationsService';
 import apiName from '@/service/currentName';
@@ -79,7 +80,7 @@ onMounted(async () => {
 
 <template>
     <uploadFile :fromVisible="fromUploadFileVisible" @buttonClose="fromUploadFileVisible = false" :onload="fetchData" :id="props.id" />
-
+   
     <houseDeiailApproveHistory
         v-if="fromHistoryVisible"
         :fromVisible="fromHistoryVisible"
