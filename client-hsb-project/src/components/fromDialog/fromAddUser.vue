@@ -7,6 +7,7 @@ import Dropdown from 'primevue/dropdown';
 import userService from '@/service/userService';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
+import LineInputFields from '../customInputfields/LineInputFields.vue';
 const toast = useToast();
 useToast;
 const props = defineProps({
@@ -296,12 +297,30 @@ onMounted(async () => {
                             <Dropdown v-model="selectedRole" :options="role" optionLabel="name" placeholder="" checkmark :highlightOnSelect="false" class="w-full md:w-14rem" :disabled="modeView" />
                         </div>
                     </div>
-                    <div class="field grid grid-cols-5 gap-4">
+                    <!-- <div class="field grid grid-cols-5 gap-4">
                         <div>
                             <label class="">Line NotificationId</label>
                         </div>
                         <div class="col-span-4">
                             <InputText class="w-full" id="firstname1" type="text" v-model="userLineNotificationsid" :disabled="modeView" />
+                        </div>
+                    </div> -->
+                    <div class="field grid grid-cols-5 gap-4">
+                        <div>
+                            <label class="">Line NotificationId</label>
+                        </div>
+                        <div class="col-span-4">
+                            <LineInputFields
+                                v-model="customerSelected"
+                                :modeReadonly="modeView"
+                                :id="userLineNotificationsid"
+                           
+                                @value-changed="
+                                    (value) => {
+                                        userLineNotificationsid = value;
+                                    }
+                                "
+                            ></LineInputFields>
                         </div>
                     </div>
                 </div>

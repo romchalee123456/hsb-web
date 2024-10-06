@@ -6,6 +6,7 @@ import InputText from 'primevue/inputtext';
 import customerService from '@/service/customerService';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
+import LineInputFields from '../customInputfields/LineInputFields.vue';
 const toast = useToast();
 useToast;
 const props = defineProps({
@@ -223,15 +224,32 @@ onMounted(async () => {
                             <InputText class="w-full" id="customerCode1" type="text" v-model="customerPhone" :disabled="modeView" />
                         </div>
                     </div>
-                    <div class="field grid grid-cols-5 gap-4">
+                    <!-- <div class="field grid grid-cols-5 gap-4">
                         <div>
                             <label class="mr-5">ไอดี-ไลน์</label>
                         </div>
                         <div class="col-span-4">
                             <InputText class="w-full" id="customerCode1" type="text" v-model="customerLine" :disabled="modeView" />
                         </div>
+                    </div> -->
+                    <div class="field grid grid-cols-5 gap-4">
+                        <div>
+                            <label class="">Line</label>
+                        </div>
+                        <div class="col-span-4">
+                            <LineInputFields
+                                v-model="customerSelected"
+                                :modeReadonly="modeView"
+                                :id="customerLine"
+                           
+                                @value-changed="
+                                    (value) => {
+                                        customerLine = value;
+                                    }
+                                "
+                            ></LineInputFields>
+                        </div>
                     </div>
-
                     <div class="grid col-span-2 gap-4">
                         <div>
                             <label class="mr-5">ที่อยู่</label>
