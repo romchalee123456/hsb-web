@@ -7,6 +7,7 @@ import InputText from 'primevue/inputtext';
 import logo from '@/assets/image/huglogo1-ai.png';
 import router from '@/router';
 import projectTrackingService from '@/service/projectTrackingService';
+import notificationsService from '@/service/notificationsService';
 
 const firstname = ref('');
 const lastname = ref('');
@@ -18,6 +19,8 @@ const role = ref([
 const projectTotal = ref(0);
 const projectList = ref([]);
 const selectedRole = ref();
+const notificationsList = ref([]);
+const notificationsCount = ref(0); // Count of notifications
 
 const menu = ref();
 const items = ref([
@@ -63,17 +66,24 @@ const fetchData = async () => {
     lastname.value = resUser.data.lastname;
 
     selectedRole.value = role.value[resUser.data.role - 1].name;
+
+    const notificationsRes = await notificationsService.findAllNotification();
+    notificationsCount.value = notificationsRes.data.length;
 };
 onMounted(async () => {
     await fetchData();
 });
+
 </script>
 <template>
     <!-- Header Section -->
     <div class="header-top">
         <div class="flex flex-wrap justify-end navbarApp pb-2 pl-0 pr-0 pt-4">
             <!-- <OverlayBadge value="2" severity="danger"> -->
+            <div class="relative">
             <i class="pi pi-bell" style="font-size: 2rem" @click="toNotifications" />
+            <span v-if="notificationsCount > 0" class="notification-badge">{{ notificationsCount }}</span>
+            </div>
             <!-- </OverlayBadge> -->
             <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" style="background-color: transparent; padding: 0; border: 0" />
             <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
@@ -140,6 +150,16 @@ onMounted(async () => {
 </template>
 
 <style>
+.notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red; /* Adjust color as needed */
+    color: white; /* Adjust color as needed */
+    border-radius: 50%;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+}
 .content-gradient {
     background: linear-gradient(to bottom, rgb(250, 248, 248) 100%, #79a1b8 0%);
 }

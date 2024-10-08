@@ -112,24 +112,26 @@ onMounted(async () => {
                 <div>
                     <h1>
                         <span class="p-1 text-white pr-8" style="font-size: 1.1rem; letter-spacing: 0.1rem">{{ houseDetailName }}</span>
-                        <Badge v-if="houseDetailStatus == 1" :value="'ร่าง'" severity="secondary"></Badge>
-                        <Badge v-if="houseDetailStatus == 2" :value="'รออนุมัติ'" severity="warn"></Badge>
-                        <Badge v-if="houseDetailStatus == 3" :value="'อนุมัติ'" severity="success"></Badge>
+                        <Badge v-if="houseDetailStatus == 1" :value="'ร่าง'" severity="secondary" style="margin-right: 8px;"></Badge>
+                        <Badge v-if="houseDetailStatus == 2" :value="'รออนุมัติ'" severity="warn" style="margin-right: 8px;"></Badge>
+                        <Badge v-if="houseDetailStatus == 3" :value="'อนุมัติ'" severity="success" style="margin-right: 8px;"></Badge>
+                        <Button @click="visible = true"  ><span style="font-size: 0.8rem" @click="showDialogHistory">ประวัติ</span></Button>
                     </h1>
+                    
                 </div>
             </div>
         </div>
         <div class="grid col p-0 justify-center">
             <div class="col-12 diagonal-gradient">
                 <div class="pl-4 pr-4">
-                    <Textarea class="w-full bg-primary text-white" v-model="houseDetailDescriptions"></Textarea>
+                    <Textarea class="w-full bg-primary text-white" placeholder="ข้อมูลงานที่จะส่งอนุมัติ...." v-model="houseDetailDescriptions"></Textarea>
                 </div>
             </div>
             <div class="pl-2 ">
                 <div v-if="houseDetailStatus == 1">
                     <Button style="margin-right: 5px; margin-left: 5px"><span style="font-size: 0.8rem" @click="showDialog">เพิ่มรูป</span></Button>
                     <Button @click="visible = true" style="margin-right: 5px"><span style="font-size: 0.8rem" @click="sendApprove">ส่งอนุมัติ</span></Button>
-                    <Button @click="visible = true"><span style="font-size: 0.8rem" @click="showDialogHistory">ประวัติ</span></Button>
+                    
                 </div>
             </div>
         </div>

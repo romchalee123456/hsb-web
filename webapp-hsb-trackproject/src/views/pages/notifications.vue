@@ -8,6 +8,7 @@ const visibleFrom = ref(false);
 const houseDetailid = ref();
 const notificationsId = ref();
 const notificationsList = ref([]);
+const notificationsCount = ref(0);
 
 const onNotificationsClick = async (notificationsIds, houseDetailids) => {
     houseDetailid.value = houseDetailids;
@@ -20,10 +21,13 @@ const fetchData = async () => {
     const res = await notificationsService.findAllNotification();
 
     notificationsList.value = res.data;
+    notificationsCount.value = notificationsList.value.length;
 };
 onMounted(async () => {
     await fetchData();
 });
+
+
 </script>
 <template>
     <houseDeiailApproveFrom
