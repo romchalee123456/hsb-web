@@ -39,6 +39,6 @@ router.route('/updateSelectedFileFalse/:id')
     .put(asyncHandler(houseDetailController.updateSelectedFileFalse));
 
 router.route('/getSelectedFile/:id')
-    .get(asyncHandler(authorization),asyncHandler(houseDetailController.getSelectedFile));
+    .get(asyncHandler(houseDetailController.getSelectedFile));
 
 module.exports = router;

@@ -2,22 +2,14 @@
 import { ref, defineProps, toRefs, onMounted, defineEmits } from 'vue';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
-import Dropdown from 'primevue/dropdown';
-import Checkbox from 'primevue/checkbox';
 import Image from 'primevue/image';
-import projectService from '@/service/projectService';
-import userService from '@/service/userService';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
-import customerInputFields from '../customInputfields/customerInputFields.vue';
-import locationsInputFields from '../customInputfields/locationsInputFields.vue';
-import PeriodDetailFrom from './PeriodDetailFrom.vue';
-import periodDetailService from '@/service/periodDetailService';
 import houseDetailService from '@/service/houseDetailService';
 import logo from '@/assets/image/huglogo1-ai.png';
 import customerService from '@/service/customerService';
 import notificationsService from '@/service/notificationsService';
+import reportService from '@/service/reportService';
 const toast = useToast();
 import apiName from '@/currentName';
 const props = defineProps({
@@ -52,21 +44,26 @@ const handleClickClose = () => {
 };
 const handleClickSendReport = async() => {
     const res = await notificationsService.sendReportNotification(id.value,customerid.value)
+    if (res.status == 'success') {
+            toast.add({ severity: 'success', summary: 'Send Success', detail: 'ส่งรายงานสำเร็จ', life: 3000 });
+
+        }
+
 };
 
 
 const fetchData = async (value) => {
-    const res = await houseDetailService.getInformationByHouseDetail(value);
+    const res = await reportService.getInformationByHouseDetail(value);
     projectCode.value = res.data.periodDetail.period.project.projectCode;
     locationsName.value = res.data.periodDetail.period.project.locationName;
     houseDetailName.value = res.data.houseDetailname.houseDetailName;
     customerid.value = res.data.periodDetail.period.project.customerid;
 
-    const res1 = await customerService.findCustomerById(customerid.value);
+    const res1 = await reportService.findCustomerById(customerid.value);
     customerFirstname.value = res1.data.customerFirstname;
     customerLastname.value = res1.data.customerLastname;
     customerPhone.value = res1.data.customerPhone;
-    const res2 = await houseDetailService.getSelectedFile(value);
+    const res2 = await reportService.getSelectedFile(value);
     houseDetailFileData.value = res2.data;
 };
 

@@ -48,11 +48,14 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const authStore = useAuthStore();
-    if (to.name !== 'Login' && !authStore.isAuthenticated) {
+
+    // Skip auth check for 'Login' and 'report' routes
+    if (to.name !== 'Login' && to.name !== 'report' && !authStore.isAuthenticated) {
         next({ name: 'Login' });
     } else {
         next();
     }
 });
+
 
 export default router;

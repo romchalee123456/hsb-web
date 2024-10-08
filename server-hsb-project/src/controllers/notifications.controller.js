@@ -2,7 +2,17 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const {
   sendnotificationsline: sendnotificationsline,
+  getAllUserProfiles: getAllUserProfiles,
+  sendnotificationslineFlex:sendnotificationslineFlex,
+  
 } = require("../utils/sendnotificationsline");
+
+const {flexMessage:flexMessage,
+  flexMessageSendApprove:flexMessageSendApprove,
+  flexMessageApprove:flexMessageApprove,
+  flexMessageSendReport:flexMessageSendReport
+} = require("../utils/notificationslineTemplete");
+
 const { APPROVER_ID } = require('../utils/secrets');
 exports.createNewNotification = async (req, res) => {
   const { description, houseDetailId } = req.body;
@@ -59,14 +69,9 @@ exports.createNewNotification = async (req, res) => {
       where: { id: 1 },
     });
 
-    const message = `
-     งานขออนุมัติโดย :${requestData.firstname} ${requestData.lastname}
-     รายละเอียด : ${description}
-     งาน : ${data.houseDetailname.houseDetailName} งานหลัก :${data.periodDetail.periodname.periodName}
-     โครงการ :${data.periodDetail.period.project.projectCode} ${data.periodDetail.period.project.projectName}
-     งวด : ${data.periodDetail.period.description}
-    `;
-    sendnotificationsline(approverData.userLineNotificationsid, message);
+    const message = flexMessageSendApprove(data,requestData,description,approverData.userLineNotificationsid);
+
+    sendnotificationslineFlex(message);
 
     if (!newNotification) {
       res.status(500).send({
@@ -83,7 +88,7 @@ exports.createNewNotification = async (req, res) => {
     console.error("Error creating notification:", error);
     throw error;
   }
-};
+}; 
 exports.approveNotification = async (req, res) => {
   const { id } = req.params;
   const { description } = req.body;
@@ -132,17 +137,10 @@ exports.approveNotification = async (req, res) => {
       where: { id: 1 },
     });
 
-    const message = `
-    งานอนุมัติโดย: ${approverData.firstname} ${approverData.lastname}
-    รายละเอียด: ${description}
-    งาน: ${data.houseDetailname.houseDetailName}
-    งานหลัก: ${data.periodDetail.periodname.periodName}
-    โครงการ: ${data.periodDetail.period.project.projectCode} ${data.periodDetail.period.project.projectName}
-    งวด: ${data.periodDetail.period.description}
-    `;
-
-    // Assuming sendnotificationsline is a function to send notifications
-    sendnotificationsline(requestData.userLineNotificationsid, message);
+    if(requestData.userLineNotificationsid){
+      const message = flexMessageApprove(data,approverData,description,requestData.userLineNotificationsid);
+      sendnotificationslineFlex(message);
+    }
 
     await prisma.housedetail.update({
       where: { houseDetailid: Number(notificationsdata.houseDetailId) },
@@ -214,18 +212,12 @@ exports.sendBackNotification = async (req, res) => {
     const approverData = await prisma.user.findUnique({
       where: { id: 1 },
     });
+if(requestData.userLineNotificationsid){
+  const message = flexMessage(data,approverData,description,requestData.userLineNotificationsid);
 
-    const message = `
-    งานส่งกลับแก้ไชโดย: ${approverData.firstname} ${approverData.lastname}
-    รายละเอียด: ${description}
-    งาน: ${data.houseDetailname.houseDetailName}
-    งานหลัก: ${data.periodDetail.periodname.periodName}
-    โครงการ: ${data.periodDetail.period.project.projectCode} ${data.periodDetail.period.project.projectName}
-    งวด: ${data.periodDetail.period.description}
-    `;
-
-    // Assuming sendnotificationsline is a function to send notifications
-    sendnotificationsline(requestData.userLineNotificationsid, message);
+  sendnotificationslineFlex(message);
+}
+   
 
     await prisma.housedetail.update({
       where: { houseDetailid: Number(notificationsdata.houseDetailId) },
@@ -399,19 +391,12 @@ exports.sendLineReport = async (req, res) => {
     });
 
 
-    const message = `
-    เรียนคุณ: ${customerData.customerFirstname} ${customerData.customerLastname}
-    บริษัทขอส่งรายงานความคืบหน้างาน
-    งาน: ${data.houseDetailname.houseDetailName}
-    งานหลัก: ${data.periodDetail.periodname.periodName}
-    โครงการ: ${data.periodDetail.period.project.projectCode} ${data.periodDetail.period.project.projectName}
-    งวด: ${data.periodDetail.period.description}
-    สามารถตรวจสอบรายละเอียดได้ที่ http://localhost:5174/report/${id}
-    `;
+    const message = flexMessageSendReport(data,customerData,id)
 
     // Assuming sendnotificationsline is a function to send notifications
     if(customerData.customerLine != null && customerData.customerLine != ""){
-      sendnotificationsline(customerData.customerLine, message);
+      const message = flexMessageSendReport(data,customerData,id)
+      sendnotificationslineFlex(message);
     }
    
 
@@ -426,4 +411,14 @@ exports.sendLineReport = async (req, res) => {
     });
   }
 };
+
+exports.getAllUserLineIds = async (req,res) =>{
+
+  const userLineProfile = await getAllUserProfiles();
+  res.status(201).send({
+    status: "success",
+    data: userLineProfile,
+  });
+
+}
 

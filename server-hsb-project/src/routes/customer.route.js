@@ -13,7 +13,7 @@ router.route('/getCustomer')
     .get(asyncHandler(authorization),asyncHandler(customerController.findAllCustomer));
 
 router.route('/customerFind/:id')
-    .get(asyncHandler(authorization),asyncHandler(customerController.findCustomerById));
+    .get(asyncHandler(customerController.findCustomerById));
 
 router.route('/customerUpdate/:id')
     .put(asyncHandler(authorization),asyncHandler(customerController.updateCustomerId));
