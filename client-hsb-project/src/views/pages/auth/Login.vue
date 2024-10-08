@@ -49,7 +49,7 @@ const onLogin = async() => {
                             <Image :src="logo" alt="Image" width="350" />
                         </div>
 
-                        <span class="text-muted-color font-medium">Sign din to continue</span>
+                        <span class="text-muted-color font-medium">Sign in to continue</span>
                     </div>
 
                     <div>
