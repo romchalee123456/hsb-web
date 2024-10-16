@@ -253,3 +253,32 @@ exports.refreshAccessToken = (req, res) => {
     res.status(403).json({ message: "Invalid refresh token" });
   }
 };
+
+exports.searchUserByFirstname = async (req, res) => {
+  const { firstname } = req.query; // Get the project code from query parameters
+
+      const data = await prisma.user.findMany({
+          where: {
+              firstname: {
+                  contains: firstname, // Use contains for a substring search
+              },
+          },
+          orderBy: {
+              id: 'desc', // Optional: order by project ID
+          },
+      })
+      if (!data) {
+        res.status(500).send({
+            status: "error",
+             message: err.message
+        });
+    } else {
+
+        res.status(201).send({
+            status: "success",
+            data: 
+                data
+            
+        });
+    }
+};

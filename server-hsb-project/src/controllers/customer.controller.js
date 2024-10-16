@@ -137,3 +137,32 @@ exports.deleteCustomerId = async (req, res) => {
     });
   }
 };
+
+exports.searchCustomerByFirstname = async (req, res) => {
+  const { customerFirstname } = req.query; // Get the project code from query parameters
+
+      const data = await prisma.customer.findMany({
+          where: {
+              customerFirstname: {
+                  contains: customerFirstname, // Use contains for a substring search
+              },
+          },
+          orderBy: {
+              customerid: 'desc', // Optional: order by project ID
+          },
+      })
+      if (!data) {
+        res.status(500).send({
+            status: "error",
+             message: err.message
+        });
+    } else {
+
+        res.status(201).send({
+            status: "success",
+            data: 
+                data
+            
+        });
+    }
+};

@@ -23,5 +23,7 @@ router.route('/getPeriodDetail/:id')
     .get(asyncHandler(authorization),asyncHandler(projectController.findAllPeriodDetail));
 router.route('/updateProjectLocation/:id')
     .put(asyncHandler(authorization),asyncHandler(projectController.updateProjectLocation));
+router.route('/searchProjectByCode')
+    .get(asyncHandler(authorization),asyncHandler(projectController.searchProjectByCode));
 
 module.exports = router;

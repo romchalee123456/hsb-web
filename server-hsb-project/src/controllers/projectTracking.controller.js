@@ -104,3 +104,32 @@ exports.findProjectById = async (req, res) => {
     });
   }
 };
+
+exports.searchProjectTrackingByCode = async (req, res) => {
+  const { projectCode } = req.query; // Get the project code from query parameters
+
+      const data = await prisma.project.findMany({
+          where: {
+              projectCode: {
+                  contains: projectCode, // Use contains for a substring search
+              },
+          },
+          orderBy: {
+              projectid: 'desc', // Optional: order by project ID
+          },
+      })
+      if (!data) {
+        res.status(500).send({
+            status: "error",
+             message: err.message
+        });
+    } else {
+
+        res.status(201).send({
+            status: "success",
+            data: 
+                data
+            
+        });
+    }
+};
