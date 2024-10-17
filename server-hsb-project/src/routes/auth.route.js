@@ -18,15 +18,17 @@ router.route('/signin')
 router.route('/getUser')
     .get(asyncHandler(authorization),asyncHandler(authController.findAllUser));
 
-    router.route('/getUser/:id')
+router.route('/getUser/:id')
     .get(asyncHandler(authController.findUserById));
-    router.route('/deleteUser/:id')
+router.route('/deleteUser/:id')
     .delete(asyncHandler(authController.deleteUserId));
 
-    router.route('/refresh')
+router.route('/refresh')
     .post(asyncHandler(authController.refreshAccessToken));
 
-    router.route('/getUserDufult')
+router.route('/getUserDufult')
     .get(asyncHandler(authorization),asyncHandler(authController.findUserDefult));
+router.route('/searchUserByFirstname')
+    .get(asyncHandler(authController.searchUserByFirstname));
 
 module.exports = router;

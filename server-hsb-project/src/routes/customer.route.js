@@ -21,4 +21,7 @@ router.route('/customerUpdate/:id')
 router.route('/customertDelete/:id')
     .delete(asyncHandler(authorization),asyncHandler(customerController.deleteCustomerId));
 
+router.route('/searchCustomerByFirstname')
+    .get(asyncHandler(customerController.searchCustomerByFirstname));
+
 module.exports = router;

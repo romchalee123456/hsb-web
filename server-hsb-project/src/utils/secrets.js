@@ -3,10 +3,6 @@ require('dotenv/config');
 const { logger } = require('./logger');
 
 const {
-    DB_HOST,
-    DB_USER,
-    DB_PASS,
-    DB_NAME,
     JWT_SECRET_KEY,
     JWT_REFRESH_SECRET_KEY,
     LINE_TK,
@@ -14,10 +10,6 @@ const {
 } = process.env;
 
 const requiredCredentials = [
-    'DB_HOST',
-    'DB_USER',
-    'DB_PASS',
-    'DB_NAME',
     'JWT_SECRET_KEY',
     'JWT_REFRESH_SECRET_KEY',
     'LINE_TK',
@@ -31,11 +23,7 @@ for (const credential of requiredCredentials) {
     }
 }
 
-module.exports = {
-    DB_HOST,
-    DB_USER,
-    DB_PASS,
-    DB_NAME, 
+module.exports = { 
     JWT_SECRET_KEY,
     JWT_REFRESH_SECRET_KEY,
     LINE_TK,

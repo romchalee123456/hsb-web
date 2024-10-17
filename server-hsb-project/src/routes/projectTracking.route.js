@@ -14,4 +14,7 @@ const authorization = require('../middlewares/authorization');
     router.route('/getPeriodName')
     .get(asyncHandler(authorization),asyncHandler(projectTrackingController.findPeriodName));
     
+    router.route('/searchProjectTrackingByCode')
+    .get(asyncHandler(authorization),asyncHandler(projectTrackingController.searchProjectTrackingByCode));
+    
 module.exports = router;
