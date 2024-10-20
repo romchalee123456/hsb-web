@@ -4,10 +4,6 @@ export default {
         var res = await http.get('/projectTracking/getProject');
         return res.data;
     },
-    async searchProjectTrackingByCode(data) {
-        const res = await http.get(`/projectTracking/searchProjectTrackingByCode?projectCode=${data}`);
-        return res.data;
-    },
     async getPeriodName() {
         var res = await http.get('/projectTracking/getPeriodName');
         return res.data;
@@ -15,5 +11,14 @@ export default {
     async findProjectById(id) {
         const res = await http.get(`/projectTracking/findProjectById/${id}`);
         return res.data;
-    }
+    },
+    async findProjectByIdSearchPeriod(id,data) {
+        const res = await http.get(`/projectTracking/findProjectByIdSearchPeriod/${id}?periodName=${data}`);
+        return res.data;
+    },
+    async searchProjectByCode(data) {
+        const res = await http.get(`/projectTracking/searchAllProject?projectCode=${data}`);
+        return res.data;
+    },
+
 };

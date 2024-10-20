@@ -9,6 +9,7 @@ import projectTrackingService from '@/service/projectTrackingService';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 const route = useRoute();
+const searchQuery = ref('');
 const firstname = ref('');
 const lastname = ref('');
 const role = ref([
@@ -69,7 +70,16 @@ const fetchData = async () => {
 
     selectedRole.value = role.value[resUser.data.role - 1].name;
 };
-
+const searchData = async () => {
+    const projectId = route.params.id;
+    const res = await projectTrackingService.findProjectByIdSearchPeriod(projectId,searchQuery.value);
+    projectName.value = res.data.projectName;
+    projectCode.value = res.data.projectCode;
+    description.value = res.data.description;
+    periodList.value = res.periodData;
+    periodTotal.value = periodList.value.length;
+    periodApproveTotal.value = res.countApprovePeriod;
+};
 const toNotifications = async () => {
     router.push('/notifications');
 };
@@ -107,7 +117,8 @@ onMounted(async () => {
                         <InputGroupAddon class="bg-primary text-white">
                             <i class="pi pi-search"></i>
                         </InputGroupAddon>
-                        <InputText class="w-full bg-primary text-white" placeholder="ค้นหา" />
+                        <InputText class="w-full bg-primary text-white" placeholder="ค้นหา" v-model="searchQuery" />
+                        <button @click="searchData" class="w-[70px] h-[36px] bg-primary text-white ">ค้นหา</button>
                     </InputGroup>
                 </div>
             </div>
