@@ -11,10 +11,13 @@ const authorization = require('../middlewares/authorization');
     router.route('/findProjectById/:id')
     .get(asyncHandler(authorization),asyncHandler(projectTrackingController.findProjectById));
 
+    router.route('/findProjectByIdSearchPeriod/:id')
+    .get(asyncHandler(authorization),asyncHandler(projectTrackingController.findProjectByIdSearchPeriod));
+    
     router.route('/getPeriodName')
     .get(asyncHandler(authorization),asyncHandler(projectTrackingController.findPeriodName));
     
-    router.route('/searchProjectTrackingByCode')
-    .get(asyncHandler(authorization),asyncHandler(projectTrackingController.searchProjectTrackingByCode));
-    
+    router.route('/searchAllProject')
+    .get(asyncHandler(authorization),asyncHandler(projectTrackingController.searchAllProject));
+
 module.exports = router;

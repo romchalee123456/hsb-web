@@ -55,8 +55,9 @@ const toNotifications = async () => {
 };
 
 const searchData = async () => {
-    const res = await projectTrackingService.searchProjectTrackingByCode(searchQuery.value);
-    projectList.value = res.data; // Update the correct ref
+    const res = await projectTrackingService.searchProjectByCode(searchQuery.value);
+    projectTotal.value = res.data.projectTotal;
+    projectList.value = res.data.projects;
 };
 
 const fetchData = async () => {
@@ -135,8 +136,10 @@ onMounted(async () => {
             <div class="pt-3">
                 <Card @Click="toPeriod(project.projectid)" style="border-bottom: 1px solid rgba(0, 0, 0, 0.2)">
                     <template #title>
-                        <span class="font-bold kanit-thin">{{ project.projectName }}</span></template
-                    >
+                        <span class="font-bold kanit-thin">{{ project.projectCode }}</span> :
+                        <span class="font-bold kanit-thin">{{ project.projectName }}</span>
+                       
+                   </template>
                     <template #content>
                         <p class="m-0">
                             {{ project.description }}
