@@ -26,8 +26,10 @@ const loadData = async () => {
 
     project.value = res.data;
 };
-const searchData = (value) => {
-    console.log(value);
+const searchData = async (value) => {
+    const res = await projectService.searchProjectByCode(value);
+
+    project.value = res.data;
 };
 
 onMounted(async () => {

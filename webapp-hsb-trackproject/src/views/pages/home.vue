@@ -19,9 +19,8 @@ const role = ref([
 const projectTotal = ref(0);
 const projectList = ref([]);
 const selectedRole = ref();
-const notificationsList = ref([]);
 const notificationsCount = ref(0); // Count of notifications
-
+const searchQuery= ref('');
 const menu = ref();
 const items = ref([
     {
@@ -53,6 +52,11 @@ const toPeriod = async (projectid) => {
 
 const toNotifications = async () => {
     router.push('/notifications');
+};
+
+const searchData = async () => {
+    const res = await projectTrackingService.searchProjectTrackingByCode(searchQuery.value);
+    projectList.value = res.data; // Update the correct ref
 };
 
 const fetchData = async () => {
@@ -116,7 +120,8 @@ onMounted(async () => {
                             <InputGroupAddon class="bg-primary text-white">
                                 <i class="pi pi-search"></i>
                             </InputGroupAddon>
-                            <InputText class="w-full bg-primary text-white" placeholder="ค้นหา"  />
+                            <InputText v-model="searchQuery" class="w-full bg-primary text-white" />
+                            <button @click="searchData" class="w-[70px] h-[36px] bg-primary text-white ">ค้นหา</button>
                         </InputGroup>
                     </div>
                 </div>

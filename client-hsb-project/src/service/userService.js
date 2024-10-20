@@ -20,4 +20,8 @@ export default {
         const res = await http.post(`/auth/update/${id}`, data);
         return res.data;
     },
+    async searchUserByFirstname(data) {
+        const res = await http.get(`/auth/searchUserByFirstname?firstname=${data}`);
+        return res.data;
+    },
 };
