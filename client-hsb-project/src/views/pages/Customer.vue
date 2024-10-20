@@ -26,8 +26,10 @@ const loadData = async () => {
 
     customer.value = res.data;
 };
-const searchData = (value) => {
-    console.log(value);
+const searchData = async (value) => {
+    const res = await customerService.searchCustomerByFirstname(value);
+
+    customer.value = res.data;
 };
 
 onMounted(async () => {

@@ -6,6 +6,11 @@ export default {
         return res.data;
     },
 
+    async searchProjectByCode(data) {
+        const res = await http.get(`/project/searchProjectByCode?projectCode=${data}`);
+        return res.data;
+    },
+
     async createProject(data) {
         const res = await http.post('/project/projectCreate', data);
         return res.data;

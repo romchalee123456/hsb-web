@@ -4,6 +4,10 @@ export default {
         var res = await http.get('/projectTracking/getProject');
         return res.data;
     },
+    async searchProjectTrackingByCode(data) {
+        const res = await http.get(`/projectTracking/searchProjectTrackingByCode?projectCode=${data}`);
+        return res.data;
+    },
     async getPeriodName() {
         var res = await http.get('/projectTracking/getPeriodName');
         return res.data;

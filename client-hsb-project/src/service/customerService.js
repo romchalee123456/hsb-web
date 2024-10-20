@@ -20,4 +20,8 @@ export default {
         const res = await http.put(`/customer/customerUpdate/${id}`, data);
         return res.data;
     },
+    async searchCustomerByFirstname(data) {
+        const res = await http.get(`/customer/searchCustomerByFirstname?customerFirstname=${data}`);
+        return res.data;
+    },
 };

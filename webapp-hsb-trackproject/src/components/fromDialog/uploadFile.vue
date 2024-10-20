@@ -56,7 +56,7 @@ const onAdvancedUpload = async (event) => {
 
         toast.add({
         severity: 'success',
-        summary: 'Delete Success',
+        summary: 'Upload Success',
         detail: 'เพิ่มภาพสำเร็จ',
         life: 5000
     });
