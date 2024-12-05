@@ -9,7 +9,6 @@ const props = defineProps({
         Type: Boolean,
         default: true
     }
-    
 });
 
 const { list, addBottonVisible } = toRefs(props);
@@ -35,24 +34,19 @@ onMounted(async () => {});
 <template>
     <div class="card">
         <div class="font-semibold text-xl mb-4">{{ props.title }}</div>
-        <Toolbar>
-            <template #start> </template>
-
-            <template #center>
+        <div class="flex gap-2">
+            <div class="flex-grow">
                 <IconField v-if="true">
                     <InputIcon>
                         <i class="pi pi-search" />
                     </InputIcon>
-                    <InputText placeholder="Search" v-model="search" v-if="true" class="w-[750px]" />
-
+                    <InputText placeholder="Search" v-model="search" v-if="true" class="w-full" />
                 </IconField>
-            </template>
+            </div>
 
-            <template #end>
-                <Button label="ค้นหา" raised @Click="searchData" v-if="true" class="mr-2" />
-                <Button severity="info" label="เพิ่มข้อมูล" v-if="addBottonVisible" @Click="handleClickAdd" />
-            </template>
-        </Toolbar>
+            <Button label="ค้นหา" raised @Click="searchData" v-if="true" />
+            <Button severity="info" label="เพิ่มข้อมูล" v-if="addBottonVisible" @Click="handleClickAdd" />
+        </div>
 
         <div class="card">
             <DataTable :value="list" tableStyle="min-width: 50rem" paginator :rows="5" @row-dblclick="onRowDblClick" stripedRows :scrollable="true" selectionMode="single" :rowsPerPageOptions="[5, 10, 20, 50]">
