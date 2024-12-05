@@ -12,6 +12,7 @@ const route = useRoute();
 const searchQuery = ref('');
 const firstname = ref('');
 const lastname = ref('');
+const userId = ref(0);
 const role = ref([
     { id: 1, name: 'admin' },
     { id: 2, name: 'ผู้ดูแลโครงการ' },
@@ -67,7 +68,7 @@ const fetchData = async () => {
     const resUser = await userService.getDefult();
     firstname.value = resUser.data.firstname;
     lastname.value = resUser.data.lastname;
-
+userId.value = resUser.data.id;
     selectedRole.value = role.value[resUser.data.role - 1].name;
 };
 const searchData = async () => {
@@ -97,7 +98,7 @@ onMounted(async () => {
             <!-- Right Side -->
             <div class="flex items-center space-x-4">
                 <!-- <OverlayBadge value="2" severity="danger"> -->
-                    <i class="pi pi-bell" style="font-size: 2rem"   @click="toNotifications"/>
+                    <i class="pi pi-bell" style="font-size: 2rem"   @click="toNotifications" v-if="userId == 1"/>
                 <!-- </OverlayBadge> -->
                 <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" style="background-color: transparent; padding: 0; border: 0"></Button>
                 <Menu ref="menu" id="overlay_menu" :model="items" :popup="true"></Menu>

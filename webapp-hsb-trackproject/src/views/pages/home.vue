@@ -16,6 +16,8 @@ const role = ref([
     { id: 2, name: 'ผู้ดูแลโครงการ' },
     { id: 3, name: 'หัวหน้าช่าง' }
 ]);
+const userId = ref(0);
+
 const projectTotal = ref(0);
 const projectList = ref([]);
 const selectedRole = ref();
@@ -56,9 +58,12 @@ const toNotifications = async () => {
 
 const searchData = async () => {
     const res = await projectTrackingService.searchProjectByCode(searchQuery.value);
+
+
     projectTotal.value = res.data.projectTotal;
     projectList.value = res.data.projects;
 };
+
 
 const fetchData = async () => {
     const res = await projectTrackingService.getProject();
@@ -69,7 +74,7 @@ const fetchData = async () => {
     const resUser = await userService.getDefult();
     firstname.value = resUser.data.firstname;
     lastname.value = resUser.data.lastname;
-
+  userId.value = resUser.data.id;
     selectedRole.value = role.value[resUser.data.role - 1].name;
 
     const notificationsRes = await notificationsService.findAllNotification();
@@ -85,8 +90,8 @@ onMounted(async () => {
     <div class="header-top">
         <div class="flex flex-wrap justify-end navbarApp pb-2 pl-0 pr-0 pt-4">
             <!-- <OverlayBadge value="2" severity="danger"> -->
-            <div class="relative">
-            <i class="pi pi-bell" style="font-size: 2rem" @click="toNotifications" />
+            <div class="relative" v-if="userId == 1" @click="toNotifications" >
+            <i class="pi pi-bell" style="font-size: 2rem" />
             <span v-if="notificationsCount > 0" class="notification-badge">{{ notificationsCount }}</span>
             </div>
             <!-- </OverlayBadge> -->

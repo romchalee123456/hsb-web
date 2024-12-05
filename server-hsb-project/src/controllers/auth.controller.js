@@ -113,6 +113,7 @@ exports.update = async (req, res) => {
     teamName,
     phoneNumber,
     userLineNotificationsid,
+    changePassword
   } = req.body;
   const { id } = req.params;
 
@@ -129,6 +130,17 @@ exports.update = async (req, res) => {
       userLineNotificationsid: userLineNotificationsid,
     },
   });
+      console.log(changePassword);
+  if (changePassword) {
+    const hashedPassword = hashPassword(changePassword.trim());
+    console.log(hashedPassword);
+    const result = await prisma.user.update({
+      where: { id: Number(id) },
+      data: {
+        password: hashedPassword.trim(),
+      },
+    });
+  }
 
   if (!result) {
     res.status(500).send({
