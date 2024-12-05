@@ -109,7 +109,7 @@ onMounted(async () => {
             <!-- Right Side -->
             <div class="flex items-center space-x-4">
                 <!-- <OverlayBadge value="2" severity="danger"> -->
-                    <i class="pi pi-bell" style="font-size: 2rem"   @click="toNotifications"/>
+                    <i class="pi pi-bell" style="font-size: 2rem"   @click="toNotifications" v-if="userId == 1"/>
                 <!-- </OverlayBadge> -->
                 <Button type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" style="background-color: transparent; padding: 0; border: 0"></Button>
                 <Menu ref="menu" id="overlay_menu" :model="items" :popup="true"></Menu>

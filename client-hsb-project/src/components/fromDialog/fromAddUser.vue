@@ -28,6 +28,8 @@ const email = ref('');
 const teamName = ref('');
 const phoneNumber = ref('');
 const userLineNotificationsid = ref('');
+const changePassword = ref('');
+
 
 const role = ref([
     { id: 1, name: 'admin' },
@@ -144,7 +146,8 @@ const handleClickSave = async () => {
                 role: selectedRole.value.id,
                 teamName: teamName.value,
                 phoneNumber: phoneNumber.value.toString(),
-                userLineNotificationsid: userLineNotificationsid.value
+                userLineNotificationsid: userLineNotificationsid.value,
+                changePassword: changePassword.value
             };
             const res = await userService.UpdateUser(payload, userId.value);
 
@@ -279,6 +282,15 @@ onMounted(async () => {
                         </div>
                         <div class="col-span-4">
                             <InputText v-model="rePassword" class="w-full" :disabled="modeView" />
+                        </div>
+                    </div>
+                    <div class="field grid grid-cols-5 gap-4" v-else>
+                        <div>
+                            
+                            <label  class="mr-5">เปลี่ยนรหัสผ่าน</label>
+                        </div>
+                        <div class="col-span-4">
+                            <InputText v-model="changePassword" class="w-full" :disabled="modeView" />
                         </div>
                     </div>
                     <div class="field grid grid-cols-5 gap-4">
