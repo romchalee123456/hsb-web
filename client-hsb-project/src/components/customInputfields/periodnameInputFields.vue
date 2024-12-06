@@ -46,9 +46,9 @@ onMounted(async () => {
         <InputGroup>
             <InputText placeholder="" v-model="periodName" readonly class="w-full" :disabled="modeReadonly" />
             <Button icon="pi pi-search" style="background-color: #192a51" @click="visible = true" :disabled="modeReadonly" />
-            <Dialog v-model:visible="visible" maximizable modal header="งวด" :style="{ width: '80rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+            <Dialog v-model:visible="visible" maximizable modal header="'งานหลัก'" :style="{ width: '80rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
                 <DataTable :value="periodname" tableStyle="min-width: 50rem" paginator :rows="5" @row-dblclick="onRowDblClick" stripedRows :scrollable="true" selectionMode="single" :rowsPerPageOptions="[5, 10, 20, 50]">
-                    <Column header="ชื่องวด" field="periodName"></Column>
+                    <Column header="'ชื่องานหลัก'" field="periodName"></Column>
                 </DataTable>
             </Dialog>
         </InputGroup>
